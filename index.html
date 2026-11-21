@@ -35,7 +35,7 @@
       border: 3px solid rgba(255, 255, 255, 0.85);
       border-radius: 22px;
       overflow: hidden;
-      background: rgba(255, 255, 255, 0.96);
+      background: rgba(255, 255, 255, 0.97);
       box-shadow: 0 18px 45px rgba(76, 29, 149, 0.22);
     }
 
@@ -43,7 +43,6 @@
       background: var(--grad-header);
       color: #ffffff;
       padding: 28px 26px 24px;
-      position: relative;
     }
 
     .hero-badge {
@@ -59,7 +58,7 @@
     }
 
     .status-bar {
-      background: linear-gradient(90deg, rgba(255, 255, 255, 0.95), rgba(240, 253, 250, 0.95));
+      background: linear-gradient(90deg, rgba(255, 255, 255, 0.96), rgba(240, 253, 250, 0.96));
       color: #0f172a;
       border-radius: 14px;
       padding: 12px 18px;
@@ -121,16 +120,30 @@
     .sec-amber { background: var(--grad-sec3); color: #78350f; border-left: 6px solid #f59e0b; }
     .sec-purple { background: var(--grad-sec4); color: #6b21a8; border-left: 6px solid #a855f7; }
 
+    /* සන්සුන් Placeholder සහ පැහැදිලි Input අකුරු */
     .form-control, .form-select {
       border-radius: 10px;
       border: 1.5px solid #cbd5e1;
       padding: 10px 12px;
+      color: #0f172a;
+      background-color: #ffffff;
       transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .form-control::placeholder {
+      color: #94a3b8;
+      opacity: 1;
+      font-size: 0.92rem;
+    }
+
+    .form-control::-webkit-input-placeholder {
+      color: #94a3b8;
     }
 
     .form-control:focus, .form-select:focus {
       border-color: #7c3aed;
       box-shadow: 0 0 0 0.22rem rgba(124, 58, 237, 0.2);
+      color: #0f172a;
     }
 
     .locked-field {
@@ -471,7 +484,7 @@
                   </select>
                 </div>
                 <div class="col-md-7">
-                  <label class="form-label fw-bold text-purple" style="color:#7e22ce;">දායක වූ ආකාරය</label>
+                  <label class="form-label fw-bold" style="color:#7e22ce;">දායක වූ ආකාරය</label>
                   <select class="form-select border-2" style="border-color:#a855f7;" name="devContributionType">
                     <option value="">තෝරන්න...</option>
                     <option>1. ශ්‍රමයෙන් දායක වුණා</option>
