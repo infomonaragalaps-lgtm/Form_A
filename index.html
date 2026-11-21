@@ -162,6 +162,14 @@
       padding: 10px 12px;
     }
 
+    .conditional-sub-box {
+      background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+      border: 1.5px dashed #f59e0b;
+      border-radius: 12px;
+      padding: 14px;
+      margin-top: 10px;
+    }
+
     .contribution-card {
       background: linear-gradient(135deg, #fdf2f8 0%, #eef2ff 50%, #ecfeff 100%);
       border: 2.5px solid #ec4899;
@@ -402,7 +410,11 @@
                 <label class="form-label fw-semibold">17. රියදුරු බලපත්‍ර තිබේද?</label>
                 <select class="form-select" name="hasLicense"><option value="">තෝරන්න...</option><option>ඇත</option><option>නැත</option></select>
               </div>
-              <div class="col-md-6"><label class="form-label fw-semibold">18. විශේෂ දක්ෂතා ඇත්නම් සඳහන් කරන්න</label><input type="text" class="form-control" name="specialSkills" /></div>
+              <!-- 18: Textarea -->
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">18. විශේෂ දක්ෂතා ඇත්නම් සඳහන් කරන්න</label>
+                <textarea class="form-control" rows="2" name="specialSkills"></textarea>
+              </div>
             </div>
 
             <div class="section-banner sec-amber">
@@ -410,13 +422,103 @@
               <span>02. පවුලේ දරුවන්ගේ අධ්‍යාපන, සෞඛ්‍ය හා පෝෂණ තොරතුරු</span>
             </div>
             <div class="row g-3">
-              <div class="col-12"><label class="form-label fw-semibold">19. පාසල් යන දරුවන්ගේ නම, පාසලේ නම, ශ්‍රේණිය සහ උපන් දිනය</label><textarea class="form-control" rows="2" name="childrenSchool"></textarea></div>
-              <div class="col-md-4"><label class="form-label fw-semibold">20. පාසල් නොයන දරුවන් සිටීද?</label><select class="form-select" name="nonSchoolChildren"><option value="">තෝරන්න...</option><option>ඇත</option><option>නැත</option></select></div>
-              <div class="col-md-8"><label class="form-label fw-semibold">21. පාසල් නොයන්නේ නම් හේතුව</label><input type="text" class="form-control" name="nonSchoolReason" /></div>
-              <div class="col-md-4"><label class="form-label fw-semibold">22. බර අඩු දරුවන් සිටීද?</label><select class="form-select" name="underweightChildren"><option value="">තෝරන්න...</option><option>ඇත</option><option>නැත</option></select></div>
-              <div class="col-md-8"><label class="form-label fw-semibold">බර අඩුවීමට හේතුව</label><input type="text" class="form-control" name="underweightReason" /></div>
-              <div class="col-md-4"><label class="form-label fw-semibold">23. මන්දපෝෂණයට දරුවන් ලක්ව තිබේද?</label><select class="form-select" name="malnutrition"><option value="">තෝරන්න...</option><option>ඇත</option><option>නැත</option></select></div>
-              <div class="col-md-8"><label class="form-label fw-semibold">විස්තර / ලැබෙන පෝෂණ ආධාර</label><input type="text" class="form-control" name="nutritionDetails" /></div>
+              <!-- 19: Table (නම, පාසල, ශ්‍රේණිය [1-13], උපන් දිනය) -->
+              <div class="col-12">
+                <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
+                  <label class="form-label fw-bold text-dark mb-0">19. පාසල් යන දරුවන්ගේ නම, පාසලේ නම, ශ්‍රේණිය සහ උපන් දිනය</label>
+                  <button type="button" class="btn btn-sm btn-outline-primary fw-bold" id="addChildRowBtn">
+                    <i class="bi bi-plus-circle me-1"></i> දරුවෙක් එක් කරන්න
+                  </button>
+                </div>
+                <div class="table-responsive">
+                  <table class="table table-bordered align-middle bg-white" id="schoolChildrenTable">
+                    <thead class="table-primary">
+                      <tr>
+                        <th style="min-width: 180px;">නම</th>
+                        <th style="min-width: 180px;">පාසල</th>
+                        <th style="min-width: 150px;">ශ්‍රේණිය</th>
+                        <th style="min-width: 155px;">උපන් දිනය</th>
+                        <th style="width: 50px;" class="text-center">ඉවත්</th>
+                      </tr>
+                    </thead>
+                    <tbody id="schoolChildrenBody">
+                      <tr>
+                        <td><input type="text" class="form-control child-name" placeholder="දරුවාගේ නම" /></td>
+                        <td><input type="text" class="form-control child-school" placeholder="පාසලේ නම" /></td>
+                        <td>
+                          <select class="form-select child-grade">
+                            <option value="">ශ්‍රේණිය...</option>
+                            <option>1 ශ්‍රේණිය</option>
+                            <option>2 ශ්‍රේණිය</option>
+                            <option>3 ශ්‍රේණිය</option>
+                            <option>4 ශ්‍රේණිය</option>
+                            <option>5 ශ්‍රේණිය</option>
+                            <option>6 ශ්‍රේණිය</option>
+                            <option>7 ශ්‍රේණිය</option>
+                            <option>8 ශ්‍රේණිය</option>
+                            <option>9 ශ්‍රේණිය</option>
+                            <option>10 ශ්‍රේණිය</option>
+                            <option>11 ශ්‍රේණිය</option>
+                            <option>12 ශ්‍රේණිය</option>
+                            <option>13 ශ්‍රේණිය</option>
+                          </select>
+                        </td>
+                        <td><input type="date" class="form-control child-dob" /></td>
+                        <td class="text-center">
+                          <button type="button" class="btn btn-sm btn-outline-danger remove-child-row" title="ඉවත් කරන්න">
+                            <i class="bi bi-trash"></i>
+                          </button>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <input type="hidden" name="childrenSchool" id="childrenSchoolJson" />
+              </div>
+
+              <!-- 20: පාසල් නොයන දරුවන් සිටීද? ("ඔව්" නම් පමණක් අනු කොටස ලෙස හේතුව පෙන්වයි) -->
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">20. පාසල් නොයන දරුවන් සිටීද?</label>
+                <select class="form-select" id="nonSchoolChildrenSelect" name="nonSchoolChildren">
+                  <option value="">තෝරන්න...</option>
+                  <option value="ඔව්">ඔව්</option>
+                  <option value="නැත">නැත</option>
+                </select>
+                <div class="conditional-sub-box d-none" id="nonSchoolReasonBox">
+                  <label class="form-label fw-bold text-dark mb-1">20(අ). පාසල් නොයන්නේ නම් හේතුව</label>
+                  <input type="text" class="form-control" id="nonSchoolReasonInput" name="nonSchoolReason" placeholder="හේතුව සඳහන් කරන්න..." />
+                </div>
+              </div>
+
+              <!-- 21: බර අඩු දරුවන් සිටීද? ("ඔව්" නම් පමණක් අනු කොටස ලෙස හේතුව පෙන්වයි) -->
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">21. බර අඩු දරුවන් සිටීද?</label>
+                <select class="form-select" id="underweightChildrenSelect" name="underweightChildren">
+                  <option value="">තෝරන්න...</option>
+                  <option value="ඔව්">ඔව්</option>
+                  <option value="නැත">නැත</option>
+                </select>
+                <div class="conditional-sub-box d-none" id="underweightReasonBox">
+                  <label class="form-label fw-bold text-dark mb-1">21(අ). බර අඩුවීමට හේතුව</label>
+                  <input type="text" class="form-control" id="underweightReasonInput" name="underweightReason" placeholder="හේතුව සඳහන් කරන්න..." />
+                </div>
+              </div>
+
+              <!-- 22: මන්දපෝෂණයට දරුවන් ලක්ව තිබේද? -->
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">22. මන්දපෝෂණයට දරුවන් ලක්ව තිබේද?</label>
+                <select class="form-select" name="malnutrition">
+                  <option value="">තෝරන්න...</option>
+                  <option value="ඔව්">ඔව්</option>
+                  <option value="නැත">නැත</option>
+                </select>
+              </div>
+
+              <!-- 23: Main Question ලෙස Textarea -->
+              <div class="col-12">
+                <label class="form-label fw-semibold">23. විස්තර / ලැබෙන පෝෂණ ආධාර</label>
+                <textarea class="form-control" rows="3" name="nutritionDetails"></textarea>
+              </div>
             </div>
           </div>
 
@@ -553,7 +655,7 @@
 
             <div class="contact-card mt-4 d-flex align-items-center gap-2">
               <i class="bi bi-telephone-outbound-fill fs-4"></i>
-              <span> මේ සම්බන්ධව අමතර තොරතුරු  සඳහා 0777300350/0719300350 අමතන්න</span>
+              <span>තොරතුරක් සඳහා 0777300350/0719300350 අමතන්න*</span>
             </div>
           </div>
 
@@ -618,6 +720,102 @@
       }
     });
 
+    // 19. පාසල් යන දරුවන්ගේ Table Row කළමනාකරණය
+    const schoolChildrenBody = document.getElementById('schoolChildrenBody');
+    const addChildRowBtn = document.getElementById('addChildRowBtn');
+
+    function createChildRow() {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td><input type="text" class="form-control child-name" placeholder="දරුවාගේ නම" /></td>
+        <td><input type="text" class="form-control child-school" placeholder="පාසලේ නම" /></td>
+        <td>
+          <select class="form-select child-grade">
+            <option value="">ශ්‍රේණිය...</option>
+            <option>1 ශ්‍රේණිය</option>
+            <option>2 ශ්‍රේණිය</option>
+            <option>3 ශ්‍රේණිය</option>
+            <option>4 ශ්‍රේණිය</option>
+            <option>5 ශ්‍රේණිය</option>
+            <option>6 ශ්‍රේණිය</option>
+            <option>7 ශ්‍රේණිය</option>
+            <option>8 ශ්‍රේණිය</option>
+            <option>9 ශ්‍රේණිය</option>
+            <option>10 ශ්‍රේණිය</option>
+            <option>11 ශ්‍රේණිය</option>
+            <option>12 ශ්‍රේණිය</option>
+            <option>13 ශ්‍රේණිය</option>
+          </select>
+        </td>
+        <td><input type="date" class="form-control child-dob" /></td>
+        <td class="text-center">
+          <button type="button" class="btn btn-sm btn-outline-danger remove-child-row" title="ඉවත් කරන්න">
+            <i class="bi bi-trash"></i>
+          </button>
+        </td>
+      `;
+      return tr;
+    }
+
+    addChildRowBtn.addEventListener('click', () => {
+      schoolChildrenBody.appendChild(createChildRow());
+    });
+
+    schoolChildrenBody.addEventListener('click', (e) => {
+      const btn = e.target.closest('.remove-child-row');
+      if (!btn) return;
+      const rows = schoolChildrenBody.querySelectorAll('tr');
+      if (rows.length > 1) {
+        btn.closest('tr').remove();
+      } else {
+        const row = rows[0];
+        row.querySelectorAll('input, select').forEach((el) => (el.value = ''));
+      }
+    });
+
+    function serializeSchoolChildren() {
+      const entries = [];
+      schoolChildrenBody.querySelectorAll('tr').forEach((tr) => {
+        const name = tr.querySelector('.child-name').value.trim();
+        const school = tr.querySelector('.child-school').value.trim();
+        const grade = tr.querySelector('.child-grade').value.trim();
+        const dob = tr.querySelector('.child-dob').value.trim();
+        if (name || school || grade || dob) {
+          const parts = [
+            name ? `නම: ${name}` : '',
+            school ? `පාසල: ${school}` : '',
+            grade ? `ශ්‍රේණිය: ${grade}` : '',
+            dob ? `උ.දි: ${dob}` : ''
+          ].filter(Boolean);
+          entries.push(parts.join(' | '));
+        }
+      });
+      return entries.join(' ; ');
+    }
+
+    // 20 & 21 Conditional Logic ("ඔව්" තේරූ විට පමණක් අනු කොටස පෙන්වයි)
+    const nonSchoolSelect = document.getElementById('nonSchoolChildrenSelect');
+    const nonSchoolBox = document.getElementById('nonSchoolReasonBox');
+    const nonSchoolInput = document.getElementById('nonSchoolReasonInput');
+
+    function syncNonSchoolReason() {
+      const isYes = nonSchoolSelect.value === 'ඔව්';
+      nonSchoolBox.classList.toggle('d-none', !isYes);
+      if (!isYes) nonSchoolInput.value = '';
+    }
+    nonSchoolSelect.addEventListener('change', syncNonSchoolReason);
+
+    const underweightSelect = document.getElementById('underweightChildrenSelect');
+    const underweightBox = document.getElementById('underweightReasonBox');
+    const underweightInput = document.getElementById('underweightReasonInput');
+
+    function syncUnderweightReason() {
+      const isYes = underweightSelect.value === 'ඔව්';
+      underweightBox.classList.toggle('d-none', !isYes);
+      if (!isYes) underweightInput.value = '';
+    }
+    underweightSelect.addEventListener('change', syncUnderweightReason);
+
     async function loadCurrentCount() {
       try {
         const res = await fetch(SCRIPT_URL);
@@ -638,6 +836,8 @@
 
     document.getElementById('surveyForm').addEventListener('submit', async (e) => {
       e.preventDefault();
+      document.getElementById('childrenSchoolJson').value = serializeSchoolChildren();
+
       const resultBox = document.getElementById('resultMessage');
       submitBtn.disabled = true;
       submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span> Save වෙමින් පවතී...';
@@ -657,6 +857,8 @@
           e.target.reset();
           e.target.querySelector('[name="district"]').value = 'Monaragala';
           e.target.querySelector('[name="division"]').value = 'Monaragala';
+          syncNonSchoolReason();
+          syncUnderweightReason();
           currentStep = 0;
           updateStepUI();
           await loadCurrentCount();
@@ -673,6 +875,8 @@
       }
     });
 
+    syncNonSchoolReason();
+    syncUnderweightReason();
     loadCurrentCount();
   </script>
 </body>
