@@ -6,13 +6,79 @@
   <title>ග්‍රාමීය සංවර්ධන සමීක්ෂණය - 2026 (පත්‍රිකා A)</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
   <style>
-    body { background-color: #f4f6f9; font-family: "Noto Sans Sinhala", system-ui, -apple-system, sans-serif; }
-    .survey-card { max-width: 920px; margin: 24px auto; border: none; border-radius: 14px; box-shadow: 0 6px 24px rgba(0,0,0,0.08); }
-    .header-banner { background: linear-gradient(135deg, #1b5e20, #2e7d32); color: #fff; border-radius: 14px 14px 0 0; padding: 24px; }
-    .status-bar { background: #e8f5e9; border: 1px solid #a5d6a7; color: #1b5e20; border-radius: 10px; padding: 12px 16px; font-weight: 600; }
-    .section-title { border-left: 4px solid #2e7d32; padding-left: 10px; margin: 24px 0 14px; font-weight: 700; color: #1b5e20; }
+    body {
+      background: linear-gradient(135deg, #e0f2fe 0%, #f0fdf4 50%, #fef9c3 100%);
+      min-height: 100vh;
+      font-family: "Noto Sans Sinhala", system-ui, -apple-system, sans-serif;
+    }
+    .survey-card {
+      max-width: 960px;
+      margin: 24px auto 40px;
+      border: none;
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 0 12px 32px rgba(15, 23, 42, 0.12);
+    }
+    .header-banner {
+      background: linear-gradient(120deg, #0f766e 0%, #1d4ed8 55%, #7e22ce 100%);
+      color: #fff;
+      padding: 28px;
+    }
+    .truth-banner {
+      background: linear-gradient(90deg, #fffbeb, #fef3c7);
+      border: 2px solid #f59e0b;
+      color: #78350f;
+      border-radius: 12px;
+      padding: 12px 16px;
+      font-weight: 700;
+      font-size: 1.02rem;
+    }
+    .status-bar {
+      background: rgba(255, 255, 255, 0.18);
+      backdrop-filter: blur(6px);
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      color: #fff;
+      border-radius: 10px;
+      padding: 10px 16px;
+      font-weight: 600;
+    }
+    .section-title {
+      background: linear-gradient(90deg, #eff6ff, #f0fdf4);
+      border-left: 5px solid #2563eb;
+      padding: 10px 14px;
+      border-radius: 0 8px 8px 0;
+      margin: 24px 0 14px;
+      font-weight: 700;
+      color: #1e3a8a;
+    }
+    .highlight-box {
+      background: linear-gradient(135deg, #f0f9ff 0%, #fdf4ff 100%);
+      border: 2px solid #a855f7;
+      border-radius: 14px;
+      padding: 18px;
+    }
+    .contact-note {
+      background: #ecfdf5;
+      border: 1.5px solid #10b981;
+      color: #065f46;
+      border-radius: 10px;
+      padding: 12px 16px;
+      font-weight: 700;
+    }
     .step-panel { display: none; }
     .step-panel.active { display: block; }
+    .btn-next-grad {
+      background: linear-gradient(90deg, #16a34a, #0d9488);
+      border: none;
+      color: #fff;
+      font-weight: 600;
+    }
+    .btn-submit-grad {
+      background: linear-gradient(90deg, #2563eb, #7c3aed);
+      border: none;
+      color: #fff;
+      font-weight: 600;
+    }
   </style>
 </head>
 <body>
@@ -26,23 +92,28 @@
         </div>
       </div>
 
-      <div class="card-body p-4">
+      <div class="card-body p-4 bg-white">
+        <!-- 1. මුලින්ම දමන සත්‍ය තොරතුරු සටහන -->
+        <div class="truth-banner mb-4">
+          ⚠️ සත්‍ය තොරතුරු පමණක් සපයන්න
+        </div>
+
         <form id="surveyForm">
           <!-- Step 1: පරිපාලන තොරතුරු -->
           <div class="step-panel active" data-step="0">
             <h5 class="section-title">පරිපාලන තොරතුරු (1/4)</h5>
             <div class="row g-3">
               <div class="col-md-6">
-                <label class="form-label">දිස්ත්‍රික්කය *</label>
+                <label class="form-label fw-semibold">දිස්ත්‍රික්කය *</label>
                 <input type="text" class="form-control bg-light" name="district" value="Monaragala" readonly required />
               </div>
               <div class="col-md-6">
-                <label class="form-label">ප්‍රාදේශීය ලේකම් කොට්ඨාසය *</label>
+                <label class="form-label fw-semibold">ප්‍රාදේශීය ලේකම් කොට්ඨාසය *</label>
                 <input type="text" class="form-control bg-light" name="division" value="Monaragala" readonly required />
               </div>
               <div class="col-md-6">
-                <label class="form-label">ග්‍රාම නිලධාරී වසම හා අංකය *</label>
-                <select class="form-select" name="gnDivision" required>
+                <label class="form-label fw-semibold">ග්‍රාම නිලධාරී වසම හා අංකය *</label>
+                <select class="form-select border-primary" name="gnDivision" required>
                   <option value="">තෝරන්න...</option>
                   <option>125 - කහම්බාන</option>
                   <option>125 A - මාරාව</option>
@@ -73,11 +144,11 @@
                 </select>
               </div>
               <div class="col-md-6">
-                <label class="form-label">ගමේ නම *</label>
+                <label class="form-label fw-semibold">ගමේ නම *</label>
                 <input type="text" class="form-control" name="village" required />
               </div>
               <div class="col-md-6">
-                <label class="form-label">සමීක්ෂකයාගේ නම</label>
+                <label class="form-label fw-semibold">සමීක්ෂකයාගේ නම</label>
                 <input type="text" class="form-control" name="surveyor" />
               </div>
             </div>
@@ -87,150 +158,59 @@
           <div class="step-panel" data-step="1">
             <h5 class="section-title">01. පවුලේ මූලික පෞද්ගලික තොරතුරු (2/4)</h5>
             <div class="row g-3">
-              <div class="col-md-6">
-                <label class="form-label">1. සම්පූර්ණ නම *</label>
-                <input type="text" class="form-control" name="fullName" required />
-              </div>
-              <div class="col-md-6">
-                <label class="form-label">2. ජා. හැ. අංකය (NIC)</label>
-                <input type="text" class="form-control" name="nic" />
-              </div>
-              <div class="col-md-6">
-                <label class="form-label">3. දුරකථන අංකය</label>
-                <input type="tel" class="form-control" name="phone" />
-              </div>
-              <div class="col-md-6">
-                <label class="form-label">WhatsApp දුරකථන අංකය</label>
-                <input type="tel" class="form-control" name="whatsapp" />
-              </div>
-              <div class="col-md-6">
-                <label class="form-label">4. ජාතිය</label>
-                <input type="text" class="form-control" name="race" />
-              </div>
-              <div class="col-md-6">
-                <label class="form-label">5. ආගම</label>
-                <input type="text" class="form-control" name="religion" />
-              </div>
+              <div class="col-md-6"><label class="form-label">1. සම්පූර්ණ නම *</label><input type="text" class="form-control" name="fullName" required /></div>
+              <div class="col-md-6"><label class="form-label">2. ජා. හැ. අංකය (NIC)</label><input type="text" class="form-control" name="nic" /></div>
+              <div class="col-md-6"><label class="form-label">3. දුරකථන අංකය</label><input type="tel" class="form-control" name="phone" /></div>
+              <div class="col-md-6"><label class="form-label">WhatsApp දුරකථන අංකය</label><input type="tel" class="form-control" name="whatsapp" /></div>
+              <div class="col-md-6"><label class="form-label">4. ජාතිය</label><input type="text" class="form-control" name="race" /></div>
+              <div class="col-md-6"><label class="form-label">5. ආගම</label><input type="text" class="form-control" name="religion" /></div>
               <div class="col-md-6">
                 <label class="form-label">6. ස්ත්‍රී / පුරුෂ භාවය</label>
-                <select class="form-select" name="gender">
-                  <option value="">තෝරන්න...</option>
-                  <option>පුරුෂ</option>
-                  <option>ස්ත්‍රී</option>
-                </select>
+                <select class="form-select" name="gender"><option value="">තෝරන්න...</option><option>පුරුෂ</option><option>ස්ත්‍රී</option></select>
               </div>
-              <div class="col-md-3">
-                <label class="form-label">7. උපන් දිනය</label>
-                <input type="date" class="form-control" name="dob" />
-              </div>
-              <div class="col-md-3">
-                <label class="form-label">8. 2026 ට වයස</label>
-                <input type="number" class="form-control" name="age" />
-              </div>
+              <div class="col-md-3"><label class="form-label">7. උපන් දිනය</label><input type="date" class="form-control" name="dob" /></div>
+              <div class="col-md-3"><label class="form-label">8. 2026 ට වයස</label><input type="number" class="form-control" name="age" /></div>
               <div class="col-md-6">
                 <label class="form-label">9. විවාහක / අවිවාහක බව</label>
                 <select class="form-select" name="maritalStatus">
-                  <option value="">තෝරන්න...</option>
-                  <option>විවාහක</option>
-                  <option>අවිවාහක</option>
-                  <option>වැන්දඹු</option>
-                  <option>දික්කසාද / වෙන්වූ</option>
+                  <option value="">තෝරන්න...</option><option>විවාහක</option><option>අවිවාහක</option><option>වැන්දඹු</option><option>දික්කසාද / වෙන්වූ</option>
                 </select>
               </div>
               <div class="col-md-6">
                 <label class="form-label">10. අධ්‍යාපන තත්ත්වය</label>
                 <select class="form-select" name="education">
-                  <option value="">තෝරන්න...</option>
-                  <option>පාසල් ගොස් නැත</option>
-                  <option>1–5 ශ්‍රේණිය</option>
-                  <option>6–10 ශ්‍රේණිය</option>
-                  <option>අ.පො.ස. (සා/පෙළ)</option>
-                  <option>අ.පො.ස. (උ/පෙළ)</option>
-                  <option>ඩිප්ලෝමා / උපාධි</option>
+                  <option value="">තෝරන්න...</option><option>පාසල් ගොස් නැත</option><option>1–5 ශ්‍රේණිය</option><option>6–10 ශ්‍රේණිය</option><option>අ.පො.ස. (සා/පෙළ)</option><option>අ.පො.ස. (උ/පෙළ)</option><option>ඩිප්ලෝමා / උපාධි</option>
                 </select>
               </div>
-              <div class="col-12">
-                <label class="form-label">ස්ථිර ලිපිනය</label>
-                <textarea class="form-control" rows="2" name="address"></textarea>
-              </div>
+              <div class="col-12"><label class="form-label">ස්ථිර ලිපිනය</label><textarea class="form-control" rows="2" name="address"></textarea></div>
               <div class="col-md-6">
                 <label class="form-label">13. රැකියා ක්ෂේත්‍රය</label>
                 <select class="form-select" name="jobSector">
-                  <option value="">තෝරන්න...</option>
-                  <option>රාජ්‍ය සේවය</option>
-                  <option>පෞද්ගලික අංශය</option>
-                  <option>කෘෂිකර්මාන්තය</option>
-                  <option>ස්වයං රැකියා / ව්‍යාපාර</option>
-                  <option>දෛනික කුලී වැඩ</option>
-                  <option>රැකියාවක නියුතු නොවේ</option>
+                  <option value="">තෝරන්න...</option><option>රාජ්‍ය සේවය</option><option>පෞද්ගලික අංශය</option><option>කෘෂිකර්මාන්තය</option><option>ස්වයං රැකියා / ව්‍යාපාර</option><option>දෛනික කුලී වැඩ</option><option>රැකියාවක නියුතු නොවේ</option>
                 </select>
               </div>
               <div class="col-md-6">
                 <label class="form-label">13. පුහුණු පාඨමාලා හදාරා තිබේද?</label>
-                <select class="form-select" name="hasTraining">
-                  <option value="">තෝරන්න...</option>
-                  <option>ඇත</option>
-                  <option>නැත</option>
-                </select>
+                <select class="form-select" name="hasTraining"><option value="">තෝරන්න...</option><option>ඇත</option><option>නැත</option></select>
               </div>
-              <div class="col-12">
-                <label class="form-label">12. රැකියාව විස්තරාත්මකව</label>
-                <textarea class="form-control" rows="2" name="jobDetails"></textarea>
-              </div>
-              <div class="col-md-6">
-                <label class="form-label">හදාරා ඇති පුහුණු පාඨමාලා විස්තර</label>
-                <input type="text" class="form-control" name="trainingDetails" />
-              </div>
+              <div class="col-12"><label class="form-label">12. රැකියාව විස්තරාත්මකව</label><textarea class="form-control" rows="2" name="jobDetails"></textarea></div>
+              <div class="col-md-6"><label class="form-label">හදාරා ඇති පුහුණු පාඨමාලා විස්තර</label><input type="text" class="form-control" name="trainingDetails" /></div>
               <div class="col-md-6">
                 <label class="form-label">14. රියදුරු බලපත්‍ර තිබේද?</label>
-                <select class="form-select" name="hasLicense">
-                  <option value="">තෝරන්න...</option>
-                  <option>ඇත</option>
-                  <option>නැත</option>
-                </select>
+                <select class="form-select" name="hasLicense"><option value="">තෝරන්න...</option><option>ඇත</option><option>නැත</option></select>
               </div>
-              <div class="col-12">
-                <label class="form-label">15. විශේෂ දක්ෂතා ඇත්නම් සඳහන් කරන්න</label>
-                <textarea class="form-control" rows="2" name="specialSkills"></textarea>
-              </div>
+              <div class="col-12"><label class="form-label">15. විශේෂ දක්ෂතා ඇත්නම් සඳහන් කරන්න</label><textarea class="form-control" rows="2" name="specialSkills"></textarea></div>
             </div>
 
             <h5 class="section-title">02. දරුවන්ගේ අධ්‍යාපන, සෞඛ්‍ය හා පෝෂණ තොරතුරු</h5>
             <div class="row g-3">
-              <div class="col-12">
-                <label class="form-label">16. පාසල් යන දරුවන්ගේ නම, පාසලේ නම, ශ්‍රේණිය සහ උපන් දිනය</label>
-                <textarea class="form-control" rows="2" name="childrenSchool"></textarea>
-              </div>
-              <div class="col-md-4">
-                <label class="form-label">17. පාසල් නොයන දරුවන් සිටීද?</label>
-                <select class="form-select" name="nonSchoolChildren">
-                  <option value="">තෝරන්න...</option><option>ඇත</option><option>නැත</option>
-                </select>
-              </div>
-              <div class="col-md-8">
-                <label class="form-label">18. පාසල් නොයන්නේ නම් හේතුව</label>
-                <input type="text" class="form-control" name="nonSchoolReason" />
-              </div>
-              <div class="col-md-4">
-                <label class="form-label">19. බර අඩු දරුවන් සිටීද?</label>
-                <select class="form-select" name="underweightChildren">
-                  <option value="">තෝරන්න...</option><option>ඇත</option><option>නැත</option>
-                </select>
-              </div>
-              <div class="col-md-8">
-                <label class="form-label">බර අඩුවීමට හේතුව</label>
-                <input type="text" class="form-control" name="underweightReason" />
-              </div>
-              <div class="col-md-4">
-                <label class="form-label">20. මන්දපෝෂණයට දරුවන් ලක්ව තිබේද?</label>
-                <select class="form-select" name="malnutrition">
-                  <option value="">තෝරන්න...</option><option>ඇත</option><option>නැත</option>
-                </select>
-              </div>
-              <div class="col-md-8">
-                <label class="form-label">විස්තර / ලැබෙන පෝෂණ ආධාර</label>
-                <input type="text" class="form-control" name="nutritionDetails" />
-              </div>
+              <div class="col-12"><label class="form-label">16. පාසල් යන දරුවන්ගේ නම, පාසලේ නම, ශ්‍රේණිය සහ උපන් දිනය</label><textarea class="form-control" rows="2" name="childrenSchool"></textarea></div>
+              <div class="col-md-4"><label class="form-label">17. පාසල් නොයන දරුවන් සිටීද?</label><select class="form-select" name="nonSchoolChildren"><option value="">තෝරන්න...</option><option>ඇත</option><option>නැත</option></select></div>
+              <div class="col-md-8"><label class="form-label">18. පාසල් නොයන්නේ නම් හේතුව</label><input type="text" class="form-control" name="nonSchoolReason" /></div>
+              <div class="col-md-4"><label class="form-label">19. බර අඩු දරුවන් සිටීද?</label><select class="form-select" name="underweightChildren"><option value="">තෝරන්න...</option><option>ඇත</option><option>නැත</option></select></div>
+              <div class="col-md-8"><label class="form-label">බර අඩුවීමට හේතුව</label><input type="text" class="form-control" name="underweightReason" /></div>
+              <div class="col-md-4"><label class="form-label">20. මන්දපෝෂණයට දරුවන් ලක්ව තිබේද?</label><select class="form-select" name="malnutrition"><option value="">තෝරන්න...</option><option>ඇත</option><option>නැත</option></select></div>
+              <div class="col-md-8"><label class="form-label">විස්තර / ලැබෙන පෝෂණ ආධාර</label><input type="text" class="form-control" name="nutritionDetails" /></div>
             </div>
           </div>
 
@@ -241,48 +221,18 @@
               <div class="col-md-6">
                 <label class="form-label">21. ඉඩම් සම්බන්ධ තොරතුරු</label>
                 <select class="form-select" name="landInfo">
-                  <option value="">තෝරන්න...</option>
-                  <option>ඉඩම් නැත</option><option>අක්කර 1/4 ට අඩුයි</option>
-                  <option>අක්කර 1/2 – 1 අතර</option><option>අක්කර 2 – 3 අතර</option>
-                  <option>අක්කර 3 – 5 ට වැඩියි</option>
+                  <option value="">තෝරන්න...</option><option>ඉඩම් නැත</option><option>අක්කර 1/4 ට අඩුයි</option><option>අක්කර 1/2 – 1 අතර</option><option>අක්කර 2 – 3 අතර</option><option>අක්කර 3 – 5 ට වැඩියි</option>
                 </select>
               </div>
-              <div class="col-md-6">
-                <label class="form-label">22. ඉඩම් අයිතිකරුගේ නම</label>
-                <input type="text" class="form-control" name="landOwner" />
-              </div>
-              <div class="col-md-6">
-                <label class="form-label">23. බලපත්‍ර / ඔප්පු අංකය</label>
-                <input type="text" class="form-control" name="deedNo" />
-              </div>
-              <div class="col-md-6">
-                <label class="form-label">24. ඉඩමේ ප්‍රමාණය</label>
-                <input type="text" class="form-control" name="landSize" />
-              </div>
-              <div class="col-12">
-                <label class="form-label">25. ඉඩමේ වගාවන්</label>
-                <input type="text" class="form-control" name="crops" placeholder="උදා: වී, පොල්, කෙසෙල්, අඹ..." />
-              </div>
-              <div class="col-md-6">
-                <label class="form-label">26. වගා කර ඇති ඉඩම් ප්‍රමාණය</label>
-                <input type="text" class="form-control" name="cultivatedArea" />
-              </div>
-              <div class="col-md-6">
-                <label class="form-label">27. පශු සම්පත් ඇත්නම්</label>
-                <input type="text" class="form-control" name="livestock" placeholder="උදා: එළ ගව, කුකුළන්..." />
-              </div>
-              <div class="col-md-6">
-                <label class="form-label">28. සතුන් ප්‍රමාණය (වර්ගය අනුව)</label>
-                <input type="text" class="form-control" name="animalCount" />
-              </div>
-              <div class="col-md-6">
-                <label class="form-label">29. දළ වශයෙන් මාසික ආදායම (රු.)</label>
-                <input type="text" class="form-control" name="monthlyIncome" />
-              </div>
-              <div class="col-12">
-                <label class="form-label">අතිරේක කෘෂි තොරතුරු</label>
-                <input type="text" class="form-control" name="extraAgriInfo" />
-              </div>
+              <div class="col-md-6"><label class="form-label">22. ඉඩම් අයිතිකරුගේ නම</label><input type="text" class="form-control" name="landOwner" /></div>
+              <div class="col-md-6"><label class="form-label">23. බලපත්‍ර / ඔප්පු අංකය</label><input type="text" class="form-control" name="deedNo" /></div>
+              <div class="col-md-6"><label class="form-label">24. ඉඩමේ ප්‍රමාණය</label><input type="text" class="form-control" name="landSize" /></div>
+              <div class="col-12"><label class="form-label">25. ඉඩමේ වගාවන්</label><input type="text" class="form-control" name="crops" placeholder="උදා: වී, පොල්, කෙසෙල්, අඹ..." /></div>
+              <div class="col-md-6"><label class="form-label">26. වගා කර ඇති ඉඩම් ප්‍රමාණය</label><input type="text" class="form-control" name="cultivatedArea" /></div>
+              <div class="col-md-6"><label class="form-label">27. පශු සම්පත් ඇත්නම්</label><input type="text" class="form-control" name="livestock" placeholder="උදා: එළ ගව, කුකුළන්..." /></div>
+              <div class="col-md-6"><label class="form-label">28. සතුන් ප්‍රමාණය (වර්ගය අනුව)</label><input type="text" class="form-control" name="animalCount" /></div>
+              <div class="col-md-6"><label class="form-label">29. දළ වශයෙන් මාසික ආදායම (රු.)</label><input type="text" class="form-control" name="monthlyIncome" /></div>
+              <div class="col-12"><label class="form-label">අතිරේක කෘෂි තොරතුරු</label><input type="text" class="form-control" name="extraAgriInfo" /></div>
             </div>
 
             <h5 class="section-title">04. නිවාස, බලශක්තිය, පානීය ජලය හා සනීපාරක්ෂක පහසුකම්</h5>
@@ -290,92 +240,37 @@
               <div class="col-md-6">
                 <label class="form-label">30. නිවසේ ස්වභාවය</label>
                 <select class="form-select" name="houseType">
-                  <option value="">තෝරන්න...</option>
-                  <option>ස්ථිර නිවසක්</option><option>අර්ධ ස්ථිර නිවසක්</option>
-                  <option>දැනට ගොඩනඟමින් පවතින නිවසක්</option><option>පැල්පතක්</option>
-                  <option>තාවකාලික නිවසක්</option><option>කුලී නිවසක්</option>
-                  <option>වතු ලයිම් කාමර</option><option>නිවාසයක් නොමැත</option>
+                  <option value="">තෝරන්න...</option><option>ස්ථිර නිවසක්</option><option>අර්ධ ස්ථිර නිවසක්</option><option>දැනට ගොඩනඟමින් පවතින නිවසක්</option><option>පැල්පතක්</option><option>තාවකාලික නිවසක්</option><option>කුලී නිවසක්</option><option>වතු ලයිම් කාමර</option><option>නිවාසයක් නොමැත</option>
                 </select>
               </div>
-              <div class="col-md-6">
-                <label class="form-label">31. නිවසක් සාදා ගැනීමට බලාපොරොත්තු වන ඉඩම</label>
-                <select class="form-select" name="houseLand">
-                  <option value="">තෝරන්න...</option><option>ඉඩමක් ඇත</option><option>ඉඩම් නොමැත</option>
-                </select>
-              </div>
-              <div class="col-md-4">
-                <label class="form-label">32. ගේ බිම් ස්වභාවය</label>
-                <input type="text" class="form-control" name="floorType" placeholder="සිමෙන්ති/ටයිල්/මැටි" />
-              </div>
-              <div class="col-md-4">
-                <label class="form-label">33(අ). වහලේ ස්වභාවය</label>
-                <input type="text" class="form-control" name="roofType" placeholder="උළු/ඇස්බැස්ටස්/තහඩු/පොල්අතු" />
-              </div>
+              <div class="col-md-6"><label class="form-label">31. නිවසක් සාදා ගැනීමට බලාපොරොත්තු වන ඉඩම</label><select class="form-select" name="houseLand"><option value="">තෝරන්න...</option><option>ඉඩමක් ඇත</option><option>ඉඩම් නොමැත</option></select></div>
+              <div class="col-md-4"><label class="form-label">32. ගේ බිම් ස්වභාවය</label><input type="text" class="form-control" name="floorType" placeholder="සිමෙන්ති/ටයිල්/මැටි" /></div>
+              <div class="col-md-4"><label class="form-label">33(අ). වහලේ ස්වභාවය</label><input type="text" class="form-control" name="roofType" placeholder="උළු/ඇස්බැස්ටස්/තහඩු/පොල්අතු" /></div>
               <div class="col-md-4">
                 <label class="form-label">33(ආ). බිත්ති ස්වභාවය</label>
-                <select class="form-select" name="wallType">
-                  <option value="">තෝරන්න...</option>
-                  <option>ගඩොල්</option><option>බ්ලොක් ගල්</option>
-                  <option>මැටි</option><option>ලෑලි</option><option>වෙනත්</option>
-                </select>
+                <select class="form-select" name="wallType"><option value="">තෝරන්න...</option><option>ගඩොල්</option><option>බ්ලොක් ගල්</option><option>මැටි</option><option>ලෑලි</option><option>වෙනත්</option></select>
               </div>
-              <div class="col-md-6">
-                <label class="form-label">34. නිවසක් සෑදීමට මූල්‍යමය හැකියාව</label>
-                <select class="form-select" name="financialAbility">
-                  <option value="">තෝරන්න...</option><option>ඇත</option><option>නැත</option>
-                </select>
-              </div>
-              <div class="col-md-6">
-                <label class="form-label">35. පාවිච්චි කරන බලශක්තිය</label>
-                <input type="text" class="form-control" name="energySource" />
-              </div>
-              <div class="col-md-6">
-                <label class="form-label">36. පානීය ජල සැපයුම</label>
-                <input type="text" class="form-control" name="waterSupply" />
-              </div>
+              <div class="col-md-6"><label class="form-label">34. නිවසක් සෑදීමට මූල්‍යමය හැකියාව</label><select class="form-select" name="financialAbility"><option value="">තෝරන්න...</option><option>ඇත</option><option>නැත</option></select></div>
+              <div class="col-md-6"><label class="form-label">35. පාවිච්චි කරන බලශක්තිය</label><input type="text" class="form-control" name="energySource" /></div>
+              <div class="col-md-6"><label class="form-label">36. පානීය ජල සැපයුම</label><input type="text" class="form-control" name="waterSupply" /></div>
               <div class="col-md-6">
                 <label class="form-label">37. වැසිකිළි ස්වභාවය</label>
-                <select class="form-select" name="toiletType">
-                  <option value="">තෝරන්න...</option>
-                  <option>ජල මුද්‍රිත</option><option>වළ වැසිකිළි</option>
-                  <option>පොදු වැසිකිළි</option><option>තාවකාලික වැසිකිළි</option><option>වැසිකිළි නොමැත</option>
-                </select>
+                <select class="form-select" name="toiletType"><option value="">තෝරන්න...</option><option>ජල මුද්‍රිත</option><option>වළ වැසිකිළි</option><option>පොදු වැසිකිළි</option><option>තාවකාලික වැසිකිළි</option><option>වැසිකිළි නොමැත</option></select>
               </div>
             </div>
           </div>
 
-          <!-- Step 4: 05, 06, 07, 08 -->
+          <!-- Step 4: 05, 06, 07, 08 + අවසාන සංවර්ධන දායකත්වය & දුරකථන සටහන -->
           <div class="step-panel" data-step="3">
             <h5 class="section-title">05. සන්නිවේදන හා වාහන / 06. ආපදා හා සමිති (4/4)</h5>
             <div class="row g-3">
-              <div class="col-md-6">
-                <label class="form-label">38(අ). පවුල සතු දුරකථන</label>
-                <input type="text" class="form-control" name="phones" />
-              </div>
-              <div class="col-md-6">
-                <label class="form-label">38(ආ). වාහන වර්ගය</label>
-                <input type="text" class="form-control" name="vehicles" />
-              </div>
-              <div class="col-md-4">
-                <label class="form-label">වාහන ප්‍රමාණය (වර්ගය අනුව)</label>
-                <input type="text" class="form-control" name="vehicleCount" />
-              </div>
-              <div class="col-md-4">
-                <label class="form-label">39. වාහනවල අයිතිකරුගේ නම</label>
-                <input type="text" class="form-control" name="vehicleOwner" />
-              </div>
-              <div class="col-md-4">
-                <label class="form-label">40. වාහන අංකය / අංකයන්</label>
-                <input type="text" class="form-control" name="vehicleNumbers" />
-              </div>
-              <div class="col-md-6">
-                <label class="form-label">පවුල මුහුණදෙන ස්වභාවික ආපදා අවදානම්</label>
-                <input type="text" class="form-control" name="disasters" />
-              </div>
-              <div class="col-md-6">
-                <label class="form-label">පවුලේ සාමාජිකයන් සක්‍රීයව සම්බන්ධ ප්‍රජා සමිති</label>
-                <input type="text" class="form-control" name="societies" />
-              </div>
+              <div class="col-md-6"><label class="form-label">38(අ). පවුල සතු දුරකථන</label><input type="text" class="form-control" name="phones" /></div>
+              <div class="col-md-6"><label class="form-label">38(ආ). වාහන වර්ගය</label><input type="text" class="form-control" name="vehicles" /></div>
+              <div class="col-md-4"><label class="form-label">වාහන ප්‍රමාණය (වර්ගය අනුව)</label><input type="text" class="form-control" name="vehicleCount" /></div>
+              <div class="col-md-4"><label class="form-label">39. වාහනවල අයිතිකරුගේ නම</label><input type="text" class="form-control" name="vehicleOwner" /></div>
+              <div class="col-md-4"><label class="form-label">40. වාහන අංකය / අංකයන්</label><input type="text" class="form-control" name="vehicleNumbers" /></div>
+              <div class="col-md-6"><label class="form-label">පවුල මුහුණදෙන ස්වභාවික ආපදා අවදානම්</label><input type="text" class="form-control" name="disasters" /></div>
+              <div class="col-md-6"><label class="form-label">පවුලේ සාමාජිකයන් සක්‍රීයව සම්බන්ධ ප්‍රජා සමිති</label><input type="text" class="form-control" name="societies" /></div>
             </div>
 
             <h5 class="section-title">07. ආධාර, විදෙස්ගත හා සුභසාධන තොරතුරු</h5>
@@ -400,11 +295,44 @@
               <div class="col-12">
                 <div class="form-check mt-2">
                   <input class="form-check-input" type="checkbox" id="certCheck" name="certification" value="ඉහත සඳහන් සියලු තොරතුරු නිවැරදි හා සත්‍ය බවට මා මෙයින් සහතික කරමි." required />
-                  <label class="form-check-label" for="certCheck">
+                  <label class="form-check-label fw-semibold" for="certCheck">
                     ඉහත සඳහන් සියලු තොරතුරු නිවැරදි හා සත්‍ය බවට මා මෙයින් සහතික කරමි. *
                   </label>
                 </div>
               </div>
+            </div>
+
+            <!-- 2. අන්තිමට දමන සංවර්ධන කටයුතු හා ශ්‍රම දාන දායකත්වය -->
+            <div class="highlight-box mt-4">
+              <label class="form-label fw-bold text-dark">
+                2025 වර්ෂයෙන් පසු ගමේ ක්‍රියාත්මක වූ සංවර්ධන කටයුතුවලදී, ශ්‍රම දානවලදී දායකත්වය
+              </label>
+              <div class="row g-3 mt-1">
+                <div class="col-md-5">
+                  <label class="form-label fw-semibold">සහභාගීත්වය</label>
+                  <select class="form-select" name="devParticipation">
+                    <option value="">තෝරන්න...</option>
+                    <option>සහභාගී වුණා</option>
+                    <option>සහභාගී වුනේ නැත</option>
+                  </select>
+                </div>
+                <div class="col-md-7">
+                  <label class="form-label fw-semibold">දායක වූ ආකාරය</label>
+                  <select class="form-select" name="devContributionType">
+                    <option value="">තෝරන්න...</option>
+                    <option>1. ශ්‍රමයෙන් දායක වුණා</option>
+                    <option>2. ද්‍රව්‍ය ආධාරවලින්</option>
+                    <option>3. මූල්‍ය ආධාරවලින්</option>
+                    <option>4. ආහාරපාන තේ සංග්‍රහ කටයුතුවලින්</option>
+                    <option>5. ශ්‍රමයෙන් හා ද්‍රව්‍ය මූල්‍ය, සෑම අතින්ම</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <!-- අවසාන දුරකථන සටහන -->
+            <div class="contact-note mt-3">
+              තොරතුරක් සඳහා 0777300350/0719300350 අමතන්න*
             </div>
           </div>
 
@@ -412,8 +340,8 @@
           <div class="d-flex justify-content-between mt-4 pt-3 border-top">
             <button type="button" class="btn btn-outline-secondary" id="prevBtn" disabled>පෙර පිටුව</button>
             <div>
-              <button type="button" class="btn btn-success" id="nextBtn">ඊළඟ පිටුව</button>
-              <button type="submit" class="btn btn-primary d-none" id="submitBtn">Submit කරන්න</button>
+              <button type="button" class="btn btn-next-grad px-4" id="nextBtn">ඊළඟ පිටුව</button>
+              <button type="submit" class="btn btn-submit-grad px-4 d-none" id="submitBtn">Submit කරන්න</button>
             </div>
           </div>
         </form>
