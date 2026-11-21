@@ -120,7 +120,6 @@
     .sec-amber { background: var(--grad-sec3); color: #78350f; border-left: 6px solid #f59e0b; }
     .sec-purple { background: var(--grad-sec4); color: #6b21a8; border-left: 6px solid #a855f7; }
 
-    /* සන්සුන් Placeholder සහ පැහැදිලි Input අකුරු */
     .form-control, .form-select {
       border-radius: 10px;
       border: 1.5px solid #cbd5e1;
@@ -136,10 +135,6 @@
       font-size: 0.92rem;
     }
 
-    .form-control::-webkit-input-placeholder {
-      color: #94a3b8;
-    }
-
     .form-control:focus, .form-select:focus {
       border-color: #7c3aed;
       box-shadow: 0 0 0 0.22rem rgba(124, 58, 237, 0.2);
@@ -151,6 +146,13 @@
       color: #3730a3 !important;
       font-weight: 700;
       border-color: #818cf8 !important;
+    }
+
+    .family-members-box {
+      background: linear-gradient(135deg, #f0fdf4 0%, #eff6ff 100%);
+      border: 2px solid #38bdf8;
+      border-radius: 14px;
+      padding: 16px;
     }
 
     .contribution-card {
@@ -213,7 +215,6 @@
 <body>
   <div class="container">
     <div class="card survey-card">
-      <!-- Colorful Hero Header -->
       <div class="hero-header">
         <span class="hero-badge"><i class="bi bi-stars me-1"></i> ප්‍රාදේශීය සංවර්ධන වැඩසටහන - 2026</span>
         <h2 class="fw-bold mb-1">ග්‍රාමීය සංවර්ධන සමීක්ෂණය - 2026 (පත්‍රිකා A)</h2>
@@ -226,13 +227,11 @@
       </div>
 
       <div class="card-body p-4">
-        <!-- 1. මුලින්ම දමන සත්‍ය තොරතුරු සටහන -->
         <div class="truth-banner mb-4 d-flex align-items-center gap-2">
           <i class="bi bi-exclamation-triangle-fill fs-4"></i>
           <span>සත්‍ය තොරතුරු පමණක් සපයන්න</span>
         </div>
 
-        <!-- Step Progress Pills -->
         <div class="row g-2 mb-4" id="stepIndicators">
           <div class="col-6 col-md-3"><div class="step-pill active" data-indicator="0"><i class="bi bi-geo-alt-fill me-1"></i>1. පරිපාලන</div></div>
           <div class="col-6 col-md-3"><div class="step-pill" data-indicator="1"><i class="bi bi-people-fill me-1"></i>2. පවුල හා දරුවන්</div></div>
@@ -324,30 +323,67 @@
                   <option value="">තෝරන්න...</option><option>විවාහක</option><option>අවිවාහක</option><option>වැන්දඹු</option><option>දික්කසාද / වෙන්වූ</option>
                 </select>
               </div>
+              <div class="col-md-6"><label class="form-label fw-semibold">ස්ථිර ලිපිනය</label><textarea class="form-control" rows="2" name="address"></textarea></div>
+
+              <!-- ස්ථිර ලිපිනයට පහළින් 11 සහ 12 -->
+              <div class="col-12">
+                <div class="family-members-box">
+                  <div class="row g-3">
+                    <div class="col-md-6">
+                      <label class="form-label fw-bold text-dark">11. කාන්තාවන් මුලිකත්වය ගන්නා පවුලකි (ඔව් / නැත)</label>
+                      <select class="form-select border-2 border-primary" name="femaleHeaded">
+                        <option value="">තෝරන්න...</option>
+                        <option>ඔව්</option>
+                        <option>නැත</option>
+                      </select>
+                    </div>
+                    <div class="col-md-6">
+                      <label class="form-label fw-bold text-dark">12. පවුලේ මුළු සාමාජිකයන් ගණන</label>
+                      <input type="number" min="0" class="form-control border-2 border-info" name="totalMembers" placeholder="මුළු සාමාජිකයන් ගණන" />
+                    </div>
+                    <div class="col-6 col-md-3">
+                      <label class="form-label fw-semibold">පුරුෂ</label>
+                      <input type="number" min="0" class="form-control" name="maleMembers" placeholder="0" />
+                    </div>
+                    <div class="col-6 col-md-3">
+                      <label class="form-label fw-semibold">ස්ත්‍රී</label>
+                      <input type="number" min="0" class="form-control" name="femaleMembers" placeholder="0" />
+                    </div>
+                    <div class="col-6 col-md-3">
+                      <label class="form-label fw-semibold">වයස අවුරුදු 18ට අඩු</label>
+                      <input type="number" min="0" class="form-control" name="under18Members" placeholder="0" />
+                    </div>
+                    <div class="col-6 col-md-3">
+                      <label class="form-label fw-semibold">වයස 60ට වැඩි</label>
+                      <input type="number" min="0" class="form-control" name="over60Members" placeholder="0" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
               <div class="col-md-6">
                 <label class="form-label fw-semibold">10. අධ්‍යාපන තත්ත්වය</label>
                 <select class="form-select" name="education">
                   <option value="">තෝරන්න...</option><option>පාසල් ගොස් නැත</option><option>1–5 ශ්‍රේණිය</option><option>6–10 ශ්‍රේණිය</option><option>අ.පො.ස. (සා/පෙළ)</option><option>අ.පො.ස. (උ/පෙළ)</option><option>ඩිප්ලෝමා / උපාධි</option>
                 </select>
               </div>
-              <div class="col-12"><label class="form-label fw-semibold">ස්ථිර ලිපිනය</label><textarea class="form-control" rows="2" name="address"></textarea></div>
               <div class="col-md-6">
-                <label class="form-label fw-semibold">13. රැකියා ක්ෂේත්‍රය</label>
+                <label class="form-label fw-semibold">රැකියා ක්ෂේත්‍රය</label>
                 <select class="form-select" name="jobSector">
                   <option value="">තෝරන්න...</option><option>රාජ්‍ය සේවය</option><option>පෞද්ගලික අංශය</option><option>කෘෂිකර්මාන්තය</option><option>ස්වයං රැකියා / ව්‍යාපාර</option><option>දෛනික කුලී වැඩ</option><option>රැකියාවක නියුතු නොවේ</option>
                 </select>
               </div>
               <div class="col-md-6">
-                <label class="form-label fw-semibold">13. පුහුණු පාඨමාලා හදාරා තිබේද?</label>
+                <label class="form-label fw-semibold">පුහුණු පාඨමාලා හදාරා තිබේද?</label>
                 <select class="form-select" name="hasTraining"><option value="">තෝරන්න...</option><option>ඇත</option><option>නැත</option></select>
               </div>
-              <div class="col-12"><label class="form-label fw-semibold">12. රැකියාව විස්තරාත්මකව</label><textarea class="form-control" rows="2" name="jobDetails"></textarea></div>
-              <div class="col-md-6"><label class="form-label fw-semibold">හදාරා ඇති පුහුණු පාඨමාලා විස්තර</label><input type="text" class="form-control" name="trainingDetails" /></div>
               <div class="col-md-6">
-                <label class="form-label fw-semibold">14. රියදුරු බලපත්‍ර තිබේද?</label>
+                <label class="form-label fw-semibold">රියදුරු බලපත්‍ර තිබේද?</label>
                 <select class="form-select" name="hasLicense"><option value="">තෝරන්න...</option><option>ඇත</option><option>නැත</option></select>
               </div>
-              <div class="col-12"><label class="form-label fw-semibold">15. විශේෂ දක්ෂතා ඇත්නම් සඳහන් කරන්න</label><textarea class="form-control" rows="2" name="specialSkills"></textarea></div>
+              <div class="col-12"><label class="form-label fw-semibold">රැකියාව විස්තරාත්මකව</label><textarea class="form-control" rows="2" name="jobDetails"></textarea></div>
+              <div class="col-12"><label class="form-label fw-semibold">හදාරා ඇති පුහුණු පාඨමාලා විස්තර</label><input type="text" class="form-control" name="trainingDetails" /></div>
+              <div class="col-12"><label class="form-label fw-semibold">විශේෂ දක්ෂතා ඇත්නම් සඳහන් කරන්න</label><textarea class="form-control" rows="2" name="specialSkills"></textarea></div>
             </div>
 
             <div class="section-banner sec-amber">
@@ -468,7 +504,6 @@
               </div>
             </div>
 
-            <!-- 2. අන්තිමට දමන සංවර්ධන කටයුතු හා ශ්‍රම දාන දායකත්වය -->
             <div class="contribution-card mt-4">
               <h6 class="fw-bold text-dark mb-3">
                 <i class="bi bi-people-fill text-danger me-1"></i>
@@ -497,14 +532,12 @@
               </div>
             </div>
 
-            <!-- අවසාන දුරකථන සටහන -->
             <div class="contact-card mt-4 d-flex align-items-center gap-2">
               <i class="bi bi-telephone-outbound-fill fs-4"></i>
-              <span>මේ සම්බන්ධව අමතර තොරතුරු  සඳහා 0777300350/0719300350 අමතන්න</span>
+              <span>තොරතුරක් සඳහා 0777300350/0719300350 අමතන්න*</span>
             </div>
           </div>
 
-          <!-- Colorful Navigation Buttons -->
           <div class="d-flex justify-content-between align-items-center mt-4 pt-3 border-top">
             <button type="button" class="btn btn-grad-prev" id="prevBtn" disabled>
               <i class="bi bi-arrow-left-circle-fill me-1"></i> පෙර පිටුව
@@ -525,11 +558,10 @@
     </div>
   </div>
 
-  <!-- Bootstrap 5 JS Bundle -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script>
     // ඔබේ Google Apps Script Web App URL එක මෙතැනට දමන්න
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbww2GIaQkDYozdMg-WOAXnPS8tDxJQWHqKwus3dmywcZDhrh0ZOBnBdExFHm32jOXEN/exec';
+    const SCRIPT_URL = 'PASTE_YOUR_DEPLOYED_WEB_APP_URL_HERE';
 
     let currentStep = 0;
     const panels = document.querySelectorAll('.step-panel');
