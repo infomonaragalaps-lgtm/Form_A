@@ -3,6 +3,19 @@ const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbww2GIaQkDYozdM
 const TOTAL_STEPS = 9;
 let currentStep = 1;
 
+const SURVEYOR_STORAGE_KEY = "pks_2027_surveyor_prefs_v1";
+const APP_COUNTER_STORAGE_KEY = "pks_2027_last_app_no_v1";
+
+const SURVEYOR_PERSIST_FIELDS = [
+  "q1_district",
+  "q2_dsd",
+  "q3_gnd",
+  "q4_village",
+  "q4a_total_families",
+  "q6_date",
+  "q6a_officer_info"
+];
+
 const CARD_CONTAINERS = [
   "schoolChildrenContainer",
   "landsContainer",
@@ -34,17 +47,127 @@ const CONDITIONAL_WRAPS = [
 ];
 
 window.addEventListener("DOMContentLoaded", () => {
-  const dateInput = document.getElementById("q6_date");
-  if (dateInput && !dateInput.value) {
-    dateInput.value = new Date().toISOString().split("T")[0];
-  }
-
+  setDefaultValues();
+  loadSurveyorPrefs();
+  loadApplicationNumbers();
   initDefaultCards();
   bindButtonEvents();
   bindProgressListeners(document.getElementById("surveyForm"));
   showStep(1);
   updateProgress();
 });
+
+function setDefaultValues() {
+  const districtEl = document.getElementById("q1_district");
+  if (districtEl && !districtEl.value.trim()) {
+    districtEl.value = "මොණරාගල";
+  }
+
+  const dsdEl = document.getElementById("q2_dsd");
+  if (dsdEl && !dsdEl.value.trim()) {
+    dsdEl.value = "මොණරාගල";
+  }
+
+  const dateEl = document.getElementById("q6_date");
+  if (dateEl && !dateEl.value) {
+    dateEl.value = new Date().toISOString().split("T")[0];
+  }
+}
+
+function saveSurveyorPrefs(showToast = false) {
+  try {
+    const prefs = {};
+    SURVEYOR_PERSIST_FIELDS.forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) {
+        prefs[id] = (el.value || "").trim();
+      }
+    });
+    localStorage.setItem(SURVEYOR_STORAGE_KEY, JSON.stringify(prefs));
+    if (showToast) {
+      showNavAlert("success", "සමීක්ෂක හා වසම් මූලික විස්තර ඔබගේ දුරකථනයේ (Local Storage) සුරකින ලදී.");
+    }
+  } catch (err) {
+    console.warn("LocalStorage save error:", err);
+  }
+}
+
+function loadSurveyorPrefs() {
+  try {
+    const raw = localStorage.getItem(SURVEYOR_STORAGE_KEY);
+    if (!raw) return;
+    const prefs = JSON.parse(raw);
+
+    SURVEYOR_PERSIST_FIELDS.forEach((id) => {
+      const el = document.getElementById(id);
+      if (el && typeof prefs[id] === "string" && prefs[id] !== "") {
+        el.value = prefs[id];
+      }
+    });
+  } catch (err) {
+    console.warn("LocalStorage load error:", err);
+  }
+}
+
+function clearSurveyorPrefs() {
+  if (!confirm("දුරකථනයේ මතක තබා ඇති සමීක්ෂක හා වසම් විස්තර මකා දැමීමට අවශ්‍යද?")) return;
+  try {
+    localStorage.removeItem(SURVEYOR_STORAGE_KEY);
+  } catch (err) {
+    console.warn("LocalStorage clear error:", err);
+  }
+
+  SURVEYOR_PERSIST_FIELDS.forEach((id) => {
+    const el = document.getElementById(id);
+    if (el) el.value = "";
+  });
+  setDefaultValues();
+  showNavAlert("info", "මතක තබා තිබූ මූලික විස්තර ඉවත් කර Default අගයන් යොදන ලදී.");
+  updateProgress();
+}
+
+function formatAppNo(num) {
+  const n = Math.max(0, Number(num) || 0);
+  return String(n).padStart(3, "0");
+}
+
+function renderApplicationBadges(lastNum) {
+  const lastFormatted = lastNum > 0 ? `PKS-2027-${formatAppNo(lastNum)}` : "PKS-2027-000";
+  const nextFormatted = `PKS-2027-${formatAppNo((lastNum || 0) + 1)}`;
+
+  const currentBadge = document.getElementById("currentAppNoBadge");
+  const nextBadge = document.getElementById("nextAppNoBadge");
+  const appNoInput = document.getElementById("q5_hh_no");
+
+  if (currentBadge) currentBadge.textContent = lastFormatted;
+  if (nextBadge) nextBadge.textContent = nextFormatted;
+  if (appNoInput && !appNoInput.value.trim()) {
+    appNoInput.value = nextFormatted;
+  }
+}
+
+async function loadApplicationNumbers() {
+  let cachedLast = 0;
+  try {
+    cachedLast = Number(localStorage.getItem(APP_COUNTER_STORAGE_KEY) || "0") || 0;
+  } catch (err) {
+    cachedLast = 0;
+  }
+  renderApplicationBadges(cachedLast);
+
+  try {
+    const res = await fetch(`${APPS_SCRIPT_URL}?action=getNextNo`, { cache: "no-store" });
+    if (!res.ok) return;
+    const data = await res.json();
+    if (data && typeof data.lastNo !== "undefined") {
+      const serverLast = Number(data.lastNo) || 0;
+      localStorage.setItem(APP_COUNTER_STORAGE_KEY, String(serverLast));
+      renderApplicationBadges(serverLast);
+    }
+  } catch (err) {
+    // Fallback gracefully to cached/default number on offline or CORS restriction
+  }
+}
 
 function showStep(stepNumber) {
   const target = Math.max(1, Math.min(TOTAL_STEPS, Number(stepNumber) || 1));
@@ -70,21 +193,10 @@ function showStep(stepNumber) {
   const submitBtn = document.getElementById("submitBtn");
   const finalFooter = document.getElementById("finalSubmitSection");
 
-  if (prevBtn) {
-    prevBtn.classList.toggle("d-none", currentStep === 1);
-  }
-
-  if (nextBtn) {
-    nextBtn.classList.toggle("d-none", currentStep === TOTAL_STEPS);
-  }
-
-  if (submitBtn) {
-    submitBtn.classList.toggle("d-none", currentStep !== TOTAL_STEPS);
-  }
-
-  if (finalFooter) {
-    finalFooter.classList.toggle("d-none", currentStep !== TOTAL_STEPS);
-  }
+  if (prevBtn) prevBtn.classList.toggle("d-none", currentStep === 1);
+  if (nextBtn) nextBtn.classList.toggle("d-none", currentStep === TOTAL_STEPS);
+  if (submitBtn) submitBtn.classList.toggle("d-none", currentStep !== TOTAL_STEPS);
+  if (finalFooter) finalFooter.classList.toggle("d-none", currentStep !== TOTAL_STEPS);
 
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
@@ -148,7 +260,6 @@ function toggleConditional(selectId, targetId) {
 
   targetEl.classList.toggle("d-none", !shouldShow);
 
-  // Ensure at least one card is present when a conditional card container opens
   if (shouldShow) {
     ensureCardWhenOpened(targetId);
   }
@@ -257,7 +368,7 @@ function addSchoolChildCard(showRemove = true) {
         </div>
         <div class="col-md-4">
           <label class="form-label">ශ්‍රේණිය</label>
-          <input type="text" class="form-control" data-field="grade" placeholder="උදා: 8 ශ්‍රේණිය" />
+          <input type="text" class="form-control" data-field="grade" placeholder="8 ශ්‍රේණිය" />
         </div>
       </div>
     `
@@ -347,7 +458,7 @@ function addLivestockCard(showRemove = true) {
       <div class="row g-3">
         <div class="col-md-3">
           <label class="form-label">සතුන් වර්ගය</label>
-          <input type="text" class="form-control" data-field="animal_type" placeholder="උදා: එළුවන්, කුකුළන්, ගවයින්" />
+          <input type="text" class="form-control" data-field="animal_type" placeholder="එළුවන්, කුකුළන්, ගවයින්" />
         </div>
         <div class="col-md-3">
           <label class="form-label">සතුන් ප්‍රමාණය</label>
@@ -359,7 +470,7 @@ function addLivestockCard(showRemove = true) {
         </div>
         <div class="col-md-3">
           <label class="form-label">අවශ්‍යතා / ගැටලු</label>
-          <input type="text" class="form-control" data-field="needs" placeholder="කූඩු / ආහාර / එන්නත් / ණය" />
+          <input type="text" class="form-control" data-field="needs" placeholder="කූඩු / ආහාර / එන්නත්" />
         </div>
       </div>
     `
@@ -383,15 +494,15 @@ function addVehicleCard(showRemove = true) {
       <div class="row g-3">
         <div class="col-md-4">
           <label class="form-label">වාහන වර්ගය</label>
-          <input type="text" class="form-control" data-field="vehicle_type" placeholder="උදා: යතුරුපැදිය, ත්‍රිරෝද රථය, මෝටර් රථය" />
+          <input type="text" class="form-control" data-field="vehicle_type" placeholder="යතුරුපැදිය / ත්‍රිරෝද රථය" />
         </div>
         <div class="col-md-4">
           <label class="form-label">අයිතිකරු</label>
-          <input type="text" class="form-control" data-field="owner" placeholder="අයිතිකරුගේ නම / සම්බන්ධතාව" />
+          <input type="text" class="form-control" data-field="owner" placeholder="අයිතිකරුගේ නම" />
         </div>
         <div class="col-md-4">
           <label class="form-label">වාහන අංකය</label>
-          <input type="text" class="form-control" data-field="vehicle_no" placeholder="උදා: WP ABC-1234" />
+          <input type="text" class="form-control" data-field="vehicle_no" placeholder="WP ABC-1234" />
         </div>
       </div>
     `
@@ -423,7 +534,7 @@ function addAbroadCard(showRemove = true) {
         </div>
         <div class="col-md-4">
           <label class="form-label">වර්ෂය</label>
-          <input type="text" class="form-control" data-field="year" placeholder="උදා: 2023" />
+          <input type="text" class="form-control" data-field="year" placeholder="2023" />
         </div>
       </div>
     `
@@ -671,12 +782,9 @@ function addLoanCard(showRemove = true) {
 }
 
 function initDefaultCards() {
-  // Always visible card sections start with one card
   addSchoolChildCard(false);
   addLandCard(false);
   addBankCard(false);
-
-  // Conditional card sections are created when toggled to "ඔව්" / "ඇත"
 }
 
 function bindButtonEvents() {
@@ -698,6 +806,16 @@ function bindButtonEvents() {
       showStep(targetStep);
     });
   });
+
+  const savePrefsBtn = document.getElementById("saveSurveyorPrefsBtn");
+  if (savePrefsBtn) {
+    savePrefsBtn.addEventListener("click", () => saveSurveyorPrefs(true));
+  }
+
+  const clearPrefsBtn = document.getElementById("clearSurveyorPrefsBtn");
+  if (clearPrefsBtn) {
+    clearPrefsBtn.addEventListener("click", clearSurveyorPrefs);
+  }
 
   document.getElementById("addSchoolChildBtn").addEventListener("click", () => addSchoolChildCard(true));
   document.getElementById("addLandBtn").addEventListener("click", () => addLandCard(true));
@@ -875,7 +993,19 @@ async function handleFormSubmit(e) {
       body: JSON.stringify(payload)
     });
 
-    showStatus("success", "සාර්ථකයි! සමීක්ෂණ දත්ත Google Sheet වෙත සාර්ථකව යොමු කරන ලදී.");
+    // Save surveyor/area info locally so next entry doesn't re-enter it
+    saveSurveyorPrefs(false);
+
+    // Increment local application counter & display updated Application No / Next Application No
+    let lastNo = Number(localStorage.getItem(APP_COUNTER_STORAGE_KEY) || "0") || 0;
+    lastNo += 1;
+    localStorage.setItem(APP_COUNTER_STORAGE_KEY, String(lastNo));
+    renderApplicationBadges(lastNo);
+
+    showStatus(
+      "success",
+      `සාර්ථකයි! අයදුම්පත් අංකය PKS-2027-${formatAppNo(lastNo)} යටතේ දත්ත Google Sheet වෙත යොමු කරන ලදී. ඊළඟ අයදුම්පත: PKS-2027-${formatAppNo(lastNo + 1)}`
+    );
   } catch (err) {
     showStatus("error", "දත්ත යැවීමේදී ගැටලුවක් ඇති විය. අන්තර්ජාල සම්බන්ධතාව පරීක්ෂා කර නැවත උත්සාහ කරන්න.");
   } finally {
@@ -885,10 +1015,14 @@ async function handleFormSubmit(e) {
 }
 
 function handleFormReset() {
-  if (!confirm("ෆෝරමයේ ඇතුළත් කළ සියලුම දත්ත හිස් කිරීමට ඔබට විශ්වාසද?")) return;
+  if (!confirm("ෆෝරමයේ ඇතුළත් කළ දත්ත හිස් කිරීමට ඔබට විශ්වාසද? (සමීක්ෂක හා වසම් මූලික විස්තර Phone එකේ සුරැකී පවතී)")) return;
 
   document.getElementById("surveyForm").reset();
-  document.getElementById("q6_date").value = new Date().toISOString().split("T")[0];
+  setDefaultValues();
+  loadSurveyorPrefs();
+
+  const lastNo = Number(localStorage.getItem(APP_COUNTER_STORAGE_KEY) || "0") || 0;
+  renderApplicationBadges(lastNo);
 
   CARD_CONTAINERS.forEach((id) => {
     const el = document.getElementById(id);
