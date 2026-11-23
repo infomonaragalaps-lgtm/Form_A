@@ -1,5 +1,8 @@
 const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbww2GIaQkDYozdMg-WOAXnPS8tDxJQWHqKwus3dmywcZDhrh0ZOBnBdExFHm32jOXEN/exec";
 
+const TOTAL_STEPS = 9;
+let currentStep = 1;
+
 const CARD_CONTAINERS = [
   "schoolChildrenContainer",
   "landsContainer",
@@ -39,8 +42,85 @@ window.addEventListener("DOMContentLoaded", () => {
   initDefaultCards();
   bindButtonEvents();
   bindProgressListeners(document.getElementById("surveyForm"));
+  showStep(1);
   updateProgress();
 });
+
+function showStep(stepNumber) {
+  const target = Math.max(1, Math.min(TOTAL_STEPS, Number(stepNumber) || 1));
+  currentStep = target;
+
+  document.querySelectorAll(".section-card[data-step]").forEach((card) => {
+    const cardStep = Number(card.getAttribute("data-step"));
+    if (cardStep === currentStep) {
+      card.classList.remove("d-none");
+    } else {
+      card.classList.add("d-none");
+    }
+  });
+
+  document.querySelectorAll(".step-pill-btn[data-goto-step]").forEach((btn) => {
+    const btnStep = Number(btn.getAttribute("data-goto-step"));
+    btn.classList.toggle("active", btnStep === currentStep);
+  });
+
+  const stepLabel = document.getElementById("stepBadgeLabel");
+  if (stepLabel) {
+    stepLabel.textContent = `කොටස ${String(currentStep).padStart(2, "0")} / ${String(TOTAL_STEPS).padStart(2, "0")}`;
+  }
+
+  const prevBtn = document.getElementById("prevStepBtn");
+  const nextBtn = document.getElementById("nextStepBtn");
+  const finalFooter = document.getElementById("finalSubmitSection");
+
+  if (prevBtn) {
+    prevBtn.classList.toggle("d-none", currentStep === 1);
+  }
+
+  if (nextBtn) {
+    nextBtn.classList.toggle("d-none", currentStep === TOTAL_STEPS);
+  }
+
+  if (finalFooter) {
+    finalFooter.classList.toggle("d-none", currentStep !== TOTAL_STEPS);
+  }
+
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function validateCurrentStep() {
+  if (currentStep === 1) {
+    const dsd = document.getElementById("q2_dsd").value.trim();
+    const gnd = document.getElementById("q3_gnd").value.trim();
+    const headName = document.getElementById("q7_head_name").value.trim();
+    const totalMembers = document.getElementById("q9_total_members").value.trim();
+
+    if (!dsd || !gnd || !headName || !totalMembers) {
+      showNavAlert(
+        "warning",
+        "ඊළඟ කොටසට යාමට පෙර අනිවාර්ය (*) තොරතුරු (02. ප්‍රා.ලේ. කොට්ඨාසය, 03. ග්‍රාම නිලධාරී වසම, 07. මූලිකයාගේ නම සහ 09. මුළු සාමාජික සංඛ්‍යාව) ඇතුළත් කරන්න."
+      );
+      return false;
+    }
+  }
+  hideNavAlert();
+  return true;
+}
+
+function showNavAlert(type, message) {
+  const alertEl = document.getElementById("navAlertBox");
+  if (!alertEl) return;
+  alertEl.className = `alert alert-${type} mt-3 fw-semibold`;
+  alertEl.textContent = message;
+  alertEl.scrollIntoView({ behavior: "smooth", block: "nearest" });
+}
+
+function hideNavAlert() {
+  const alertEl = document.getElementById("navAlertBox");
+  if (!alertEl) return;
+  alertEl.className = "alert d-none";
+  alertEl.textContent = "";
+}
 
 function toggleConditional(selectId, targetId) {
   const selectEl = document.getElementById(selectId);
@@ -574,6 +654,25 @@ function initDefaultCards() {
 }
 
 function bindButtonEvents() {
+  document.getElementById("prevStepBtn").addEventListener("click", () => {
+    hideNavAlert();
+    showStep(currentStep - 1);
+  });
+
+  document.getElementById("nextStepBtn").addEventListener("click", () => {
+    if (validateCurrentStep()) {
+      showStep(currentStep + 1);
+    }
+  });
+
+  document.querySelectorAll(".step-pill-btn[data-goto-step]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const targetStep = Number(btn.getAttribute("data-goto-step"));
+      if (targetStep > currentStep && !validateCurrentStep()) return;
+      showStep(targetStep);
+    });
+  });
+
   document.getElementById("addSchoolChildBtn").addEventListener("click", () => addSchoolChildCard(true));
   document.getElementById("addLandBtn").addEventListener("click", () => addLandCard(true));
   document.getElementById("addLivestockBtn").addEventListener("click", () => addLivestockCard(true));
@@ -622,8 +721,13 @@ function updateProgress() {
   const pct = Math.round((filled / keyIds.length) * 100);
   const bar = document.getElementById("progressBar");
   const label = document.getElementById("progressLabel");
-  if (bar) bar.style.width = `${pct}%`;
-  if (label) label.textContent = `සම්පූර්ණ කර ඇති ප්‍රමාණය: ${pct}%`;
+  if (bar) {
+    bar.style.width = `${pct}%`;
+    bar.setAttribute("aria-valuenow", String(pct));
+  }
+  if (label) {
+    label.textContent = `සම්පූර්ණ කර ඇති ප්‍රමාණය: ${pct}%`;
+  }
 }
 
 function collectCardData(containerId) {
@@ -693,6 +797,8 @@ function showStatus(type, message) {
 
 async function handleFormSubmit(e) {
   e.preventDefault();
+  hideNavAlert();
+
   const statusBox = document.getElementById("statusMessage");
   statusBox.className = "alert d-none";
   statusBox.textContent = "";
@@ -704,14 +810,16 @@ async function handleFormSubmit(e) {
   const certified = document.getElementById("certifyCheckbox").checked;
 
   if (!dsd || !gnd || !headName || !totalMembers) {
+    showStep(1);
     showStatus(
       "error",
-      "කරුණාකර අනිවාර්ය (*) මූලික තොරතුරු (ප්‍රා.ලේ. කොට්ඨාසය, ග්‍රාම නිලධාරී වසම, මූලිකයාගේ නම සහ මුළු සාමාජික සංඛ්‍යාව) සම්පූර්ණ කරන්න."
+      "කරුණාකර අනිවාර්ය (*) මූලික තොරතුරු (02. ප්‍රා.ලේ. කොට්ඨාසය, 03. ග්‍රාම නිලධාරී වසම, 07. මූලිකයාගේ නම සහ 09. මුළු සාමාජික සංඛ්‍යාව) සම්පූර්ණ කරන්න."
     );
     return;
   }
 
   if (!certified) {
+    showStep(9);
     showStatus(
       "error",
       "දත්ත Submit කිරීමට පෙර \"ඉහත තොරතුරු නිවැරදි හා සත්‍ය බවට මා සහතික කරමි.\" යන්න තෝරන්න."
@@ -758,10 +866,12 @@ function handleFormReset() {
   });
 
   initDefaultCards();
+  hideNavAlert();
 
   const statusBox = document.getElementById("statusMessage");
   statusBox.className = "alert d-none";
   statusBox.textContent = "";
 
+  showStep(1);
   updateProgress();
 }
