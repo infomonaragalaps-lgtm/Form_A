@@ -131,9 +131,10 @@ function formatAppNo(num) {
   return String(n).padStart(3, "0");
 }
 
-function renderApplicationBadges(lastNum) {
-  const lastFormatted = lastNum > 0 ? `PKS-2027-${formatAppNo(lastNum)}` : "PKS-2027-000";
-  const nextFormatted = `PKS-2027-${formatAppNo((lastNum || 0) + 1)}`;
+function renderApplicationBadges(lastNum, syncInput = true) {
+  const safeLast = Math.max(0, Number(lastNum) || 0);
+  const lastFormatted = `PKS-2027-${formatAppNo(safeLast)}`;
+  const nextFormatted = `PKS-2027-${formatAppNo(safeLast + 1)}`;
 
   const currentBadge = document.getElementById("currentAppNoBadge");
   const nextBadge = document.getElementById("nextAppNoBadge");
@@ -141,7 +142,7 @@ function renderApplicationBadges(lastNum) {
 
   if (currentBadge) currentBadge.textContent = lastFormatted;
   if (nextBadge) nextBadge.textContent = nextFormatted;
-  if (appNoInput && !appNoInput.value.trim()) {
+  if (appNoInput && syncInput) {
     appNoInput.value = nextFormatted;
   }
 }
@@ -153,19 +154,23 @@ async function loadApplicationNumbers() {
   } catch (err) {
     cachedLast = 0;
   }
-  renderApplicationBadges(cachedLast);
+  renderApplicationBadges(cachedLast, true);
 
   try {
     const res = await fetch(`${APPS_SCRIPT_URL}?action=getNextNo`, { cache: "no-store" });
     if (!res.ok) return;
     const data = await res.json();
     if (data && typeof data.lastNo !== "undefined") {
-      const serverLast = Number(data.lastNo) || 0;
-      localStorage.setItem(APP_COUNTER_STORAGE_KEY, String(serverLast));
-      renderApplicationBadges(serverLast);
+      const serverLast = Math.max(0, Number(data.lastNo) || 0);
+      try {
+        localStorage.setItem(APP_COUNTER_STORAGE_KEY, String(serverLast));
+      } catch (err) {
+        // Ignore storage errors
+      }
+      renderApplicationBadges(serverLast, true);
     }
   } catch (err) {
-    // Fallback gracefully to cached/default number on offline or CORS restriction
+    // Keep cached/default count if offline or endpoint not yet updated
   }
 }
 
@@ -344,7 +349,6 @@ function appendCard(containerId, cardEl) {
   updateProgress();
 }
 
-// 19. පාසල් යන දරුවන්ගේ Card
 function addSchoolChildCard(showRemove = true) {
   const containerId = "schoolChildrenContainer";
   const prefix = "පාසල් යන දරුවා";
@@ -376,7 +380,6 @@ function addSchoolChildCard(showRemove = true) {
   appendCard(containerId, card);
 }
 
-// 24. ඉඩම් තොරතුරු Card (25 - 32 fields)
 function addLandCard(showRemove = true) {
   const containerId = "landsContainer";
   const prefix = "ඉඩම";
@@ -442,7 +445,6 @@ function addLandCard(showRemove = true) {
   appendCard(containerId, card);
 }
 
-// පශු සම්පත් Card
 function addLivestockCard(showRemove = true) {
   const containerId = "livestockContainer";
   const prefix = "සත්ව වර්ගය";
@@ -478,7 +480,6 @@ function addLivestockCard(showRemove = true) {
   appendCard(containerId, card);
 }
 
-// වාහන තොරතුරු Card
 function addVehicleCard(showRemove = true) {
   const containerId = "vehiclesContainer";
   const prefix = "වාහනය";
@@ -510,7 +511,6 @@ function addVehicleCard(showRemove = true) {
   appendCard(containerId, card);
 }
 
-// 7.2 විදෙස්ගත වූවන් Card
 function addAbroadCard(showRemove = true) {
   const containerId = "abroadContainer";
   const prefix = "විදෙස්ගත වූ තැනැත්තා";
@@ -542,7 +542,6 @@ function addAbroadCard(showRemove = true) {
   appendCard(containerId, card);
 }
 
-// 7.3 මව / පියා අහිමි වූ දරුවන් Card
 function addOrphanCard(showRemove = true) {
   const containerId = "orphanContainer";
   const prefix = "දරුවා";
@@ -570,7 +569,6 @@ function addOrphanCard(showRemove = true) {
   appendCard(containerId, card);
 }
 
-// 7.4 විශේෂ ආබාධ සහිත පුද්ගලයින් Card
 function addDisabilityCard(showRemove = true) {
   const containerId = "disabilityContainer";
   const prefix = "පුද්ගලයා";
@@ -618,7 +616,6 @@ function addDisabilityCard(showRemove = true) {
   appendCard(containerId, card);
 }
 
-// 7.5 ඇබ්බැහි වූවන් Card
 function addAddictionCard(showRemove = true) {
   const containerId = "addictionContainer";
   const prefix = "පුද්ගලයා";
@@ -650,7 +647,6 @@ function addAddictionCard(showRemove = true) {
   appendCard(containerId, card);
 }
 
-// 7.6 විවිධ රජයේ / සමාජ ආධාර ලබන පුද්ගලයින් Card
 function addWelfareCard(showRemove = true) {
   const containerId = "welfareContainer";
   const prefix = "ලාභියා";
@@ -697,7 +693,6 @@ function addWelfareCard(showRemove = true) {
   appendCard(containerId, card);
 }
 
-// 08. බැංකු ගිණුම් Card
 function addBankCard(showRemove = true) {
   const containerId = "bankContainer";
   const prefix = "බැංකු ගිණුම";
@@ -729,7 +724,6 @@ function addBankCard(showRemove = true) {
   appendCard(containerId, card);
 }
 
-// 08. ණය පහසුකම් Card
 function addLoanCard(showRemove = true) {
   const containerId = "loanContainer";
   const prefix = "ණය පහසුකම";
@@ -993,14 +987,16 @@ async function handleFormSubmit(e) {
       body: JSON.stringify(payload)
     });
 
-    // Save surveyor/area info locally so next entry doesn't re-enter it
     saveSurveyorPrefs(false);
 
-    // Increment local application counter & display updated Application No / Next Application No
     let lastNo = Number(localStorage.getItem(APP_COUNTER_STORAGE_KEY) || "0") || 0;
     lastNo += 1;
-    localStorage.setItem(APP_COUNTER_STORAGE_KEY, String(lastNo));
-    renderApplicationBadges(lastNo);
+    try {
+      localStorage.setItem(APP_COUNTER_STORAGE_KEY, String(lastNo));
+    } catch (err) {
+      // Ignore storage errors
+    }
+    renderApplicationBadges(lastNo, true);
 
     showStatus(
       "success",
@@ -1022,7 +1018,7 @@ function handleFormReset() {
   loadSurveyorPrefs();
 
   const lastNo = Number(localStorage.getItem(APP_COUNTER_STORAGE_KEY) || "0") || 0;
-  renderApplicationBadges(lastNo);
+  renderApplicationBadges(lastNo, true);
 
   CARD_CONTAINERS.forEach((id) => {
     const el = document.getElementById(id);
