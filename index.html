@@ -18,11 +18,26 @@
 </head>
 <body>
   <div class="survey-wrapper">
-    <!-- Colorful Gradient Header -->
+    <!-- Colorful Gradient Header with Application Numbers -->
     <header class="hero-header">
-      <div class="hero-badge">ප්‍රාදේශීය සංවර්ධන හා සමාජ සමීක්ෂණ ව්‍යාපෘතිය</div>
-      <h1>ප්‍රජා කුටුම්භ සමීක්ෂණය - 2027 : පත්‍රිකා A </h1>
-      <p>පවුලේ ජන විකාස, අධ්‍යාපන, ජීවනෝපාය, නිවාස, සුභසාධන හා ආර්ථික තොරතුරු රැස්කිරීමේ නිල ඩිජිටල් ප්‍රශ්නාවලිය</p>
+      <div class="d-flex flex-wrap justify-content-between align-items-start gap-3">
+        <div>
+          <div class="hero-badge">ප්‍රාදේශීය සංවර්ධන හා සමාජ සමීක්ෂණ ව්‍යාපෘතිය</div>
+          <h1>ප්‍රජා කුටුම්භ සමීක්ෂණය - 2027</h1>
+          <p>පවුලේ ජන විකාස, අධ්‍යාපන, ජීවනෝපාය, නිවාස, සුභසාධන හා ආර්ථික තොරතුරු රැස්කිරීමේ නිල ඩිජිටල් ප්‍රශ්නාවලිය</p>
+        </div>
+
+        <div class="app-no-box text-end">
+          <div class="app-no-item">
+            <span class="app-no-label">අවසන් අයදුම්පත් අංකය:</span>
+            <span id="currentAppNoBadge" class="app-no-badge">PKS-2027-000</span>
+          </div>
+          <div class="app-no-item mt-1">
+            <span class="app-no-label">ඊළඟ අයදුම්පත් අංකය:</span>
+            <span id="nextAppNoBadge" class="app-no-badge next-badge">PKS-2027-001</span>
+          </div>
+        </div>
+      </div>
     </header>
 
     <!-- Sticky Progress & Step Navigation Bar -->
@@ -55,33 +70,66 @@
           <h2>01. මූලික පරිපාලන හා ස්ථානීය තොරතුරු</h2>
         </div>
         <div class="section-body">
+          <div class="note-box">
+            <strong>විශේෂ දැනුම්දීමයි (රහස්‍යභාවය පිළිබඳ සහතිකය):</strong> මෙම සමීක්ෂණය ඔබගේ පෞද්ගලික තොරතුරු සොයා බැලීමට නොව, ගමේ සහ පවුල්වල සංවර්ධන හා සුභසාධන අවශ්‍යතා නිවැරදිව හඳුනා ගැනීමට පමණි.
+          </div>
+
           <div class="row g-3 mb-3">
             <div class="col-md-4">
               <label for="q1_district" class="form-label">01. දිස්ත්‍රික්කය <span class="req">*</span></label>
-              <input type="text" id="q1_district" name="q1_district" class="form-control" value="මොනරාගල" required />
+              <input type="text" id="q1_district" name="q1_district" class="form-control" value="මොණරාගල" required />
             </div>
             <div class="col-md-4">
               <label for="q2_dsd" class="form-label">02. ප්‍රාදේශීය ලේකම් කොට්ඨාසය <span class="req">*</span></label>
-              <input type="text" id="q2_dsd" name="q2_dsd" class="form-control" placeholder="ප්‍රා.ලේ. කොට්ඨාසය ඇතුළත් කරන්න" required />
+              <input type="text" id="q2_dsd" name="q2_dsd" class="form-control" value="මොණරාගල" placeholder="ප්‍රා.ලේ. කොට්ඨාසය" required />
             </div>
             <div class="col-md-4">
-              <label for="q3_gnd" class="form-label">03. ග්‍රාම නිලධාරී වසම / අංකය <span class="req">*</span></label>
-              <input type="text" id="q3_gnd" name="q3_gnd" class="form-control" placeholder="ග්‍රාම සේවා වසම හා අංකය" required />
+              <label for="q3_gnd" class="form-label">03. ග්‍රාම නිලධාරී වසම / කොට්ඨාසය <span class="req">*</span></label>
+              <select id="q3_gnd" name="q3_gnd" class="form-select" required>
+                <option value="">ග්‍රාම නිලධාරී වසම තෝරන්න...</option>
+                <option value="හුලංදාව">හුලංදාව</option>
+                <option value="මොණරාගල">මොණරාගල</option>
+                <option value="වෙනත් (ලැයිස්තුව එක් කරන්න)">වෙනත් (ලැයිස්තුව එක් කරන්න)</option>
+              </select>
             </div>
           </div>
 
           <div class="row g-3 mb-3">
             <div class="col-md-4">
-              <label for="q4_village" class="form-label">04. ගම / ජනාවාසය</label>
+              <label for="q4_village" class="form-label">04. ගමේ නම / ජනාවාසය</label>
               <input type="text" id="q4_village" name="q4_village" class="form-control" placeholder="ගමේ නම" />
             </div>
             <div class="col-md-4">
-              <label for="q5_hh_no" class="form-label">05. කුටුම්භ / නිවාස අංකය</label>
-              <input type="text" id="q5_hh_no" name="q5_hh_no" class="form-control" placeholder="උදා: 124/A" />
+              <label for="q4a_total_families" class="form-label">04(අ). ගමෙහි සිටින මුළු පවුල් සංඛ්‍යාව</label>
+              <input type="number" id="q4a_total_families" name="q4a_total_families" class="form-control" min="0" placeholder="0" />
             </div>
             <div class="col-md-4">
+              <label for="q5_hh_no" class="form-label">05. ප්‍රශ්නාවලි / අයදුම්පත් අංකය</label>
+              <input type="text" id="q5_hh_no" name="q5_hh_no" class="form-control" placeholder="PKS-2027-001" />
+            </div>
+          </div>
+
+          <div class="row g-3 mb-3">
+            <div class="col-md-6">
+              <label for="q6a_officer_info" class="form-label">06(අ). සමීක්ෂකයාගේ නම හා තනතුර</label>
+              <input type="text" id="q6a_officer_info" name="q6a_officer_info" class="form-control" placeholder="සමීක්ෂකයාගේ නම සහ තනතුර" />
+            </div>
+            <div class="col-md-6">
               <label for="q6_date" class="form-label">06. සමීක්ෂණ දිනය</label>
               <input type="date" id="q6_date" name="q6_date" class="form-control" />
+            </div>
+          </div>
+
+          <!-- Phone Local Storage Save / Clear Bar -->
+          <div class="sub-panel mb-3">
+            <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
+              <div class="small fw-semibold text-secondary">
+                ඉහත දිස්ත්‍රික්කය, ප්‍රා.ලේ. කොට්ඨාසය, GN වසම, ගමේ නම, මුළු පවුල් සංඛ්‍යාව, සමීක්ෂක විස්තර හා දිනය ඔබගේ Phone එකේ මතක තබා ගැනීමට:
+              </div>
+              <div class="d-flex gap-2 flex-wrap">
+                <button type="button" class="btn btn-sm btn-outline-primary fw-semibold" id="saveSurveyorPrefsBtn">Phone එකේ Save කරන්න</button>
+                <button type="button" class="btn btn-sm btn-outline-danger fw-semibold" id="clearSurveyorPrefsBtn">මතකය මකන්න</button>
+              </div>
             </div>
           </div>
 
@@ -154,13 +202,13 @@
             </div>
             <div class="col-md-6">
               <label for="q17_vocational" class="form-label">17. වෘත්තීය පුහුණු අවශ්‍යතා</label>
-              <input type="text" id="q17_vocational" name="q17_vocational" class="form-control" placeholder="අවශ්‍ය වෘත්තීය පුහුණු ක්ෂේත්‍ර ඇත්නම් සඳහන් කරන්න" />
+              <input type="text" id="q17_vocational" name="q17_vocational" class="form-control" placeholder="අවශ්‍ය වෘත්තීය පුහුණු ක්ෂේත්‍ර" />
             </div>
           </div>
 
           <div class="mb-3">
             <label for="q18_special_talents" class="form-label">18. පවුලේ සාමාජිකයන් සතු විශේෂ දක්ෂතා / කුසලතා</label>
-            <textarea id="q18_special_talents" name="q18_special_talents" class="form-control" placeholder="කලා, ක්‍රීඩා, ශිල්පීය, තාක්ෂණික හෝ වෙනත් විශේෂ දක්ෂතා ඇත්නම් විස්තර කරන්න..."></textarea>
+            <textarea id="q18_special_talents" name="q18_special_talents" class="form-control" placeholder="කලා, ක්‍රීඩා, ශිල්පීය, තාක්ෂණික හෝ වෙනත් දක්ෂතා..."></textarea>
           </div>
 
           <!-- 19. පාසල් යන දරුවන්ගේ විස්තර (Dynamic Cards) -->
@@ -185,7 +233,7 @@
               </div>
               <div class="col-md-6 d-none" id="q20_reason_wrap">
                 <label for="q20_reason" class="form-label">20(අ). පාසල් නොයෑමට හේතුව</label>
-                <input type="text" id="q20_reason" name="q20_reason" class="form-control" placeholder="හේතුව සඳහන් කරන්න" />
+                <input type="text" id="q20_reason" name="q20_reason" class="form-control" placeholder="හේතුව" />
               </div>
             </div>
           </div>
@@ -203,19 +251,19 @@
               </div>
               <div class="col-md-6 d-none" id="q21_reason_wrap">
                 <label for="q21_reason" class="form-label">21(අ). හේතුව / විස්තරය</label>
-                <input type="text" id="q21_reason" name="q21_reason" class="form-control" placeholder="හේතුව සඳහන් කරන්න" />
+                <input type="text" id="q21_reason" name="q21_reason" class="form-control" placeholder="හේතුව" />
               </div>
             </div>
           </div>
 
           <div class="mb-3">
             <label for="q22_health_notes" class="form-label">22. නිදන්ගත රෝග හෝ සෞඛ්‍ය තත්වයන් (ඇත්නම්)</label>
-            <input type="text" id="q22_health_notes" name="q22_health_notes" class="form-control" placeholder="රෝග තත්වයන් හෝ සෞඛ්‍ය අවශ්‍යතා සඳහන් කරන්න" />
+            <input type="text" id="q22_health_notes" name="q22_health_notes" class="form-control" placeholder="රෝග තත්වයන් හෝ සෞඛ්‍ය අවශ්‍යතා" />
           </div>
 
           <div>
             <label for="q23_nutrition_aid" class="form-label">23. පවුලට / දරුවන්ට ලැබෙන පෝෂණ ආධාර විස්තර</label>
-            <textarea id="q23_nutrition_aid" name="q23_nutrition_aid" class="form-control" placeholder="ත්‍රිපෝෂ, පාසල් පෝෂණ වැඩසටහන් හෝ වෙනත් පෝෂණ ආධාර ලැබේ නම් විස්තර කරන්න..."></textarea>
+            <textarea id="q23_nutrition_aid" name="q23_nutrition_aid" class="form-control" placeholder="ත්‍රිපෝෂ, පාසල් පෝෂණ වැඩසටහන් හෝ වෙනත් ආධාර..."></textarea>
           </div>
         </div>
       </section>
@@ -332,14 +380,14 @@
               </div>
               <div class="col-md-6 d-none" id="q38_other_wrap">
                 <label for="q38_other_text" class="form-label">වෙනත් බලශක්ති ප්‍රභවය (විස්තර කරන්න)</label>
-                <textarea id="q38_other_text" name="q38_other_text" class="form-control" placeholder="වෙනත් බලශක්ති මූලාශ්‍රය සඳහන් කරන්න..."></textarea>
+                <textarea id="q38_other_text" name="q38_other_text" class="form-control" placeholder="වෙනත් බලශක්ති මූලාශ්‍රය"></textarea>
               </div>
             </div>
 
             <div class="row g-3">
               <div class="col-md-6">
                 <label for="q38_solar_kw" class="form-label">සූර්ය පැනල ධාරිතාව (kW)</label>
-                <input type="text" id="q38_solar_kw" name="q38_solar_kw" class="form-control" placeholder="උදා: 5 kW (නැත්නම් හිස්ව තබන්න)" />
+                <input type="text" id="q38_solar_kw" name="q38_solar_kw" class="form-control" placeholder="5 kW" />
               </div>
               <div class="col-md-6">
                 <label for="q38_net_metering" class="form-label">Net Metering පහසුකම</label>
@@ -487,7 +535,7 @@
 
           <div>
             <label for="q43b_community_org" class="form-label">ගමේ ප්‍රජා සංවර්ධන සමිතිවල සක්‍රීය දායකත්වය</label>
-            <textarea id="q43b_community_org" name="q43b_community_org" class="form-control" placeholder="ග්‍රාම සංවර්ධන සමිතිය, මරණාධාර සමිතිය, කාන්තා සමිති, ගොවි සමිති ආදියේ දායකත්වය සඳහන් කරන්න..."></textarea>
+            <textarea id="q43b_community_org" name="q43b_community_org" class="form-control" placeholder="ග්‍රාම සංවර්ධන සමිතිය, මරණාධාර සමිතිය, කාන්තා සමිති, ගොවි සමිති..."></textarea>
           </div>
         </div>
       </section>
@@ -513,11 +561,11 @@
               <div class="row g-3">
                 <div class="col-md-6">
                   <label for="q44a_material_aid" class="form-label">පවුලට ලැබී ඇති ද්‍රව්‍ය ආධාර</label>
-                  <input type="text" id="q44a_material_aid" name="q44a_material_aid" class="form-control" placeholder="ලැබී ඇති ද්‍රව්‍ය ආධාර" />
+                  <input type="text" id="q44a_material_aid" name="q44a_material_aid" class="form-control" placeholder="ද්‍රව්‍ය ආධාර" />
                 </div>
                 <div class="col-md-6">
                   <label for="q44b_aid_qty" class="form-label">ලැබූ ප්‍රමාණය</label>
-                  <input type="text" id="q44b_aid_qty" name="q44b_aid_qty" class="form-control" placeholder="ලැබූ ප්‍රමාණය" />
+                  <input type="text" id="q44b_aid_qty" name="q44b_aid_qty" class="form-control" placeholder="ප්‍රමාණය" />
                 </div>
                 <div class="col-md-6">
                   <label for="q44c_aid_amount" class="form-label">පවුලට ලැබෙන ආධාර මුදල් / මාසික ප්‍රමාණය (රු.)</label>
@@ -720,14 +768,13 @@
             <label for="q09d_officer_note" class="form-label">
               ඉහත තොරතුරු හා නිවසේ සැබෑ තත්ත්වය නිරීක්ෂණය කිරීමෙන් පසු, මෙම පවුල සඳහා කඩිනමින් ඉටුවිය යුතු ප්‍රමුඛතම අවශ්‍යතාව වන්නේ:
             </label>
-            <textarea id="q09d_officer_note" name="q09d_officer_note" class="form-control" placeholder="සමීක්ෂක නිලධාරියාගේ නිර්දේශ හා ප්‍රමුඛතම අවශ්‍යතාව සටහන් කරන්න..."></textarea>
+            <textarea id="q09d_officer_note" name="q09d_officer_note" class="form-control" placeholder="සමීක්ෂක නිලධාරියාගේ නිර්දේශ හා ප්‍රමුඛතම අවශ්‍යතාව..."></textarea>
           </div>
         </div>
       </section>
 
       <!-- Final Section (Visible on Step 09): සහතික කිරීම, දුරකථන සටහන සහ Submit -->
       <div id="finalSubmitSection" class="d-none">
-        <!-- සහතික කිරීමේ Checkbox එක -->
         <div class="cert-card">
           <label class="cert-check" for="certifyCheckbox">
             <input type="checkbox" id="certifyCheckbox" name="certifyCheckbox" class="form-check-input" required />
@@ -735,7 +782,6 @@
           </label>
         </div>
 
-        <!-- අමතර තොරතුරු සටහන -->
         <div class="hotline-box">
           * මේ සම්බන්ධව අමතර තොරතුරු සඳහා 0777300350 / 0719300350 අමතන්න *
         </div>
@@ -750,7 +796,7 @@
 
         <div class="d-flex gap-2 flex-wrap">
           <button type="button" class="btn btn-next-step" id="nextStepBtn">ඊළඟ කොටස →</button>
-          <button type="submit" class="btn btn-submit-form" id="submitBtn">දත්ත Submit කරන්න</button>
+          <button type="submit" class="btn btn-submit-form d-none" id="submitBtn">දත්ත Submit කරන්න</button>
         </div>
       </div>
 
