@@ -6,6 +6,7 @@
   --accent-soft: #f0fdfa;
   --purple: #7c3aed;
   --pink: #db2777;
+  --amber: #d97706;
   --warn-bg: #fffbeb;
   --warn-border: #f59e0b;
   --warn-text: #92400e;
@@ -16,22 +17,22 @@
   --border: #cbd5e1;
   --border-light: #e2e8f0;
   --text-main: #0f172a;
-  --placeholder-color: #b0bccb;
   --radius-lg: 18px;
   --radius-md: 12px;
   --radius-sm: 8px;
-  --shadow-sm: 0 2px 6px rgba(15, 23, 42, 0.06);
-  --shadow-md: 0 10px 28px rgba(30, 58, 138, 0.1);
-  --shadow-lg: 0 18px 40px rgba(30, 58, 138, 0.18);
+  --shadow-sm: 0 2px 8px rgba(15, 23, 42, 0.08);
+  --shadow-md: 0 12px 30px rgba(30, 58, 138, 0.14);
+  --shadow-lg: 0 20px 44px rgba(49, 46, 129, 0.24);
 }
 
 body {
   font-family: 'Noto Sans Sinhala', sans-serif;
   background:
-    radial-gradient(circle at 12% 15%, rgba(37, 99, 235, 0.16), transparent 42%),
-    radial-gradient(circle at 88% 18%, rgba(219, 39, 119, 0.14), transparent 40%),
-    radial-gradient(circle at 50% 90%, rgba(15, 118, 110, 0.16), transparent 45%),
-    linear-gradient(135deg, #eef2ff 0%, #f0fdf4 50%, #fdf2f8 100%);
+    radial-gradient(circle at 10% 12%, rgba(59, 130, 246, 0.24), transparent 42%),
+    radial-gradient(circle at 90% 15%, rgba(236, 72, 153, 0.22), transparent 42%),
+    radial-gradient(circle at 82% 85%, rgba(16, 185, 129, 0.22), transparent 45%),
+    radial-gradient(circle at 18% 88%, rgba(139, 92, 246, 0.22), transparent 45%),
+    linear-gradient(135deg, #e0e7ff 0%, #ccfbf1 48%, #fce7f3 100%);
   color: var(--text-main);
   line-height: 1.65;
   min-height: 100vh;
@@ -43,31 +44,12 @@ body {
   margin: 0 auto;
 }
 
-/* Soft Placeholder Colors */
-input::placeholder,
-textarea::placeholder {
-  color: var(--placeholder-color) !important;
-  opacity: 1;
-  font-weight: 400;
-}
-
-input::-webkit-input-placeholder,
-textarea::-webkit-input-placeholder {
-  color: var(--placeholder-color) !important;
-}
-
-input::-moz-placeholder,
-textarea::-moz-placeholder {
-  color: var(--placeholder-color) !important;
-  opacity: 1;
-}
-
-/* Colorful Gradient Header */
+/* Vibrant Gradient Header */
 .hero-header {
-  background: linear-gradient(125deg, #312e81 0%, #1d4ed8 38%, #0d9488 75%, #db2777 100%);
+  background: linear-gradient(120deg, #1e1b4b 0%, #2563eb 32%, #0d9488 68%, #db2777 100%);
   color: #ffffff;
   border-radius: var(--radius-lg);
-  padding: 26px 24px;
+  padding: 28px 24px;
   box-shadow: var(--shadow-lg);
   position: relative;
   overflow: hidden;
@@ -79,9 +61,9 @@ textarea::-moz-placeholder {
   position: absolute;
   right: -50px;
   top: -50px;
-  width: 210px;
-  height: 210px;
-  background: rgba(255, 255, 255, 0.12);
+  width: 220px;
+  height: 220px;
+  background: rgba(255, 255, 255, 0.14);
   border-radius: 50%;
   pointer-events: none;
 }
@@ -89,83 +71,87 @@ textarea::-moz-placeholder {
 .hero-header::after {
   content: "";
   position: absolute;
-  left: -40px;
+  left: -45px;
   bottom: -60px;
-  width: 170px;
-  height: 170px;
-  background: rgba(255, 255, 255, 0.08);
+  width: 180px;
+  height: 180px;
+  background: rgba(255, 255, 255, 0.1);
   border-radius: 50%;
   pointer-events: none;
 }
 
-.hero-top-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 14px;
-  flex-wrap: wrap;
-  margin-bottom: 8px;
-  position: relative;
-  z-index: 2;
-}
-
 .hero-badge {
   display: inline-block;
-  background: rgba(255, 255, 255, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.35);
+  background: rgba(255, 255, 255, 0.22);
+  border: 1px solid rgba(255, 255, 255, 0.4);
   padding: 4px 14px;
   border-radius: 999px;
   font-size: 0.82rem;
   font-weight: 600;
-}
-
-.app-no-group {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-
-.app-no-chip {
-  background: rgba(15, 23, 42, 0.35);
-  border: 1px solid rgba(255, 255, 255, 0.32);
-  backdrop-filter: blur(6px);
-  color: #ffffff;
-  padding: 5px 12px;
-  border-radius: 999px;
-  font-size: 0.82rem;
-  font-weight: 700;
-}
-
-.app-no-chip.next-chip {
-  background: linear-gradient(90deg, rgba(16, 185, 129, 0.45), rgba(59, 130, 246, 0.45));
-  border-color: rgba(255, 255, 255, 0.55);
+  margin-bottom: 10px;
 }
 
 .hero-header h1 {
-  font-size: clamp(1.45rem, 3.2vw, 2.1rem);
+  font-size: clamp(1.45rem, 3.2vw, 2.15rem);
   font-weight: 700;
   margin-bottom: 6px;
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.22);
+}
+
+.hero-header p {
+  font-size: 0.95rem;
+  opacity: 0.96;
+  margin-bottom: 0;
+}
+
+/* Application No Badges in Header */
+.app-no-box {
+  background: rgba(15, 23, 42, 0.35);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: var(--radius-md);
+  padding: 12px 16px;
   position: relative;
   z-index: 2;
 }
 
-.hero-header p {
-  font-size: 0.96rem;
-  opacity: 0.95;
-  margin-bottom: 0;
-  position: relative;
-  z-index: 2;
+.app-no-item {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  font-size: 0.86rem;
+}
+
+.app-no-label {
+  color: rgba(255, 255, 255, 0.92);
+  font-weight: 600;
+}
+
+.app-no-badge {
+  background: rgba(255, 255, 255, 0.22);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 0.84rem;
+}
+
+.app-no-badge.next-badge {
+  background: linear-gradient(90deg, #f59e0b, #ec4899);
+  border-color: transparent;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
 }
 
 /* Sticky Progress & Step Bar */
 .progress-card {
-  background: rgba(255, 255, 255, 0.95);
+  background: rgba(255, 255, 255, 0.96);
   backdrop-filter: blur(10px);
   border-radius: var(--radius-md);
   padding: 14px 18px;
-  box-shadow: var(--shadow-sm);
-  border: 1px solid rgba(255, 255, 255, 0.85);
+  box-shadow: var(--shadow-md);
+  border: 1px solid rgba(255, 255, 255, 0.9);
   margin-bottom: 18px;
   position: sticky;
   top: 10px;
@@ -185,7 +171,7 @@ textarea::-moz-placeholder {
 }
 
 .step-badge-pill {
-  background: linear-gradient(90deg, #2563eb, #7c3aed);
+  background: linear-gradient(90deg, #2563eb, #9333ea, #ec4899);
   color: #ffffff;
   padding: 3px 12px;
   border-radius: 999px;
@@ -193,18 +179,17 @@ textarea::-moz-placeholder {
 }
 
 .progress {
-  height: 9px;
+  height: 10px;
   border-radius: 999px;
   background-color: #e2e8f0;
   margin-bottom: 10px;
 }
 
 .progress-bar {
-  background: linear-gradient(90deg, #2563eb 0%, #0d9488 55%, #db2777 100%);
+  background: linear-gradient(90deg, #2563eb 0%, #0d9488 50%, #ec4899 100%);
   transition: width 0.35s ease;
 }
 
-/* Step Pills */
 .step-pills {
   display: flex;
   gap: 6px;
@@ -231,13 +216,13 @@ textarea::-moz-placeholder {
 }
 
 .step-pill-btn.active {
-  background: linear-gradient(90deg, #1d4ed8, #7c3aed);
+  background: linear-gradient(90deg, #2563eb, #7c3aed, #db2777);
   color: #ffffff;
   border-color: transparent;
-  box-shadow: 0 3px 10px rgba(79, 70, 229, 0.3);
+  box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
 }
 
-/* Section Cards */
+/* Section Cards with Colorful Gradients */
 .section-card {
   background: var(--bg-card);
   border-radius: var(--radius-lg);
@@ -260,25 +245,25 @@ textarea::-moz-placeholder {
 }
 
 .section-header {
-  background: linear-gradient(90deg, #1e3a8a 0%, #2563eb 55%, #0284c7 100%);
+  background: linear-gradient(90deg, #1d4ed8 0%, #7c3aed 55%, #db2777 100%);
   color: #ffffff;
   padding: 16px 22px;
 }
 
 .section-header.teal {
-  background: linear-gradient(90deg, #0f766e 0%, #0d9488 55%, #059669 100%);
+  background: linear-gradient(90deg, #0f766e 0%, #0d9488 50%, #2563eb 100%);
 }
 
 .section-header.violet {
-  background: linear-gradient(90deg, #5b21b6 0%, #7c3aed 55%, #c026d3 100%);
+  background: linear-gradient(90deg, #6d28d9 0%, #a21caf 55%, #e11d48 100%);
 }
 
 .section-header.rose {
-  background: linear-gradient(90deg, #9d174d 0%, #db2777 55%, #ea580c 100%);
+  background: linear-gradient(90deg, #be185d 0%, #e11d48 55%, #f59e0b 100%);
 }
 
 .section-header.slate {
-  background: linear-gradient(90deg, #0f172a 0%, #1e293b 55%, #334155 100%);
+  background: linear-gradient(90deg, #1e1b4b 0%, #312e81 55%, #0f766e 100%);
 }
 
 .section-header h2 {
@@ -292,33 +277,16 @@ textarea::-moz-placeholder {
 }
 
 .note-box {
-  background: linear-gradient(90deg, #fffbeb 0%, #fef3c7 100%);
-  border-left: 4px solid var(--warn-border);
-  color: var(--warn-text);
+  background: linear-gradient(90deg, #eff6ff 0%, #fdf2f8 100%);
+  border-left: 4px solid #7c3aed;
+  color: #1e293b;
   padding: 13px 16px;
   border-radius: var(--radius-sm);
   font-size: 0.92rem;
   margin-bottom: 20px;
-  font-weight: 500;
 }
 
-.storage-strip {
-  background: linear-gradient(90deg, #eff6ff 0%, #f0fdf4 100%);
-  border: 1px solid #bfdbfe;
-  border-radius: var(--radius-md);
-  padding: 11px 15px;
-  margin-bottom: 18px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 10px;
-  flex-wrap: wrap;
-  font-size: 0.86rem;
-  color: #1e3a8a;
-  font-weight: 600;
-}
-
-/* Form Controls */
+/* Form Controls & Soft Placeholders */
 .form-label {
   font-size: 0.92rem;
   font-weight: 600;
@@ -340,10 +308,20 @@ textarea::-moz-placeholder {
   color: var(--text-main);
 }
 
+.form-control::placeholder {
+  color: #b8c2cf;
+  opacity: 1;
+  font-weight: 400;
+}
+
+.form-control::-ms-input-placeholder {
+  color: #b8c2cf;
+}
+
 .form-control:focus,
 .form-select:focus {
-  border-color: var(--primary-light);
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+  border-color: var(--purple);
+  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.16);
 }
 
 textarea.form-control {
@@ -376,8 +354,8 @@ textarea.form-control {
 }
 
 .check-tile:hover {
-  background: var(--primary-soft);
-  border-color: #93c5fd;
+  background: #f5f3ff;
+  border-color: #c4b5fd;
 }
 
 .check-tile .form-check-input {
@@ -388,7 +366,7 @@ textarea.form-control {
 
 /* Sub-panels & Dynamic Cards */
 .sub-panel {
-  background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+  background: linear-gradient(135deg, #ffffff 0%, #f8fafc 65%, #f5f3ff 100%);
   border: 1.5px solid var(--border-light);
   border-radius: var(--radius-md);
   padding: 18px;
@@ -416,7 +394,7 @@ textarea.form-control {
 .dynamic-card {
   background: #ffffff;
   border: 1.5px solid #cbd5e1;
-  border-left: 4px solid #0d9488;
+  border-left: 4px solid #7c3aed;
   border-radius: var(--radius-md);
   padding: 16px;
   margin-bottom: 12px;
@@ -433,12 +411,12 @@ textarea.form-control {
   align-items: center;
   margin-bottom: 12px;
   font-weight: 700;
-  color: var(--accent);
+  color: var(--purple);
   font-size: 0.94rem;
 }
 
 .btn-add-item {
-  background: linear-gradient(90deg, #0f766e 0%, #0d9488 100%);
+  background: linear-gradient(90deg, #0d9488 0%, #2563eb 100%);
   border: none;
   color: #ffffff;
   font-weight: 600;
@@ -478,7 +456,7 @@ textarea.form-control {
 }
 
 .cat-title {
-  background: linear-gradient(90deg, #e0e7ff 0%, #f3e8ff 100%);
+  background: linear-gradient(90deg, #dbeafe 0%, #ede9fe 50%, #fce7f3 100%);
   color: #1e1b4b;
   font-weight: 700;
   font-size: 0.95rem;
@@ -489,8 +467,8 @@ textarea.form-control {
 
 /* Certification & Hotline Footer */
 .cert-card {
-  background: linear-gradient(90deg, #f8fafc 0%, #eff6ff 100%);
-  border: 1.5px solid #93c5fd;
+  background: linear-gradient(90deg, #eff6ff 0%, #f5f3ff 100%);
+  border: 1.5px solid #a78bfa;
   border-radius: var(--radius-md);
   padding: 16px 18px;
   margin-bottom: 16px;
@@ -517,7 +495,7 @@ textarea.form-control {
 }
 
 .hotline-box {
-  background: linear-gradient(90deg, #047857 0%, #0d9488 50%, #0284c7 100%);
+  background: linear-gradient(90deg, #059669 0%, #2563eb 50%, #db2777 100%);
   color: #ffffff;
   text-align: center;
   padding: 14px 18px;
@@ -559,13 +537,13 @@ textarea.form-control {
 }
 
 .btn-next-step {
-  background: linear-gradient(90deg, #2563eb 0%, #7c3aed 100%);
+  background: linear-gradient(90deg, #2563eb 0%, #7c3aed 55%, #db2777 100%);
   border: none;
   color: #ffffff;
   font-weight: 700;
   padding: 11px 26px;
   border-radius: var(--radius-sm);
-  box-shadow: 0 6px 16px rgba(79, 70, 229, 0.28);
+  box-shadow: 0 6px 16px rgba(124, 58, 237, 0.3);
 }
 
 .btn-next-step:hover,
@@ -593,6 +571,14 @@ textarea.form-control {
 @media (max-width: 768px) {
   .section-body {
     padding: 15px;
+  }
+
+  .app-no-box {
+    width: 100%;
+  }
+
+  .app-no-item {
+    justify-content: space-between;
   }
 
   .step-nav-bar {
