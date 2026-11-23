@@ -52,11 +52,7 @@ function showStep(stepNumber) {
 
   document.querySelectorAll(".section-card[data-step]").forEach((card) => {
     const cardStep = Number(card.getAttribute("data-step"));
-    if (cardStep === currentStep) {
-      card.classList.remove("d-none");
-    } else {
-      card.classList.add("d-none");
-    }
+    card.classList.toggle("d-none", cardStep !== currentStep);
   });
 
   document.querySelectorAll(".step-pill-btn[data-goto-step]").forEach((btn) => {
@@ -71,6 +67,7 @@ function showStep(stepNumber) {
 
   const prevBtn = document.getElementById("prevStepBtn");
   const nextBtn = document.getElementById("nextStepBtn");
+  const submitBtn = document.getElementById("submitBtn");
   const finalFooter = document.getElementById("finalSubmitSection");
 
   if (prevBtn) {
@@ -79,6 +76,10 @@ function showStep(stepNumber) {
 
   if (nextBtn) {
     nextBtn.classList.toggle("d-none", currentStep === TOTAL_STEPS);
+  }
+
+  if (submitBtn) {
+    submitBtn.classList.toggle("d-none", currentStep !== TOTAL_STEPS);
   }
 
   if (finalFooter) {
@@ -93,16 +94,27 @@ function validateCurrentStep() {
     const dsd = document.getElementById("q2_dsd").value.trim();
     const gnd = document.getElementById("q3_gnd").value.trim();
     const headName = document.getElementById("q7_head_name").value.trim();
-    const totalMembers = document.getElementById("q9_total_members").value.trim();
 
-    if (!dsd || !gnd || !headName || !totalMembers) {
+    if (!dsd || !gnd || !headName) {
       showNavAlert(
         "warning",
-        "ඊළඟ කොටසට යාමට පෙර අනිවාර්ය (*) තොරතුරු (02. ප්‍රා.ලේ. කොට්ඨාසය, 03. ග්‍රාම නිලධාරී වසම, 07. මූලිකයාගේ නම සහ 09. මුළු සාමාජික සංඛ්‍යාව) ඇතුළත් කරන්න."
+        "ඊළඟ කොටසට යාමට පෙර අනිවාර්ය (*) තොරතුරු (02. ප්‍රා.ලේ. කොට්ඨාසය, 03. ග්‍රාම නිලධාරී වසම සහ 07. පවුලේ මූලිකයාගේ සම්පූර්ණ නම) ඇතුළත් කරන්න."
       );
       return false;
     }
   }
+
+  if (currentStep === 2) {
+    const totalMembers = document.getElementById("q9_total_members").value.trim();
+    if (!totalMembers) {
+      showNavAlert(
+        "warning",
+        "ඊළඟ කොටසට යාමට පෙර අනිවාර්ය (*) තොරතුර (09. මුළු සාමාජික සංඛ්‍යාව) ඇතුළත් කරන්න."
+      );
+      return false;
+    }
+  }
+
   hideNavAlert();
   return true;
 }
@@ -134,12 +146,35 @@ function toggleConditional(selectId, targetId) {
     val === "දුරකථන ඇත" ||
     val === "වාහන ඇත";
 
+  targetEl.classList.toggle("d-none", !shouldShow);
+
+  // Ensure at least one card is present when a conditional card container opens
   if (shouldShow) {
-    targetEl.classList.remove("d-none");
-  } else {
-    targetEl.classList.add("d-none");
+    ensureCardWhenOpened(targetId);
   }
+
   updateProgress();
+}
+
+function ensureCardWhenOpened(targetId) {
+  const map = {
+    livestock_wrap: ["livestockContainer", () => addLivestockCard(false)],
+    vehicles_wrap: ["vehiclesContainer", () => addVehicleCard(false)],
+    abroad_wrap: ["abroadContainer", () => addAbroadCard(false)],
+    orphan_wrap: ["orphanContainer", () => addOrphanCard(false)],
+    disability_wrap: ["disabilityContainer", () => addDisabilityCard(false)],
+    addiction_wrap: ["addictionContainer", () => addAddictionCard(false)],
+    welfare_wrap: ["welfareContainer", () => addWelfareCard(false)],
+    loan_wrap: ["loanContainer", () => addLoanCard(false)]
+  };
+
+  const entry = map[targetId];
+  if (!entry) return;
+  const [containerId, creatorFn] = entry;
+  const container = document.getElementById(containerId);
+  if (container && container.querySelectorAll(".dynamic-card").length === 0) {
+    creatorFn();
+  }
 }
 
 function toggleEnergyOther() {
@@ -147,11 +182,7 @@ function toggleEnergyOther() {
   const otherWrap = document.getElementById("q38_other_wrap");
   if (!energyEl || !otherWrap) return;
 
-  if (energyEl.value === "වෙනත්") {
-    otherWrap.classList.remove("d-none");
-  } else {
-    otherWrap.classList.add("d-none");
-  }
+  otherWrap.classList.toggle("d-none", energyEl.value !== "වෙනත්");
   updateProgress();
 }
 
@@ -640,17 +671,12 @@ function addLoanCard(showRemove = true) {
 }
 
 function initDefaultCards() {
+  // Always visible card sections start with one card
   addSchoolChildCard(false);
   addLandCard(false);
-  addLivestockCard(false);
-  addVehicleCard(false);
-  addAbroadCard(false);
-  addOrphanCard(false);
-  addDisabilityCard(false);
-  addAddictionCard(false);
-  addWelfareCard(false);
   addBankCard(false);
-  addLoanCard(false);
+
+  // Conditional card sections are created when toggled to "ඔව්" / "ඇත"
 }
 
 function bindButtonEvents() {
@@ -809,11 +835,20 @@ async function handleFormSubmit(e) {
   const totalMembers = document.getElementById("q9_total_members").value.trim();
   const certified = document.getElementById("certifyCheckbox").checked;
 
-  if (!dsd || !gnd || !headName || !totalMembers) {
+  if (!dsd || !gnd || !headName) {
     showStep(1);
     showStatus(
       "error",
-      "කරුණාකර අනිවාර්ය (*) මූලික තොරතුරු (02. ප්‍රා.ලේ. කොට්ඨාසය, 03. ග්‍රාම නිලධාරී වසම, 07. මූලිකයාගේ නම සහ 09. මුළු සාමාජික සංඛ්‍යාව) සම්පූර්ණ කරන්න."
+      "කරුණාකර අනිවාර්ය (*) මූලික තොරතුරු (02. ප්‍රා.ලේ. කොට්ඨාසය, 03. ග්‍රාම නිලධාරී වසම සහ 07. පවුලේ මූලිකයාගේ සම්පූර්ණ නම) සම්පූර්ණ කරන්න."
+    );
+    return;
+  }
+
+  if (!totalMembers) {
+    showStep(2);
+    showStatus(
+      "error",
+      "කරුණාකර අනිවාර්ය (*) තොරතුර (09. මුළු සාමාජික සංඛ්‍යාව) සම්පූර්ණ කරන්න."
     );
     return;
   }
