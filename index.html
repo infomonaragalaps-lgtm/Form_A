@@ -18,27 +18,39 @@
 </head>
 <body>
   <div class="survey-wrapper">
-    <!-- Header Banner -->
+    <!-- Colorful Gradient Header -->
     <header class="hero-header">
       <div class="hero-badge">ප්‍රාදේශීය සංවර්ධන හා සමාජ සමීක්ෂණ ව්‍යාපෘතිය</div>
-      <h1>ප්‍රජා කුටුම්භ සමීක්ෂණය - 2027</h1>
+      <h1>ප්‍රජා කුටුම්භ සමීක්ෂණය - 2027 : පත්‍රිකා A </h1>
       <p>පවුලේ ජන විකාස, අධ්‍යාපන, ජීවනෝපාය, නිවාස, සුභසාධන හා ආර්ථික තොරතුරු රැස්කිරීමේ නිල ඩිජිටල් ප්‍රශ්නාවලිය</p>
     </header>
 
-    <!-- Sticky Progress Indicator -->
+    <!-- Sticky Progress & Step Navigation Bar -->
     <div class="progress-card">
       <div class="progress-top">
         <span id="progressLabel">සම්පූර්ණ කර ඇති ප්‍රමාණය: 0%</span>
-        <span>01 සිට 09 දක්වා කොටස්</span>
+        <span id="stepBadgeLabel" class="step-badge-pill">කොටස 01 / 09</span>
       </div>
       <div class="progress">
         <div id="progressBar" class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
       </div>
+
+      <div class="step-pills" aria-label="කොටස් තේරීම">
+        <button type="button" class="step-pill-btn active" data-goto-step="1">01. මූලික</button>
+        <button type="button" class="step-pill-btn" data-goto-step="2">02. පවුල</button>
+        <button type="button" class="step-pill-btn" data-goto-step="3">03. ඉඩම්</button>
+        <button type="button" class="step-pill-btn" data-goto-step="4">04. නිවාස</button>
+        <button type="button" class="step-pill-btn" data-goto-step="5">05. දුරකථන</button>
+        <button type="button" class="step-pill-btn" data-goto-step="6">06. ආපදා</button>
+        <button type="button" class="step-pill-btn" data-goto-step="7">07. ආධාර</button>
+        <button type="button" class="step-pill-btn" data-goto-step="8">08. බැංකු/ණය</button>
+        <button type="button" class="step-pill-btn" data-goto-step="9">09. නිගමන</button>
+      </div>
     </div>
 
     <form id="surveyForm" novalidate>
-      <!-- 01. මූලික පරිපාලන හා ස්ථානීය තොරතුරු -->
-      <section class="section-card" data-section="01">
+      <!-- Step 01: මූලික පරිපාලන හා ස්ථානීය තොරතුරු -->
+      <section class="section-card" data-step="1">
         <div class="section-header">
           <h2>01. මූලික පරිපාලන හා ස්ථානීය තොරතුරු</h2>
         </div>
@@ -86,8 +98,8 @@
         </div>
       </section>
 
-      <!-- 02. පවුලේ සාමාජිකයන්, අධ්‍යාපනය හා පෝෂණ තොරතුරු -->
-      <section class="section-card" data-section="02">
+      <!-- Step 02: පවුලේ සාමාජිකයන්, අධ්‍යාපනය හා පෝෂණ තොරතුරු -->
+      <section class="section-card d-none" data-step="2">
         <div class="section-header teal">
           <h2>02. පවුලේ සාමාජිකයන්, අධ්‍යාපනය හා පෝෂණ තොරතුරු</h2>
         </div>
@@ -208,9 +220,9 @@
         </div>
       </section>
 
-      <!-- 03. ඉඩම්, පශු සම්පත් හා කෘෂිකර්ම තොරතුරු -->
-      <section class="section-card" data-section="03">
-        <div class="section-header">
+      <!-- Step 03: ඉඩම්, පශු සම්පත් හා කෘෂිකර්ම තොරතුරු -->
+      <section class="section-card d-none" data-step="3">
+        <div class="section-header violet">
           <h2>03. ඉඩම්, පශු සම්පත් හා කෘෂිකර්ම තොරතුරු</h2>
         </div>
         <div class="section-body">
@@ -273,9 +285,9 @@
         </div>
       </section>
 
-      <!-- 04. නිවාස හා මූලික යටිතල පහසුකම් -->
-      <section class="section-card" data-section="04">
-        <div class="section-header teal">
+      <!-- Step 04: නිවාස හා මූලික යටිතල පහසුකම් -->
+      <section class="section-card d-none" data-step="4">
+        <div class="section-header rose">
           <h2>04. නිවාස හා මූලික යටිතල පහසුකම්</h2>
         </div>
         <div class="section-body">
@@ -379,8 +391,8 @@
         </div>
       </section>
 
-      <!-- 05. දුරකථන, ඩිජිටල් හා ප්‍රවාහන පහසුකම් -->
-      <section class="section-card" data-section="05">
+      <!-- Step 05: දුරකථන, ඩිජිටල් හා ප්‍රවාහන පහසුකම් -->
+      <section class="section-card d-none" data-step="5">
         <div class="section-header">
           <h2>05. දුරකථන, ඩිජිටල් හා ප්‍රවාහන පහසුකම්</h2>
         </div>
@@ -445,8 +457,8 @@
         </div>
       </section>
 
-      <!-- 06. ආපදා අවදානම්, රක්ෂණ හා ප්‍රජා සහභාගීත්වය -->
-      <section class="section-card" data-section="06">
+      <!-- Step 06: ආපදා අවදානම්, රක්ෂණ හා ප්‍රජා සහභාගීත්වය -->
+      <section class="section-card d-none" data-step="6">
         <div class="section-header teal">
           <h2>06. ආපදා අවදානම්, රක්ෂණ හා ප්‍රජා සහභාගීත්වය</h2>
         </div>
@@ -480,9 +492,9 @@
         </div>
       </section>
 
-      <!-- 07. ආධාර, විදෙස්ගතවූවන් හා සුභසාධන තොරතුරු -->
-      <section class="section-card" data-section="07">
-        <div class="section-header">
+      <!-- Step 07: ආධාර, විදෙස්ගතවූවන් හා සුභසාධන තොරතුරු -->
+      <section class="section-card d-none" data-step="7">
+        <div class="section-header violet">
           <h2>07. ආධාර, විදෙස්ගතවූවන් හා සුභසාධන තොරතුරු</h2>
         </div>
         <div class="section-body">
@@ -616,9 +628,9 @@
         </div>
       </section>
 
-      <!-- 08. ආර්ථික සහයෝගීතා, බැංකු හා ණය තොරතුරු -->
-      <section class="section-card" data-section="08">
-        <div class="section-header teal">
+      <!-- Step 08: ආර්ථික සහයෝගීතා, බැංකු හා ණය තොරතුරු -->
+      <section class="section-card d-none" data-step="8">
+        <div class="section-header rose">
           <h2>08. ආර්ථික සහයෝගීතා, බැංකු හා ණය තොරතුරු</h2>
         </div>
         <div class="section-body">
@@ -656,8 +668,8 @@
         </div>
       </section>
 
-      <!-- 09. සමීක්ෂක නිලධාරියාගේ නිගමන සහ පවුල් වර්ගීකරණය -->
-      <section class="section-card" data-section="09">
+      <!-- Step 09: සමීක්ෂක නිලධාරියාගේ නිගමන සහ පවුල් වර්ගීකරණය -->
+      <section class="section-card d-none" data-step="9">
         <div class="section-header slate">
           <h2>09. සමීක්ෂක නිලධාරියාගේ නිගමන සහ පවුල් වර්ගීකරණය (නිලධාරියා විසින් අදාළ කොටු තුළ ✓ සලකුණ යොදන්න)</h2>
         </div>
@@ -713,25 +725,37 @@
         </div>
       </section>
 
-      <!-- සහතික කිරීමේ Checkbox එක -->
-      <div class="cert-card">
-        <label class="cert-check" for="certifyCheckbox">
-          <input type="checkbox" id="certifyCheckbox" name="certifyCheckbox" class="form-check-input" required />
-          <span>"ඉහත තොරතුරු නිවැරදි හා සත්‍ය බවට මා සහතික කරමි."</span>
-        </label>
+      <!-- Final Section (Visible on Step 09): සහතික කිරීම, දුරකථන සටහන සහ Submit -->
+      <div id="finalSubmitSection" class="d-none">
+        <!-- සහතික කිරීමේ Checkbox එක -->
+        <div class="cert-card">
+          <label class="cert-check" for="certifyCheckbox">
+            <input type="checkbox" id="certifyCheckbox" name="certifyCheckbox" class="form-check-input" required />
+            <span>"ඉහත තොරතුරු නිවැරදි හා සත්‍ය බවට මා සහතික කරමි."</span>
+          </label>
+        </div>
+
+        <!-- අමතර තොරතුරු සටහන -->
+        <div class="hotline-box">
+          * මේ සම්බන්ධව අමතර තොරතුරු සඳහා 0777300350 / 0719300350 අමතන්න *
+        </div>
       </div>
 
-      <!-- අමතර තොරතුරු සටහන -->
-      <div class="hotline-box">
-        * මේ සම්බන්ධව අමතර තොරතුරු සඳහා 0777300350 / 0719300350 අමතන්න *
+      <!-- Step Navigation Bar -->
+      <div class="step-nav-bar">
+        <div class="d-flex gap-2 flex-wrap">
+          <button type="button" class="btn btn-prev-step d-none" id="prevStepBtn">← පෙර කොටස</button>
+          <button type="button" class="btn btn-outline-secondary fw-semibold" id="resetFormBtn">ෆෝරමය හිස් කරන්න</button>
+        </div>
+
+        <div class="d-flex gap-2 flex-wrap">
+          <button type="button" class="btn btn-next-step" id="nextStepBtn">ඊළඟ කොටස →</button>
+          <button type="submit" class="btn btn-submit-form" id="submitBtn">දත්ත Submit කරන්න</button>
+        </div>
       </div>
 
-      <!-- Submit / Reset Bar -->
-      <div class="action-bar">
-        <button type="button" class="btn btn-outline-secondary fw-semibold" id="resetFormBtn">ෆෝරමය හිස් කරන්න</button>
-        <button type="submit" class="btn btn-submit-form" id="submitBtn">දත්ත Submit කරන්න</button>
-      </div>
-
+      <!-- Navigation / Validation / Submit Alerts -->
+      <div id="navAlertBox" class="alert d-none" role="alert"></div>
       <div id="statusMessage" class="alert d-none" role="alert"></div>
     </form>
   </div>
