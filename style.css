@@ -6,7 +6,6 @@
   --accent-soft: #f0fdfa;
   --purple: #7c3aed;
   --pink: #db2777;
-  --amber: #d97706;
   --warn-bg: #fffbeb;
   --warn-border: #f59e0b;
   --warn-text: #92400e;
@@ -17,6 +16,7 @@
   --border: #cbd5e1;
   --border-light: #e2e8f0;
   --text-main: #0f172a;
+  --placeholder-color: #b0bccb;
   --radius-lg: 18px;
   --radius-md: 12px;
   --radius-sm: 8px;
@@ -43,12 +43,31 @@ body {
   margin: 0 auto;
 }
 
+/* Soft Placeholder Colors */
+input::placeholder,
+textarea::placeholder {
+  color: var(--placeholder-color) !important;
+  opacity: 1;
+  font-weight: 400;
+}
+
+input::-webkit-input-placeholder,
+textarea::-webkit-input-placeholder {
+  color: var(--placeholder-color) !important;
+}
+
+input::-moz-placeholder,
+textarea::-moz-placeholder {
+  color: var(--placeholder-color) !important;
+  opacity: 1;
+}
+
 /* Colorful Gradient Header */
 .hero-header {
   background: linear-gradient(125deg, #312e81 0%, #1d4ed8 38%, #0d9488 75%, #db2777 100%);
   color: #ffffff;
   border-radius: var(--radius-lg);
-  padding: 28px 24px;
+  padding: 26px 24px;
   box-shadow: var(--shadow-lg);
   position: relative;
   overflow: hidden;
@@ -79,6 +98,17 @@ body {
   pointer-events: none;
 }
 
+.hero-top-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+  position: relative;
+  z-index: 2;
+}
+
 .hero-badge {
   display: inline-block;
   background: rgba(255, 255, 255, 0.2);
@@ -87,7 +117,28 @@ body {
   border-radius: 999px;
   font-size: 0.82rem;
   font-weight: 600;
-  margin-bottom: 10px;
+}
+
+.app-no-group {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.app-no-chip {
+  background: rgba(15, 23, 42, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.32);
+  backdrop-filter: blur(6px);
+  color: #ffffff;
+  padding: 5px 12px;
+  border-radius: 999px;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.app-no-chip.next-chip {
+  background: linear-gradient(90deg, rgba(16, 185, 129, 0.45), rgba(59, 130, 246, 0.45));
+  border-color: rgba(255, 255, 255, 0.55);
 }
 
 .hero-header h1 {
@@ -95,22 +146,26 @@ body {
   font-weight: 700;
   margin-bottom: 6px;
   text-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  position: relative;
+  z-index: 2;
 }
 
 .hero-header p {
   font-size: 0.96rem;
   opacity: 0.95;
   margin-bottom: 0;
+  position: relative;
+  z-index: 2;
 }
 
 /* Sticky Progress & Step Bar */
 .progress-card {
-  background: rgba(255, 255, 255, 0.94);
+  background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(10px);
   border-radius: var(--radius-md);
   padding: 14px 18px;
   box-shadow: var(--shadow-sm);
-  border: 1px solid rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.85);
   margin-bottom: 18px;
   position: sticky;
   top: 10px;
@@ -182,7 +237,7 @@ body {
   box-shadow: 0 3px 10px rgba(79, 70, 229, 0.3);
 }
 
-/* Section Cards with Colorful Gradients */
+/* Section Cards */
 .section-card {
   background: var(--bg-card);
   border-radius: var(--radius-lg);
@@ -245,6 +300,22 @@ body {
   font-size: 0.92rem;
   margin-bottom: 20px;
   font-weight: 500;
+}
+
+.storage-strip {
+  background: linear-gradient(90deg, #eff6ff 0%, #f0fdf4 100%);
+  border: 1px solid #bfdbfe;
+  border-radius: var(--radius-md);
+  padding: 11px 15px;
+  margin-bottom: 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  font-size: 0.86rem;
+  color: #1e3a8a;
+  font-weight: 600;
 }
 
 /* Form Controls */
