@@ -1175,7 +1175,6 @@ function bindButtonEvents() {
   bindIfExists("saveSurveyorPrefsBtn", "click", () => saveSurveyorPrefs(true));
   bindIfExists("clearSurveyorPrefsBtn", "click", clearSurveyorPrefs);
 
-  bindIfExists("addLandBtn", "click", () => addLandCard(true));
   bindIfExists("addLivestockBtn", "click", () => addLivestockCard(true));
   bindIfExists("addVehicleBtn", "click", () => addVehicleCard(true));
   bindIfExists("addAbroadBtn", "click", () => addAbroadCard(true));
