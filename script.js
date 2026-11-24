@@ -534,8 +534,7 @@ function initSection03Children() {
   bindIfExists("ch_school_attending", "change", toggleSection03Children);
   bindIfExists("ch_not_attending", "change", toggleSection03Children);
   bindIfExists("ch_underweight", "change", toggleSection03Children);
-  bindIfExists("addSchoolChildBtn", "click", () => addSchoolChildCard(true));
-
+  
   toggleSection03Children();
 }
 
