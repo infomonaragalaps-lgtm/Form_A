@@ -208,25 +208,28 @@ function showStep(stepNumber) {
 
 function validateCurrentStep() {
   if (currentStep === 1) {
-    const dsd = document.getElementById("q2_dsd").value.trim();
-    const gnd = document.getElementById("q3_gnd").value.trim();
-    const headName = document.getElementById("q7_head_name").value.trim();
+    const dsdEl = document.getElementById("q2_dsd");
+    const gndEl = document.getElementById("q3_gnd");
+    const dsd = dsdEl ? dsdEl.value.trim() : "";
+    const gnd = gndEl ? gndEl.value.trim() : "";
 
-    if (!dsd || !gnd || !headName) {
+    if (!dsd || !gnd) {
       showNavAlert(
         "warning",
-        "ඊළඟ කොටසට යාමට පෙර අනිවාර්ය (*) තොරතුරු (02. ප්‍රා.ලේ. කොට්ඨාසය, 03. ග්‍රාම නිලධාරී වසම සහ 07. පවුලේ මූලිකයාගේ සම්පූර්ණ නම) ඇතුළත් කරන්න."
+        "ඊළඟ කොටසට යාමට පෙර අනිවාර්ය (*) තොරතුරු (ප්‍රාදේශීය ලේකම් කොට්ඨාසය සහ ග්‍රාම නිලධාරී වසම) තෝරන්න."
       );
       return false;
     }
   }
 
   if (currentStep === 2) {
-    const totalMembers = document.getElementById("q9_total_members").value.trim();
-    if (!totalMembers) {
+    const headNameEl = document.getElementById("q7_head_name");
+    const headName = headNameEl ? headNameEl.value.trim() : "";
+
+    if (headNameEl && !headName) {
       showNavAlert(
         "warning",
-        "ඊළඟ කොටසට යාමට පෙර අනිවාර්ය (*) තොරතුර (09. මුළු සාමාජික සංඛ්‍යාව) ඇතුළත් කරන්න."
+        "ඊළඟ කොටසට යාමට පෙර අනිවාර්ය (*) තොරතුර (පවුලේ මූලිකයාගේ සම්පූර්ණ නම) ඇතුළත් කරන්න."
       );
       return false;
     }
