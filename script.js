@@ -5,6 +5,9 @@ let currentStep = 1;
 
 const SURVEYOR_STORAGE_KEY = "pks_2027_surveyor_prefs_v1";
 const APP_COUNTER_STORAGE_KEY = "pks_2027_last_app_no_v1";
+const SUBMITTED_NICS_STORAGE_KEY = "pks_2027_submitted_nics_v1";
+
+let lastValidNicValue = "";
 
 const SURVEYOR_PERSIST_FIELDS = [
   "q1_district",
@@ -43,7 +46,9 @@ const CONDITIONAL_WRAPS = [
   "disability_wrap",
   "addiction_wrap",
   "welfare_wrap",
-  "loan_wrap"
+  "loan_wrap",
+  "hh_training_details_wrap",
+  "hh_license_type_wrap"
 ];
 
 window.addEventListener("DOMContentLoaded", () => {
@@ -51,6 +56,7 @@ window.addEventListener("DOMContentLoaded", () => {
   loadSurveyorPrefs();
   loadApplicationNumbers();
   initDefaultCards();
+  initSection01PersonalDetails();
   bindButtonEvents();
   bindProgressListeners(document.getElementById("surveyForm"));
   showStep(1);
@@ -170,7 +176,7 @@ async function loadApplicationNumbers() {
       renderApplicationBadges(serverLast, true);
     }
   } catch (err) {
-    // Keep cached/default count if offline or endpoint not yet updated
+    // Fallback to cached counter if offline
   }
 }
 
@@ -223,15 +229,34 @@ function validateCurrentStep() {
   }
 
   if (currentStep === 2) {
-    const headNameEl = document.getElementById("q7_head_name");
-    const headName = headNameEl ? headNameEl.value.trim() : "";
+    const fullNameEl = document.getElementById("hh_full_name");
+    const fullName = fullNameEl ? fullNameEl.value.trim() : "";
 
-    if (headNameEl && !headName) {
+    if (fullNameEl && !fullName) {
       showNavAlert(
         "warning",
-        "ඊළඟ කොටසට යාමට පෙර අනිවාර්ය (*) තොරතුර (පවුලේ මූලිකයාගේ සම්පූර්ණ නම) ඇතුළත් කරන්න."
+        "ඊළඟ කොටසට යාමට පෙර අනිවාර්ය (*) තොරතුර (01. සම්පූර්ණ නම) ඇතුළත් කරන්න."
       );
       return false;
+    }
+
+    const nicEl = document.getElementById("hh_nic");
+    if (nicEl && nicEl.value.trim()) {
+      const normalizedNic = normalizeNic(nicEl.value);
+      if (getKnownNics().includes(normalizedNic)) {
+        showNavAlert(
+          "warning",
+          `මෙම ජා.හැ. අංකය (${normalizedNic}) දැනටමත් ඇතුළත් කර ඇත. සමාන NIC අංකයක් ඇතුළත් කළ නොහැක.`
+        );
+        return false;
+      }
+      if (!isValidSriLankanNicFormat(normalizedNic)) {
+        showNavAlert(
+          "warning",
+          "කරුණාකර නිවැරදි ජා.හැ. අංකයක් (NIC) ඇතුළත් කරන්න (උදා: 851234567V හෝ 198512304567)."
+        );
+        return false;
+      }
     }
   }
 
@@ -252,6 +277,186 @@ function hideNavAlert() {
   if (!alertEl) return;
   alertEl.className = "alert d-none";
   alertEl.textContent = "";
+}
+
+// Section 02 / 01. ගෘහ මූලික / ප්‍රධාන අයදුම්කරුගේ මූලික පෞද්ගලික තොරතුරු Logic
+function normalizeNic(raw) {
+  return String(raw || "").trim().toUpperCase().replace(/\s+/g, "");
+}
+
+function isValidSriLankanNicFormat(nic) {
+  if (!nic) return true;
+  const oldNicRegex = /^[0-9]{9}[VX]$/;
+  const newNicRegex = /^[0-9]{12}$/;
+  return oldNicRegex.test(nic) || newNicRegex.test(nic);
+}
+
+function getKnownNics() {
+  try {
+    const raw = localStorage.getItem(SUBMITTED_NICS_STORAGE_KEY);
+    const parsed = raw ? JSON.parse(raw) : [];
+    return Array.isArray(parsed) ? parsed.map(normalizeNic) : [];
+  } catch (err) {
+    return [];
+  }
+}
+
+function registerSubmittedNic(nicValue) {
+  const normalized = normalizeNic(nicValue);
+  if (!normalized || !isValidSriLankanNicFormat(normalized)) return;
+
+  const existing = getKnownNics();
+  if (!existing.includes(normalized)) {
+    existing.push(normalized);
+    try {
+      localStorage.setItem(SUBMITTED_NICS_STORAGE_KEY, JSON.stringify(existing));
+    } catch (err) {
+      // Ignore storage quota errors
+    }
+  }
+}
+
+function setNicFeedback(message, isError = true) {
+  const feedbackEl = document.getElementById("hhNicFeedback");
+  const nicInput = document.getElementById("hh_nic");
+  if (!feedbackEl || !nicInput) return;
+
+  if (!message) {
+    feedbackEl.textContent = "";
+    feedbackEl.classList.add("d-none");
+    nicInput.classList.remove("is-invalid");
+    return;
+  }
+
+  feedbackEl.textContent = message;
+  feedbackEl.classList.toggle("text-danger", isError);
+  feedbackEl.classList.toggle("text-success", !isError);
+  feedbackEl.classList.remove("d-none");
+  nicInput.classList.toggle("is-invalid", isError);
+}
+
+function handleNicLiveInput() {
+  const nicInput = document.getElementById("hh_nic");
+  if (!nicInput) return;
+
+  const cleaned = normalizeNic(nicInput.value);
+  nicInput.value = cleaned;
+
+  if (!cleaned) {
+    lastValidNicValue = "";
+    setNicFeedback("");
+    return;
+  }
+
+  const knownNics = getKnownNics();
+  if (knownNics.includes(cleaned)) {
+    nicInput.value = lastValidNicValue;
+    setNicFeedback(
+      `මෙම ජා.හැ. අංකය (${cleaned}) දැනටමත් ඇතුළත් කර ඇත. සමාන NIC අංකයක් නැවත ඇතුළත් කළ නොහැක!`,
+      true
+    );
+    return;
+  }
+
+  if (!isValidSriLankanNicFormat(cleaned)) {
+    if (cleaned.length > 12) {
+      nicInput.value = lastValidNicValue;
+      setNicFeedback("NIC අංකය අකුරු/ඉලක්කම් 12කට සීමා වේ.", true);
+      return;
+    }
+    setNicFeedback(
+      "නිවැරදි NIC ආකෘතිය ඇතුළත් කරන්න (උදා: 851234567V හෝ 198512304567).",
+      true
+    );
+    return;
+  }
+
+  lastValidNicValue = cleaned;
+  setNicFeedback("NIC අංකය නිවැරදියි.", false);
+}
+
+function calculateAgeFor2027() {
+  const dobInput = document.getElementById("hh_dob");
+  const ageInput = document.getElementById("hh_age_2027");
+  if (!dobInput || !ageInput || !dobInput.value) return;
+
+  const parts = dobInput.value.split("-");
+  if (parts.length !== 3) return;
+
+  const birthYear = Number(parts[0]);
+  const birthMonth = Number(parts[1]);
+  const birthDay = Number(parts[2]);
+
+  if (!birthYear || birthYear > 2027) {
+    ageInput.value = "";
+    return;
+  }
+
+  let ageIn2027 = 2027 - birthYear;
+  if (birthMonth > 12 || (birthMonth === 12 && birthDay > 31)) {
+    ageIn2027 -= 1;
+  }
+
+  ageInput.value = String(Math.max(0, ageIn2027));
+  updateProgress();
+}
+
+function updateFamilyMembersCardSummary() {
+  const inputs = document.querySelectorAll(".hh-member-count-input");
+  let sum = 0;
+
+  inputs.forEach((input) => {
+    const digitsOnly = String(input.value || "").replace(/[^0-9]/g, "");
+    if (input.value !== digitsOnly) {
+      input.value = digitsOnly;
+    }
+    sum += Number(digitsOnly || 0);
+  });
+
+  const previewEl = document.getElementById("hhTotalMembersPreview");
+  if (previewEl) {
+    previewEl.textContent = `මුළු එකතුව: ${sum}`;
+  }
+}
+
+function toggleSection01Conditionals() {
+  const trainingSelect = document.getElementById("hh_training_status");
+  const trainingWrap = document.getElementById("hh_training_details_wrap");
+  if (trainingSelect && trainingWrap) {
+    trainingWrap.classList.toggle("d-none", trainingSelect.value !== "ඇත");
+  }
+
+  const licenseSelect = document.getElementById("hh_license_status");
+  const licenseWrap = document.getElementById("hh_license_type_wrap");
+  if (licenseSelect && licenseWrap) {
+    licenseWrap.classList.toggle("d-none", licenseSelect.value !== "ඇත");
+  }
+
+  updateProgress();
+}
+
+function initSection01PersonalDetails() {
+  const nicInput = document.getElementById("hh_nic");
+  if (nicInput) {
+    nicInput.addEventListener("input", handleNicLiveInput);
+    nicInput.addEventListener("blur", handleNicLiveInput);
+  }
+
+  const dobInput = document.getElementById("hh_dob");
+  if (dobInput) {
+    dobInput.addEventListener("change", calculateAgeFor2027);
+    dobInput.addEventListener("input", calculateAgeFor2027);
+  }
+
+  document.querySelectorAll(".hh-member-count-input").forEach((input) => {
+    input.addEventListener("input", () => {
+      updateFamilyMembersCardSummary();
+      updateProgress();
+    });
+  });
+
+  toggleSection01Conditionals();
+  updateFamilyMembersCardSummary();
 }
 
 function toggleConditional(selectId, targetId) {
@@ -354,8 +559,10 @@ function appendCard(containerId, cardEl) {
 
 function addSchoolChildCard(showRemove = true) {
   const containerId = "schoolChildrenContainer";
+  const container = document.getElementById(containerId);
+  if (!container) return;
   const prefix = "පාසල් යන දරුවා";
-  const count = document.getElementById(containerId).querySelectorAll(".dynamic-card").length + 1;
+  const count = container.querySelectorAll(".dynamic-card").length + 1;
 
   const card = createCardElement(
     "school_child",
@@ -385,8 +592,10 @@ function addSchoolChildCard(showRemove = true) {
 
 function addLandCard(showRemove = true) {
   const containerId = "landsContainer";
+  const container = document.getElementById(containerId);
+  if (!container) return;
   const prefix = "ඉඩම";
-  const count = document.getElementById(containerId).querySelectorAll(".dynamic-card").length + 1;
+  const count = container.querySelectorAll(".dynamic-card").length + 1;
 
   const card = createCardElement(
     "land",
@@ -450,8 +659,10 @@ function addLandCard(showRemove = true) {
 
 function addLivestockCard(showRemove = true) {
   const containerId = "livestockContainer";
+  const container = document.getElementById(containerId);
+  if (!container) return;
   const prefix = "සත්ව වර්ගය";
-  const count = document.getElementById(containerId).querySelectorAll(".dynamic-card").length + 1;
+  const count = container.querySelectorAll(".dynamic-card").length + 1;
 
   const card = createCardElement(
     "livestock",
@@ -485,8 +696,10 @@ function addLivestockCard(showRemove = true) {
 
 function addVehicleCard(showRemove = true) {
   const containerId = "vehiclesContainer";
+  const container = document.getElementById(containerId);
+  if (!container) return;
   const prefix = "වාහනය";
-  const count = document.getElementById(containerId).querySelectorAll(".dynamic-card").length + 1;
+  const count = container.querySelectorAll(".dynamic-card").length + 1;
 
   const card = createCardElement(
     "vehicle",
@@ -516,8 +729,10 @@ function addVehicleCard(showRemove = true) {
 
 function addAbroadCard(showRemove = true) {
   const containerId = "abroadContainer";
+  const container = document.getElementById(containerId);
+  if (!container) return;
   const prefix = "විදෙස්ගත වූ තැනැත්තා";
-  const count = document.getElementById(containerId).querySelectorAll(".dynamic-card").length + 1;
+  const count = container.querySelectorAll(".dynamic-card").length + 1;
 
   const card = createCardElement(
     "abroad",
@@ -547,8 +762,10 @@ function addAbroadCard(showRemove = true) {
 
 function addOrphanCard(showRemove = true) {
   const containerId = "orphanContainer";
+  const container = document.getElementById(containerId);
+  if (!container) return;
   const prefix = "දරුවා";
-  const count = document.getElementById(containerId).querySelectorAll(".dynamic-card").length + 1;
+  const count = container.querySelectorAll(".dynamic-card").length + 1;
 
   const card = createCardElement(
     "orphan",
@@ -574,8 +791,10 @@ function addOrphanCard(showRemove = true) {
 
 function addDisabilityCard(showRemove = true) {
   const containerId = "disabilityContainer";
+  const container = document.getElementById(containerId);
+  if (!container) return;
   const prefix = "පුද්ගලයා";
-  const count = document.getElementById(containerId).querySelectorAll(".dynamic-card").length + 1;
+  const count = container.querySelectorAll(".dynamic-card").length + 1;
 
   const card = createCardElement(
     "disability",
@@ -621,8 +840,10 @@ function addDisabilityCard(showRemove = true) {
 
 function addAddictionCard(showRemove = true) {
   const containerId = "addictionContainer";
+  const container = document.getElementById(containerId);
+  if (!container) return;
   const prefix = "පුද්ගලයා";
-  const count = document.getElementById(containerId).querySelectorAll(".dynamic-card").length + 1;
+  const count = container.querySelectorAll(".dynamic-card").length + 1;
 
   const card = createCardElement(
     "addiction",
@@ -652,8 +873,10 @@ function addAddictionCard(showRemove = true) {
 
 function addWelfareCard(showRemove = true) {
   const containerId = "welfareContainer";
+  const container = document.getElementById(containerId);
+  if (!container) return;
   const prefix = "ලාභියා";
-  const count = document.getElementById(containerId).querySelectorAll(".dynamic-card").length + 1;
+  const count = container.querySelectorAll(".dynamic-card").length + 1;
 
   const card = createCardElement(
     "welfare",
@@ -698,8 +921,10 @@ function addWelfareCard(showRemove = true) {
 
 function addBankCard(showRemove = true) {
   const containerId = "bankContainer";
+  const container = document.getElementById(containerId);
+  if (!container) return;
   const prefix = "බැංකු ගිණුම";
-  const count = document.getElementById(containerId).querySelectorAll(".dynamic-card").length + 1;
+  const count = container.querySelectorAll(".dynamic-card").length + 1;
 
   const card = createCardElement(
     "bank",
@@ -729,8 +954,10 @@ function addBankCard(showRemove = true) {
 
 function addLoanCard(showRemove = true) {
   const containerId = "loanContainer";
+  const container = document.getElementById(containerId);
+  if (!container) return;
   const prefix = "ණය පහසුකම";
-  const count = document.getElementById(containerId).querySelectorAll(".dynamic-card").length + 1;
+  const count = container.querySelectorAll(".dynamic-card").length + 1;
 
   const card = createCardElement(
     "loan",
@@ -784,13 +1011,20 @@ function initDefaultCards() {
   addBankCard(false);
 }
 
+function bindIfExists(id, eventName, handler) {
+  const el = document.getElementById(id);
+  if (el) {
+    el.addEventListener(eventName, handler);
+  }
+}
+
 function bindButtonEvents() {
-  document.getElementById("prevStepBtn").addEventListener("click", () => {
+  bindIfExists("prevStepBtn", "click", () => {
     hideNavAlert();
     showStep(currentStep - 1);
   });
 
-  document.getElementById("nextStepBtn").addEventListener("click", () => {
+  bindIfExists("nextStepBtn", "click", () => {
     if (validateCurrentStep()) {
       showStep(currentStep + 1);
     }
@@ -804,30 +1038,23 @@ function bindButtonEvents() {
     });
   });
 
-  const savePrefsBtn = document.getElementById("saveSurveyorPrefsBtn");
-  if (savePrefsBtn) {
-    savePrefsBtn.addEventListener("click", () => saveSurveyorPrefs(true));
-  }
+  bindIfExists("saveSurveyorPrefsBtn", "click", () => saveSurveyorPrefs(true));
+  bindIfExists("clearSurveyorPrefsBtn", "click", clearSurveyorPrefs);
 
-  const clearPrefsBtn = document.getElementById("clearSurveyorPrefsBtn");
-  if (clearPrefsBtn) {
-    clearPrefsBtn.addEventListener("click", clearSurveyorPrefs);
-  }
+  bindIfExists("addSchoolChildBtn", "click", () => addSchoolChildCard(true));
+  bindIfExists("addLandBtn", "click", () => addLandCard(true));
+  bindIfExists("addLivestockBtn", "click", () => addLivestockCard(true));
+  bindIfExists("addVehicleBtn", "click", () => addVehicleCard(true));
+  bindIfExists("addAbroadBtn", "click", () => addAbroadCard(true));
+  bindIfExists("addOrphanBtn", "click", () => addOrphanCard(true));
+  bindIfExists("addDisabilityBtn", "click", () => addDisabilityCard(true));
+  bindIfExists("addAddictionBtn", "click", () => addAddictionCard(true));
+  bindIfExists("addWelfareBtn", "click", () => addWelfareCard(true));
+  bindIfExists("addBankBtn", "click", () => addBankCard(true));
+  bindIfExists("addLoanBtn", "click", () => addLoanCard(true));
 
-  document.getElementById("addSchoolChildBtn").addEventListener("click", () => addSchoolChildCard(true));
-  document.getElementById("addLandBtn").addEventListener("click", () => addLandCard(true));
-  document.getElementById("addLivestockBtn").addEventListener("click", () => addLivestockCard(true));
-  document.getElementById("addVehicleBtn").addEventListener("click", () => addVehicleCard(true));
-  document.getElementById("addAbroadBtn").addEventListener("click", () => addAbroadCard(true));
-  document.getElementById("addOrphanBtn").addEventListener("click", () => addOrphanCard(true));
-  document.getElementById("addDisabilityBtn").addEventListener("click", () => addDisabilityCard(true));
-  document.getElementById("addAddictionBtn").addEventListener("click", () => addAddictionCard(true));
-  document.getElementById("addWelfareBtn").addEventListener("click", () => addWelfareCard(true));
-  document.getElementById("addBankBtn").addEventListener("click", () => addBankCard(true));
-  document.getElementById("addLoanBtn").addEventListener("click", () => addLoanCard(true));
-
-  document.getElementById("surveyForm").addEventListener("submit", handleFormSubmit);
-  document.getElementById("resetFormBtn").addEventListener("click", handleFormReset);
+  bindIfExists("surveyForm", "submit", handleFormSubmit);
+  bindIfExists("resetFormBtn", "click", handleFormReset);
 }
 
 function bindProgressListeners(root) {
@@ -840,16 +1067,18 @@ function bindProgressListeners(root) {
 
 function updateProgress() {
   const keyIds = [
-    "q2_dsd", "q3_gnd", "q7_head_name", "q9_total_members",
-    "q16_edu_level", "q35_floor", "q36a_roof", "q38_energy",
-    "q39_water_supply", "q40_toilet", "q41a_phone_status",
-    "q42_vehicle_status", "q44_aid_received", "q45_abroad_status",
-    "q46_orphan_status", "q47_disability_status", "q48_addiction_status",
-    "q49_welfare_status", "q52_loan_status", "certifyCheckbox"
+    "q2_dsd", "q3_gnd", "hh_full_name", "hh_nic", "hh_phone",
+    "hh_ethnicity", "hh_religion", "hh_gender", "hh_dob", "hh_age_2027",
+    "hh_marital_status", "hh_permanent_address", "hh_mem_male",
+    "hh_mem_female", "hh_female_headed", "hh_education", "hh_job_sector",
+    "hh_job_stability", "hh_training_status", "hh_license_status"
   ];
 
+  const existingIds = keyIds.filter((id) => document.getElementById(id) !== null);
+  if (existingIds.length === 0) return;
+
   let filled = 0;
-  keyIds.forEach((id) => {
+  existingIds.forEach((id) => {
     const el = document.getElementById(id);
     if (!el) return;
     if (el.type === "checkbox") {
@@ -859,7 +1088,7 @@ function updateProgress() {
     }
   });
 
-  const pct = Math.round((filled / keyIds.length) * 100);
+  const pct = Math.round((filled / existingIds.length) * 100);
   const bar = document.getElementById("progressBar");
   const label = document.getElementById("progressLabel");
   if (bar) {
@@ -899,13 +1128,21 @@ function buildPayload() {
   const form = document.getElementById("surveyForm");
   const data = {};
 
-  form.querySelectorAll("input[id], select[id], textarea[id]").forEach((el) => {
-    if (el.type === "checkbox") {
-      data[el.id] = el.checked ? "ඔව් (සහතික කර ඇත)" : "නැත";
-    } else {
-      data[el.id] = (el.value || "").trim();
-    }
-  });
+  if (form) {
+    form.querySelectorAll("input[id], select[id], textarea[id]").forEach((el) => {
+      if (el.type === "checkbox") {
+        data[el.id] = el.checked ? "ඔව් (සහතික කර ඇත)" : "නැත";
+      } else {
+        data[el.id] = (el.value || "").trim();
+      }
+    });
+  }
+
+  const m = Number(data.hh_mem_male || 0);
+  const f = Number(data.hh_mem_female || 0);
+  const u18 = Number(data.hh_mem_under18 || 0);
+  const o60 = Number(data.hh_mem_over60 || 0);
+  data.hh_members_total_calc = m + f + u18 + o60;
 
   data.q43_disasters = collectCheckboxGroup("q43_disasters").join(", ");
   data.q43a_insurance = collectCheckboxGroup("q43a_insurance").join(", ");
@@ -931,6 +1168,7 @@ function buildPayload() {
 
 function showStatus(type, message) {
   const box = document.getElementById("statusMessage");
+  if (!box) return;
   box.className = `alert alert-${type === "success" ? "success" : "danger"} mt-3 fw-semibold`;
   box.textContent = message;
   box.scrollIntoView({ behavior: "smooth", block: "nearest" });
@@ -941,45 +1179,43 @@ async function handleFormSubmit(e) {
   hideNavAlert();
 
   const statusBox = document.getElementById("statusMessage");
-  statusBox.className = "alert d-none";
-  statusBox.textContent = "";
+  if (statusBox) {
+    statusBox.className = "alert d-none";
+    statusBox.textContent = "";
+  }
 
-  const dsd = document.getElementById("q2_dsd").value.trim();
-  const gnd = document.getElementById("q3_gnd").value.trim();
-  const headName = document.getElementById("q7_head_name").value.trim();
-  const totalMembers = document.getElementById("q9_total_members").value.trim();
-  const certified = document.getElementById("certifyCheckbox").checked;
+  const dsdEl = document.getElementById("q2_dsd");
+  const gndEl = document.getElementById("q3_gnd");
+  const fullNameEl = document.getElementById("hh_full_name");
+  const certifyEl = document.getElementById("certifyCheckbox");
 
-  if (!dsd || !gnd || !headName) {
+  const dsd = dsdEl ? dsdEl.value.trim() : "";
+  const gnd = gndEl ? gndEl.value.trim() : "";
+  const fullName = fullNameEl ? fullNameEl.value.trim() : "";
+
+  if (!dsd || !gnd) {
     showStep(1);
-    showStatus(
-      "error",
-      "කරුණාකර අනිවාර්ය (*) මූලික තොරතුරු (02. ප්‍රා.ලේ. කොට්ඨාසය, 03. ග්‍රාම නිලධාරී වසම සහ 07. පවුලේ මූලිකයාගේ සම්පූර්ණ නම) සම්පූර්ණ කරන්න."
-    );
+    showStatus("error", "කරුණාකර අනිවාර්ය (*) මූලික තොරතුරු (ප්‍රාදේශීය ලේකම් කොට්ඨාසය සහ ග්‍රාම නිලධාරී වසම) තෝරන්න.");
     return;
   }
 
-  if (!totalMembers) {
+  if (fullNameEl && !fullName) {
     showStep(2);
-    showStatus(
-      "error",
-      "කරුණාකර අනිවාර්ය (*) තොරතුර (09. මුළු සාමාජික සංඛ්‍යාව) සම්පූර්ණ කරන්න."
-    );
+    showStatus("error", "කරුණාකර අනිවාර්ය (*) තොරතුර (01. සම්පූර්ණ නම) ඇතුළත් කරන්න.");
     return;
   }
 
-  if (!certified) {
+  if (certifyEl && !certifyEl.checked) {
     showStep(9);
-    showStatus(
-      "error",
-      "දත්ත Submit කිරීමට පෙර \"ඉහත තොරතුරු නිවැරදි හා සත්‍ය බවට මා සහතික කරමි.\" යන්න තෝරන්න."
-    );
+    showStatus("error", "දත්ත Submit කිරීමට පෙර \"ඉහත තොරතුරු නිවැරදි හා සත්‍ය බවට මා සහතික කරමි.\" යන්න තෝරන්න.");
     return;
   }
 
   const submitBtn = document.getElementById("submitBtn");
-  submitBtn.disabled = true;
-  submitBtn.textContent = "දත්ත යවමින් පවතී...";
+  if (submitBtn) {
+    submitBtn.disabled = true;
+    submitBtn.textContent = "දත්ත යවමින් පවතී...";
+  }
 
   try {
     const payload = buildPayload();
@@ -991,6 +1227,11 @@ async function handleFormSubmit(e) {
     });
 
     saveSurveyorPrefs(false);
+
+    const nicEl = document.getElementById("hh_nic");
+    if (nicEl && nicEl.value.trim()) {
+      registerSubmittedNic(nicEl.value.trim());
+    }
 
     let lastNo = Number(localStorage.getItem(APP_COUNTER_STORAGE_KEY) || "0") || 0;
     lastNo += 1;
@@ -1008,17 +1249,25 @@ async function handleFormSubmit(e) {
   } catch (err) {
     showStatus("error", "දත්ත යැවීමේදී ගැටලුවක් ඇති විය. අන්තර්ජාල සම්බන්ධතාව පරීක්ෂා කර නැවත උත්සාහ කරන්න.");
   } finally {
-    submitBtn.disabled = false;
-    submitBtn.textContent = "දත්ත Submit කරන්න";
+    if (submitBtn) {
+      submitBtn.disabled = false;
+      submitBtn.textContent = "දත්ත Submit කරන්න";
+    }
   }
 }
 
 function handleFormReset() {
   if (!confirm("ෆෝරමයේ ඇතුළත් කළ දත්ත හිස් කිරීමට ඔබට විශ්වාසද? (සමීක්ෂක හා වසම් මූලික විස්තර Phone එකේ සුරැකී පවතී)")) return;
 
-  document.getElementById("surveyForm").reset();
+  const form = document.getElementById("surveyForm");
+  if (form) form.reset();
+
+  lastValidNicValue = "";
+  setNicFeedback("");
   setDefaultValues();
   loadSurveyorPrefs();
+  updateFamilyMembersCardSummary();
+  toggleSection01Conditionals();
 
   const lastNo = Number(localStorage.getItem(APP_COUNTER_STORAGE_KEY) || "0") || 0;
   renderApplicationBadges(lastNo, true);
@@ -1037,8 +1286,10 @@ function handleFormReset() {
   hideNavAlert();
 
   const statusBox = document.getElementById("statusMessage");
-  statusBox.className = "alert d-none";
-  statusBox.textContent = "";
+  if (statusBox) {
+    statusBox.className = "alert d-none";
+    statusBox.textContent = "";
+  }
 
   showStep(1);
   updateProgress();
