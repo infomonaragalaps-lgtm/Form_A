@@ -158,124 +158,205 @@
         </div>
       </section>
 
-      <!-- Step 02: පවුලේ සාමාජිකයන්, අධ්‍යාපනය හා පෝෂණ තොරතුරු -->
+<!-- Section 02 / Step 02: 01. ගෘහ මූලික / ප්‍රධාන අයදුම්කරුගේ මූලික පෞද්ගලික තොරතුරු -->
       <section class="section-card d-none" data-step="2">
         <div class="section-header teal">
-          <h2>02. පවුලේ සාමාජිකයන්, අධ්‍යාපනය හා පෝෂණ තොරතුරු</h2>
+          <h2>01. ගෘහ මූලික / ප්‍රධාන අයදුම්කරුගේ මූලික පෞද්ගලික තොරතුරු</h2>
         </div>
         <div class="section-body">
           <div class="row g-3 mb-3">
-            <div class="col-sm-6 col-lg-3">
-              <label for="q9_total_members" class="form-label">09. මුළු සාමාජික සංඛ්‍යාව <span class="req">*</span></label>
-              <input type="number" id="q9_total_members" name="q9_total_members" class="form-control" min="1" placeholder="0" required />
-            </div>
-            <div class="col-sm-6 col-lg-3">
-              <label for="q10_males" class="form-label">10. පිරිමි සාමාජිකයන් සංඛ්‍යාව</label>
-              <input type="number" id="q10_males" name="q10_males" class="form-control" min="0" placeholder="0" />
-            </div>
-            <div class="col-sm-6 col-lg-3">
-              <label for="q11_females" class="form-label">11. ස්ත්‍රී සාමාජිකයන් සංඛ්‍යාව</label>
-              <input type="number" id="q11_females" name="q11_females" class="form-control" min="0" placeholder="0" />
-            </div>
-            <div class="col-sm-6 col-lg-3">
-              <label for="q12_children_under18" class="form-label">12. අවු. 18 ට අඩු ළමයින් සංඛ්‍යාව</label>
-              <input type="number" id="q12_children_under18" name="q12_children_under18" class="form-control" min="0" placeholder="0" />
-            </div>
-          </div>
-
-          <div class="row g-3 mb-3">
             <div class="col-md-4">
-              <label for="q13_elders_60plus" class="form-label">13. අවු. 60 ට වැඩි වැඩිහිටියන් සංඛ්‍යාව</label>
-              <input type="number" id="q13_elders_60plus" name="q13_elders_60plus" class="form-control" min="0" placeholder="0" />
+              <label for="hh_full_name" class="form-label">01. සම්පූර්ණ නම <span class="req">*</span></label>
+              <input type="text" id="hh_full_name" name="hh_full_name" class="form-control" placeholder="සම්පූර්ණ නම" required />
             </div>
             <div class="col-md-4">
-              <label for="q14_employed" class="form-label">14. රැකියා නියුක්ත සංඛ්‍යාව</label>
-              <input type="number" id="q14_employed" name="q14_employed" class="form-control" min="0" placeholder="0" />
+              <label for="hh_nic" class="form-label">02. ජා. හැ. අංකය (NIC)</label>
+              <input type="text" id="hh_nic" name="hh_nic" class="form-control" maxlength="12" placeholder="පැරණි හෝ නව NIC අංකය" autocomplete="off" />
+              <div id="hhNicFeedback" class="form-text text-danger fw-semibold d-none"></div>
             </div>
             <div class="col-md-4">
-              <label for="q15_unemployed" class="form-label">15. රැකියා විරහිත / සොයමින් සිටින සංඛ්‍යාව</label>
-              <input type="number" id="q15_unemployed" name="q15_unemployed" class="form-control" min="0" placeholder="0" />
+              <label for="hh_phone" class="form-label">03. දුරකථන අංකය</label>
+              <input type="tel" id="hh_phone" name="hh_phone" class="form-control" placeholder="07X XXX XXXX" />
             </div>
           </div>
 
           <div class="row g-3 mb-3">
             <div class="col-md-6">
-              <label for="q16_edu_level" class="form-label">16. පවුලේ ඉහළම අධ්‍යාපන මට්ටම</label>
-              <select id="q16_edu_level" name="q16_edu_level" class="form-select">
+              <label for="hh_ethnicity" class="form-label">04. ජාතිය</label>
+              <select id="hh_ethnicity" name="hh_ethnicity" class="form-select">
                 <option value="">තෝරන්න...</option>
-                <option value="පාසල් ගොස් නැත">පාසල් ගොස් නැත</option>
-                <option value="ප්‍රාථමික (1-5 ශ්‍රේණිය)">ප්‍රාථමික (1-5 ශ්‍රේණිය)</option>
-                <option value="කනිෂ්ඨ ද්විතීයික (6-9 ශ්‍රේණිය)">කනිෂ්ඨ ද්විතීයික (6-9 ශ්‍රේණිය)</option>
-                <option value="අ.පො.ස. (සා.පෙළ)">අ.පො.ස. (සා.පෙළ)</option>
-                <option value="අ.පො.ස. (උ.පෙළ)">අ.පො.ස. (උ.පෙළ)</option>
-                <option value="වෘත්තීය පුහුණු / NVQ / ඩිප්ලෝමා">වෘත්තීය පුහුණු / NVQ / ඩිප්ලෝමා</option>
-                <option value="උපාධි / පශ්චාත් උපාධි">උපාධි / පශ්චාත් උපාධි</option>
+                <option value="සිංහල">සිංහල</option>
+                <option value="දෙමළ">දෙමළ</option>
+                <option value="මුස්ලිම්">මුස්ලිම්</option>
+                <option value="වෙනත්">වෙනත්</option>
               </select>
             </div>
             <div class="col-md-6">
-              <label for="q17_vocational" class="form-label">17. වෘත්තීය පුහුණු අවශ්‍යතා</label>
-              <input type="text" id="q17_vocational" name="q17_vocational" class="form-control" placeholder="අවශ්‍ය වෘත්තීය පුහුණු ක්ෂේත්‍ර" />
+              <label for="hh_religion" class="form-label">05. ආගම</label>
+              <select id="hh_religion" name="hh_religion" class="form-select">
+                <option value="">තෝරන්න...</option>
+                <option value="බෞද්ධ">බෞද්ධ</option>
+                <option value="හින්දු">හින්දු</option>
+                <option value="ඉස්ලාම්">ඉස්ලාම්</option>
+                <option value="කතෝලික/ක්‍රිස්තියානි">කතෝලික/ක්‍රිස්තියානි</option>
+                <option value="වෙනත්">වෙනත්</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="row g-3 mb-3">
+            <div class="col-md-4">
+              <label for="hh_gender" class="form-label">06. ස්ත්‍රී / පුරුෂ භාවය</label>
+              <select id="hh_gender" name="hh_gender" class="form-select">
+                <option value="">තෝරන්න...</option>
+                <option value="පුරුෂ">පුරුෂ</option>
+                <option value="ස්ත්‍රී">ස්ත්‍රී</option>
+              </select>
+            </div>
+            <div class="col-md-4">
+              <label for="hh_dob" class="form-label">07. උපන් දිනය</label>
+              <input type="date" id="hh_dob" name="hh_dob" class="form-control" />
+            </div>
+            <div class="col-md-4">
+              <label for="hh_age_2027" class="form-label">08. 2027 ට වයස (අවුරුදු)</label>
+              <input type="number" id="hh_age_2027" name="hh_age_2027" class="form-control" min="0" max="125" placeholder="ස්වයංක්‍රීයව ගණනය වේ" />
+            </div>
+          </div>
+
+          <div class="row g-3 mb-3">
+            <div class="col-md-6">
+              <label for="hh_marital_status" class="form-label">09. විවාහක / අවිවාහක බව</label>
+              <select id="hh_marital_status" name="hh_marital_status" class="form-select">
+                <option value="">තෝරන්න...</option>
+                <option value="විවාහක">විවාහක</option>
+                <option value="අවිවාහක">අවිවාහක</option>
+                <option value="වැන්දඹු">වැන්දඹු</option>
+                <option value="දික්කසාද / වෙන්වූ">දික්කසාද / වෙන්වූ</option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label for="hh_female_headed" class="form-label">12. කාන්තාවන් මූලිකත්වය ගන්නා පවුලකි (Female-headed Household)</label>
+              <select id="hh_female_headed" name="hh_female_headed" class="form-select">
+                <option value="">තෝරන්න...</option>
+                <option value="ඔව්">ඔව්</option>
+                <option value="නැත">නැත</option>
+              </select>
             </div>
           </div>
 
           <div class="mb-3">
-            <label for="q18_special_talents" class="form-label">18. පවුලේ සාමාජිකයන් සතු විශේෂ දක්ෂතා / කුසලතා</label>
-            <textarea id="q18_special_talents" name="q18_special_talents" class="form-control" placeholder="කලා, ක්‍රීඩා, ශිල්පීය, තාක්ෂණික හෝ වෙනත් දක්ෂතා..."></textarea>
+            <label for="hh_permanent_address" class="form-label">10. ස්ථිර ලිපිනය</label>
+            <textarea id="hh_permanent_address" name="hh_permanent_address" class="form-control" placeholder="ස්ථිර ලිපිනය ඇතුළත් කරන්න..."></textarea>
           </div>
 
-          <!-- 19. පාසල් යන දරුවන්ගේ විස්තර (Dynamic Cards) -->
-          <div class="sub-panel">
-            <div class="sub-panel-header">
-              <span>19. පාසල් යන දරුවන්ගේ විස්තර</span>
-              <button type="button" class="btn btn-add-item" id="addSchoolChildBtn">+ දරුවෙක් එක් කරන්න</button>
+          <!-- 11. පවුලේ මුළු සාමාජික සංඛ්‍යාව (Textboxes 4 Card එකක් ඇතුළේ) -->
+          <div class="dynamic-card mb-3" id="familyMembersCard">
+            <div class="dynamic-card-top">
+              <span class="card-title-label">11. පවුලේ මුළු සාමාජික සංඛ්‍යාව</span>
+              <span class="badge bg-primary-subtle text-primary fw-semibold" id="hhTotalMembersPreview">මුළු එකතුව: 0</span>
             </div>
-            <div id="schoolChildrenContainer"></div>
+            <div class="row g-3">
+              <div class="col-sm-6 col-lg-3">
+                <label for="hh_mem_male" class="form-label">පුරුෂ</label>
+                <input type="text" id="hh_mem_male" name="hh_mem_male" class="form-control hh-member-count-input" inputmode="numeric" placeholder="0" />
+              </div>
+              <div class="col-sm-6 col-lg-3">
+                <label for="hh_mem_female" class="form-label">ස්ත්‍රී</label>
+                <input type="text" id="hh_mem_female" name="hh_mem_female" class="form-control hh-member-count-input" inputmode="numeric" placeholder="0" />
+              </div>
+              <div class="col-sm-6 col-lg-3">
+                <label for="hh_mem_under18" class="form-label">වයස 18ට අඩු</label>
+                <input type="text" id="hh_mem_under18" name="hh_mem_under18" class="form-control hh-member-count-input" inputmode="numeric" placeholder="0" />
+              </div>
+              <div class="col-sm-6 col-lg-3">
+                <label for="hh_mem_over60" class="form-label">වයස 60ට වැඩි</label>
+                <input type="text" id="hh_mem_over60" name="hh_mem_over60" class="form-control hh-member-count-input" inputmode="numeric" placeholder="0" />
+              </div>
+            </div>
           </div>
 
-          <!-- 20. පාසල් නොයන දරුවන් (Conditional) -->
+          <div class="row g-3 mb-3">
+            <div class="col-md-4">
+              <label for="hh_education" class="form-label">13. අධ්‍යාපන තත්ත්වය</label>
+              <select id="hh_education" name="hh_education" class="form-select">
+                <option value="">තෝරන්න...</option>
+                <option value="පාසල් ගොස් නැත">පාසල් ගොස් නැත</option>
+                <option value="1-5 ශ්‍රේණිය">1-5 ශ්‍රේණිය</option>
+                <option value="6-10 ශ්‍රේණිය">6-10 ශ්‍රේණිය</option>
+                <option value="අ.පො.ස. (සා./පෙළ)">අ.පො.ස. (සා./පෙළ)</option>
+                <option value="අ.පො.ස. (උ./පෙළ)">අ.පො.ස. (උ./පෙළ)</option>
+                <option value="ඩිප්ලෝමා / උපාධි">ඩිප්ලෝමා / උපාධි</option>
+              </select>
+            </div>
+            <div class="col-md-4">
+              <label for="hh_job_sector" class="form-label">14. රැකියා ක්ෂේත්‍රය</label>
+              <select id="hh_job_sector" name="hh_job_sector" class="form-select">
+                <option value="">තෝරන්න...</option>
+                <option value="රජයේ">රජයේ</option>
+                <option value="පෞද්ගලික">පෞද්ගලික</option>
+                <option value="ගොවි">ගොවි</option>
+                <option value="සේවා">සේවා</option>
+                <option value="කුලී">කුලී</option>
+                <option value="විදේශ">විදේශ</option>
+              </select>
+            </div>
+            <div class="col-md-4">
+              <label for="hh_job_stability" class="form-label">15. රැකියාව ස්ථිරත්වය</label>
+              <select id="hh_job_stability" name="hh_job_stability" class="form-select">
+                <option value="">තෝරන්න...</option>
+                <option value="ස්ථිර">ස්ථිර</option>
+                <option value="තාවකාලික">තාවකාලික</option>
+                <option value="අනියම්">අනියම්</option>
+                <option value="ස්වයං රැකියා">ස්වයං රැකියා</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- 16. පුහුණු පාඨමාලා හදාරා (Conditional) -->
           <div class="sub-panel">
             <div class="row g-3">
-              <div class="col-md-6">
-                <label for="q20_not_attending" class="form-label">20. පාසල් වයසේ පාසල් නොයන දරුවන් සිටීද?</label>
-                <select id="q20_not_attending" name="q20_not_attending" class="form-select" onchange="toggleConditional('q20_not_attending', 'q20_reason_wrap')">
+              <div class="col-md-5">
+                <label for="hh_training_status" class="form-label">16. පුහුණු පාඨමාලා හදාරා</label>
+                <select id="hh_training_status" name="hh_training_status" class="form-select" onchange="toggleSection01Conditionals()">
                   <option value="">තෝරන්න...</option>
                   <option value="නැත">නැත</option>
-                  <option value="ඔව්">ඔව්</option>
+                  <option value="ඇත">ඇත</option>
                 </select>
               </div>
-              <div class="col-md-6 d-none" id="q20_reason_wrap">
-                <label for="q20_reason" class="form-label">20(අ). පාසල් නොයෑමට හේතුව</label>
-                <input type="text" id="q20_reason" name="q20_reason" class="form-control" placeholder="හේතුව" />
+              <div class="col-md-7 d-none" id="hh_training_details_wrap">
+                <label for="hh_training_details" class="form-label">හැදෑරූ පුහුණු පාඨමාලා විස්තර</label>
+                <input type="text" id="hh_training_details" name="hh_training_details" class="form-control" placeholder="පාඨමාලාවේ නම / ආයතනය / වර්ෂය" />
               </div>
             </div>
           </div>
 
-          <!-- 21. බර අඩු දරුවන් (Conditional) -->
+          <!-- 17. රියදුරු බලපත්‍ර (Conditional) -->
           <div class="sub-panel">
             <div class="row g-3">
-              <div class="col-md-6">
-                <label for="q21_underweight" class="form-label">21. පෝෂණ ඌනතා / බර අඩු දරුවන් සිටීද?</label>
-                <select id="q21_underweight" name="q21_underweight" class="form-select" onchange="toggleConditional('q21_underweight', 'q21_reason_wrap')">
+              <div class="col-md-5">
+                <label for="hh_license_status" class="form-label">17. රියදුරු බලපත්‍ර</label>
+                <select id="hh_license_status" name="hh_license_status" class="form-select" onchange="toggleSection01Conditionals()">
                   <option value="">තෝරන්න...</option>
                   <option value="නැත">නැත</option>
-                  <option value="ඔව්">ඔව්</option>
+                  <option value="ඇත">ඇත</option>
                 </select>
               </div>
-              <div class="col-md-6 d-none" id="q21_reason_wrap">
-                <label for="q21_reason" class="form-label">21(අ). හේතුව / විස්තරය</label>
-                <input type="text" id="q21_reason" name="q21_reason" class="form-control" placeholder="හේතුව" />
+              <div class="col-md-7 d-none" id="hh_license_type_wrap">
+                <label for="hh_license_type" class="form-label">රියදුරු බලපත්‍ර වර්ගය</label>
+                <select id="hh_license_type" name="hh_license_type" class="form-select">
+                  <option value="">තෝරන්න...</option>
+                  <option value="යතුරුපැදි">යතුරුපැදි</option>
+                  <option value="සැහැල්ලු">සැහැල්ලු</option>
+                  <option value="බර වාහන">බර වාහන</option>
+                </select>
               </div>
             </div>
           </div>
 
-          <div class="mb-3">
-            <label for="q22_health_notes" class="form-label">22. නිදන්ගත රෝග හෝ සෞඛ්‍ය තත්වයන් (ඇත්නම්)</label>
-            <input type="text" id="q22_health_notes" name="q22_health_notes" class="form-control" placeholder="රෝග තත්වයන් හෝ සෞඛ්‍ය අවශ්‍යතා" />
-          </div>
-
+          <!-- 18. විශේෂ දක්ෂතා ඇත්නම් විස්තර -->
           <div>
-            <label for="q23_nutrition_aid" class="form-label">23. පවුලට / දරුවන්ට ලැබෙන පෝෂණ ආධාර විස්තර</label>
-            <textarea id="q23_nutrition_aid" name="q23_nutrition_aid" class="form-control" placeholder="ත්‍රිපෝෂ, පාසල් පෝෂණ වැඩසටහන් හෝ වෙනත් ආධාර..."></textarea>
+            <label for="hh_special_skills" class="form-label">18. විශේෂ දක්ෂතා ඇත්නම් විස්තර</label>
+            <textarea id="hh_special_skills" name="hh_special_skills" class="form-control" placeholder="විශේෂ දක්ෂතා හෝ කුසලතා ඇත්නම් විස්තර කරන්න..."></textarea>
           </div>
         </div>
       </section>
