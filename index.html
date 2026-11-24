@@ -443,66 +443,131 @@
         </div>
       </section>
 
-      <!-- Step 04: ඉඩම්, පශු සම්පත් හා කෘෂිකර්ම තොරතුරු -->
+      <!-- Section 04 / Step 04: 04. ඉඩම් හිමිකම්, කෘෂිකර්මාන්තය, පශු සම්පත් හා ආර්ථික තත්ත්වය -->
       <section class="section-card d-none" data-step="4">
-        <div class="section-header violet">
-          <h2>04. ඉඩම්, පශු සම්පත් හා කෘෂිකර්ම තොරතුරු</h2>
+        <div class="section-header teal">
+          <h2>04. ඉඩම් හිමිකම්, කෘෂිකර්මාන්තය, පශු සම්පත් හා ආර්ථික තත්ත්වය</h2>
         </div>
         <div class="section-body">
-          <!-- 24. ඉඩම් තොරතුරු (Dynamic Cards 25-32) -->
-          <div class="sub-panel">
-            <div class="sub-panel-header">
-              <span>24. ඉඩම් තොරතුරු (25 - 32 විස්තර)</span>
-              <button type="button" class="btn btn-add-item" id="addLandBtn">+ ඉඩමක් එක් කරන්න</button>
+          <!-- 21 ට උඩින් ප්‍රශ්නය: ඔබට හෝ නිවැසියන්ට ඉඩම් පවතීද? -->
+          <div class="mb-3">
+            <label for="q20_land_ownership_status" class="form-label">ඔබට හෝ නිවැසියන්ට ඉඩම් පවතීද?</label>
+            <select id="q20_land_ownership_status" name="q20_land_ownership_status" class="form-select" onchange="toggleSection04Land()">
+              <option value="">තෝරන්න...</option>
+              <option value="ඔව්">ඔව්</option>
+              <option value="නැත">නැත</option>
+            </select>
+          </div>
+
+          <!-- ඔව් තේරූ විට පෙන්වන ඉඩම් Cards Panel -->
+          <div class="sub-panel d-none mb-3" id="land_cards_wrap">
+            <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+              <span class="fw-bold text-dark">ඉඩම් විස්තර (21 - 25)</span>
+              <button type="button" class="btn btn-sm btn-add-item" id="addLandBtn" onclick="addLandCard(true)">+ තවත් ඉඩමක් එක් කරන්න</button>
             </div>
             <div id="landsContainer"></div>
           </div>
 
-          <!-- පශු සම්පත් තත්වය (Conditional + Dynamic Cards) -->
+          <!-- 26, 27, 28, 29 වෙනම Fields -->
           <div class="sub-panel">
-            <div class="mb-3">
-              <label for="q33_livestock_status" class="form-label">පශු සම්පත් තත්වය</label>
-              <select id="q33_livestock_status" name="q33_livestock_status" class="form-select" onchange="toggleConditional('q33_livestock_status', 'livestock_wrap')">
-                <option value="">තෝරන්න...</option>
-                <option value="නැත">නැත</option>
-                <option value="ඇත">ඇත</option>
-              </select>
-            </div>
-            <div class="d-none" id="livestock_wrap">
-              <div class="sub-panel-header">
-                <span>පශු සම්පත් විස්තර</span>
-                <button type="button" class="btn btn-add-item" id="addLivestockBtn">+ සත්ව වර්ගයක් එක් කරන්න</button>
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label for="q26_cultivated_extent" class="form-label">26. වගා කර ඇති ඉඩම් ප්‍රමාණය</label>
+                <input type="text" id="q26_cultivated_extent" name="q26_cultivated_extent" class="form-control" placeholder="අක්කර / රූඩ් / පර්චස්" />
               </div>
-              <div id="livestockContainer"></div>
+              <div class="col-md-6">
+                <label for="q29_gross_monthly_income" class="form-label">29. දළ මාසික ආදායම (රු.)</label>
+                <input type="text" id="q29_gross_monthly_income" name="q29_gross_monthly_income" class="form-control" placeholder="රු." />
+              </div>
             </div>
           </div>
 
-          <!-- ගෙවතු වගාව, කාබනික පොහොර හා වෙළඳපොළ ප්‍රවේශය -->
-          <div class="row g-3">
-            <div class="col-md-4">
-              <label for="q34_home_garden" class="form-label">ගෙවතු වගාව</label>
-              <select id="q34_home_garden" name="q34_home_garden" class="form-select">
-                <option value="">තෝරන්න...</option>
-                <option value="ඇත (සක්‍රීයයි)">ඇත (සක්‍රීයයි)</option>
-                <option value="ඇත (අර්ධ වශයෙන්)">ඇත (අර්ධ වශයෙන්)</option>
-                <option value="නැත">නැත</option>
-              </select>
+          <!-- 27. පශු සම්පත් ඇත්නම් & 28. සතුන් ප්‍රමාණය (වර්ගය අනුව) -->
+          <div class="sub-panel">
+            <div class="mb-3">
+              <label class="form-label d-block">27. පශු සම්පත් ඇත්නම්</label>
+              <div class="row g-2">
+                <div class="col-6 col-md-3">
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="q27_livestock" id="livestock_cow" value="එළ ගව" />
+                    <label class="form-check-label" for="livestock_cow">එළ ගව</label>
+                  </div>
+                </div>
+                <div class="col-6 col-md-3">
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="q27_livestock" id="livestock_buffalo" value="මී ගව" />
+                    <label class="form-check-label" for="livestock_buffalo">මී ගව</label>
+                  </div>
+                </div>
+                <div class="col-6 col-md-3">
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="q27_livestock" id="livestock_poultry" value="කුකුළන්" />
+                    <label class="form-check-label" for="livestock_poultry">කුකුළන්</label>
+                  </div>
+                </div>
+                <div class="col-6 col-md-3">
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="q27_livestock" id="livestock_goat" value="එළුවන්" />
+                    <label class="form-check-label" for="livestock_goat">එළුවන්</label>
+                  </div>
+                </div>
+                <div class="col-6 col-md-3">
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="q27_livestock" id="livestock_pig" value="ඌරන්" />
+                    <label class="form-check-label" for="livestock_pig">ඌරන්</label>
+                  </div>
+                </div>
+                <div class="col-6 col-md-3">
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="q27_livestock" id="livestock_bee" value="මී මැසි ජනපද" />
+                    <label class="form-check-label" for="livestock_bee">මී මැසි ජනපද</label>
+                  </div>
+                </div>
+                <div class="col-6 col-md-3">
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="q27_livestock" id="livestock_fish" value="මිරිදිය මසුන්" />
+                    <label class="form-check-label" for="livestock_fish">මිරිදිය මසුන්</label>
+                  </div>
+                </div>
+                <div class="col-6 col-md-3">
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="q27_livestock" id="livestock_other_chk" value="වෙනත්" onchange="toggleSection04OtherInputs()" />
+                    <label class="form-check-label" for="livestock_other_chk">වෙනත්</label>
+                  </div>
+                </div>
+              </div>
+
+              <div class="mt-2 d-none" id="q27_livestock_other_wrap">
+                <label for="q27_livestock_other_text" class="form-label">වෙනත් පශු සම්පත් (සඳහන් කරන්න)</label>
+                <input type="text" id="q27_livestock_other_text" name="q27_livestock_other_text" class="form-control" placeholder="වෙනත් සත්ව වර්ග" />
+              </div>
             </div>
-            <div class="col-md-4">
-              <label for="q34a_organic_fert" class="form-label">කාබනික පොහොර භාවිතය</label>
-              <select id="q34a_organic_fert" name="q34a_organic_fert" class="form-select">
-                <option value="">තෝරන්න...</option>
-                <option value="සිදු කරයි">සිදු කරයි</option>
-                <option value="සිදු නොකරයි">සිදු නොකරයි</option>
-              </select>
+
+            <div>
+              <label for="q28_animal_count_by_type" class="form-label">28. සතුන් ප්‍රමාණය (වර්ගය අනුව)</label>
+              <textarea id="q28_animal_count_by_type" name="q28_animal_count_by_type" class="form-control" placeholder="උදා: එළ ගව - 2, කුකුළන් - 15..."></textarea>
             </div>
-            <div class="col-md-4">
-              <label for="q34b_market_access" class="form-label">වෙළඳපොළ ප්‍රවේශය</label>
-              <select id="q34b_market_access" name="q34b_market_access" class="form-select">
-                <option value="">තෝරන්න...</option>
-                <option value="ඇත">ඇත</option>
-                <option value="ගැටලු පවති">ගැටලු පවති</option>
-              </select>
+          </div>
+
+          <!-- ගෙවතු වගාව, කාබනික පොහොර භාවිතය හා වෙළඳපොළ ප්‍රවේශය -->
+          <div class="sub-panel mb-0">
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label for="q29a_home_garden_compost" class="form-label">ගෙවතු වගාව / කාබනික පොහොර නිෂ්පාදනය</label>
+                <select id="q29a_home_garden_compost" name="q29a_home_garden_compost" class="form-select">
+                  <option value="">තෝරන්න...</option>
+                  <option value="සිදු කරයි">සිදු කරයි</option>
+                  <option value="සිදු නොකරයි">සිදු නොකරයි</option>
+                </select>
+              </div>
+              <div class="col-md-6">
+                <label for="q29b_market_access" class="form-label">නිෂ්පාදන අලෙවියට වෙළඳපොළක්</label>
+                <select id="q29b_market_access" name="q29b_market_access" class="form-select">
+                  <option value="">තෝරන්න...</option>
+                  <option value="ඇත">ඇත</option>
+                  <option value="ගැටලු පවතී">ගැටලු පවතී</option>
+                </select>
+              </div>
             </div>
           </div>
         </div>
