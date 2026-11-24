@@ -365,81 +365,79 @@
 
       <!-- Section 03 / Step 03: 03. පවුලේ දරුවන්ගේ අධ්‍යාපන, සෞඛ්‍ය හා පෝෂණ තොරතුරු -->
       <section class="section-card d-none" data-step="3">
-        <div class="section-header">
+        <div class="section-header teal">
           <h2>03. පවුලේ දරුවන්ගේ අධ්‍යාපන, සෞඛ්‍ය හා පෝෂණ තොරතුරු</h2>
         </div>
         <div class="section-body">
           <!-- 19. පාසල් යන වයසේ දරුවන් සිටීද? -->
-          <div class="sub-panel">
-            <div class="row g-3 align-items-end">
-              <div class="col-md-6">
-                <label for="q19_school_children_status" class="form-label">19. පාසල් යන වයසේ දරුවන් සිටීද?</label>
-                <select id="q19_school_children_status" name="q19_school_children_status" class="form-select" onchange="toggleConditional('q19_school_children_status', 'school_children_wrap')">
-                  <option value="">තෝරන්න...</option>
-                  <option value="නැත">නැත</option>
-                  <option value="ඔව්">ඔව්</option>
-                </select>
-              </div>
-            </div>
-
-            <div id="school_children_wrap" class="mt-3 d-none">
-              <div class="sub-panel-header">
-                <span>පාසල් යන දරුවන්ගේ විස්තර</span>
-                <button type="button" class="btn btn-add-item" id="addSchoolChildBtn">+ දරුවෙක් එක් කරන්න</button>
-              </div>
-              <div id="schoolChildrenContainer"></div>
-            </div>
+          <div class="mb-3">
+            <label for="ch_school_attending" class="form-label">19. පාසල් යන වයසේ දරුවන් සිටීද?</label>
+            <select id="ch_school_attending" name="ch_school_attending" class="form-select" onchange="toggleSection03Children()">
+              <option value="">තෝරන්න...</option>
+              <option value="ඔව්">ඔව්</option>
+              <option value="නැත">නැත</option>
+            </select>
           </div>
 
-          <!-- 20 & 21. පාසල් නොයන දරුවන් -->
+          <div class="sub-panel d-none mb-3" id="ch_school_children_wrap">
+            <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+              <span class="fw-bold text-dark">පාසල් යන දරුවන්ගේ විස්තර</span>
+              <button type="button" class="btn btn-sm btn-add-item" id="addSchoolChildBtn" onclick="addSchoolChildCard(true)">+ දරුවෙක් එක් කරන්න</button>
+            </div>
+            <div id="schoolChildrenContainer"></div>
+          </div>
+
+          <!-- 20 & 21 -->
           <div class="sub-panel">
             <div class="row g-3">
               <div class="col-md-5">
-                <label for="q20_not_attending" class="form-label">20. පාසල් නොයන දරුවන්</label>
-                <select id="q20_not_attending" name="q20_not_attending" class="form-select" onchange="toggleConditional('q20_not_attending', 'q21_reason_wrap')">
+                <label for="ch_not_attending" class="form-label">20. පාසල් නොයන දරුවන්</label>
+                <select id="ch_not_attending" name="ch_not_attending" class="form-select" onchange="toggleSection03Children()">
                   <option value="">තෝරන්න...</option>
-                  <option value="නැත">නැත</option>
                   <option value="ඇත">ඇත</option>
+                  <option value="නැත">නැත</option>
                 </select>
               </div>
-              <div class="col-md-7 d-none" id="q21_reason_wrap">
-                <label for="q21_not_attending_reason" class="form-label">21. පාසල් නොයන්නේ නම් හේතුව</label>
-                <input type="text" id="q21_not_attending_reason" name="q21_not_attending_reason" class="form-control" placeholder="පාසල් නොයෑමට හේතුව" />
+              <div class="col-md-7 d-none" id="ch_not_attending_reason_wrap">
+                <label for="ch_not_attending_reason" class="form-label">21. පාසල් නොයන්නේ නම් හේතුව</label>
+                <input type="text" id="ch_not_attending_reason" name="ch_not_attending_reason" class="form-control" placeholder="පාසල් නොයෑමට හේතුව" />
               </div>
             </div>
           </div>
 
-          <!-- 22 & 23. බර අඩු දරුවන් -->
+          <!-- 22 & 23 -->
           <div class="sub-panel">
             <div class="row g-3">
               <div class="col-md-5">
-                <label for="q22_underweight" class="form-label">22. බර අඩු දරුවන්</label>
-                <select id="q22_underweight" name="q22_underweight" class="form-select" onchange="toggleConditional('q22_underweight', 'q23_reason_wrap')">
+                <label for="ch_underweight" class="form-label">22. බර අඩු දරුවන්</label>
+                <select id="ch_underweight" name="ch_underweight" class="form-select" onchange="toggleSection03Children()">
                   <option value="">තෝරන්න...</option>
-                  <option value="නැත">නැත</option>
                   <option value="ඇත">ඇත</option>
+                  <option value="නැත">නැත</option>
                 </select>
               </div>
-              <div class="col-md-7 d-none" id="q23_underweight_reason_wrap">
-                <label for="q23_underweight_reason" class="form-label">23. බර අඩුවීමට හේතුව</label>
-                <input type="text" id="q23_underweight_reason" name="q23_underweight_reason" class="form-control" placeholder="බර අඩුවීමට හේතුව" />
+              <div class="col-md-7 d-none" id="ch_underweight_reason_wrap">
+                <label for="ch_underweight_reason" class="form-label">23. බර අඩුවීමට හේතුව</label>
+                <input type="text" id="ch_underweight_reason" name="ch_underweight_reason" class="form-control" placeholder="බර අඩුවීමට හේතුව" />
               </div>
             </div>
           </div>
 
-          <!-- 24 & 25. මන්දපෝෂණය සහ ලැබෙන පෝෂණ ආධාර -->
-          <div class="row g-3">
-            <div class="col-md-5">
-              <label for="q24_malnutrition" class="form-label">24. මන්දපෝෂණයට දරුවන් ලක්ව</label>
-              <select id="q24_malnutrition" name="q24_malnutrition" class="form-select">
-                <option value="">තෝරන්න...</option>
-                <option value="නැත">නැත</option>
-                <option value="ඇත">ඇත</option>
-              </select>
-            </div>
-            <div class="col-md-7">
-              <label for="q25_nutrition_aid" class="form-label">25. විස්තර / ලැබෙන පෝෂණ ආධාර</label>
-              <textarea id="q25_nutrition_aid" name="q25_nutrition_aid" class="form-control" placeholder="ත්‍රිපෝෂ, පාසල් පෝෂණ වැඩසටහන් හෝ වෙනත් පෝෂණ ආධාර විස්තර..."></textarea>
+          <!-- 24 & 25 (25 සැමවිටම පෙනෙන ලෙස) -->
+          <div class="sub-panel mb-0">
+            <div class="row g-3">
+              <div class="col-md-5">
+                <label for="ch_malnourished" class="form-label">24. මන්දපෝෂණයට දරුවන් ලක්ව</label>
+                <select id="ch_malnourished" name="ch_malnourished" class="form-select">
+                  <option value="">තෝරන්න...</option>
+                  <option value="ඇත">ඇත</option>
+                  <option value="නැත">නැත</option>
+                </select>
+              </div>
+              <div class="col-md-7">
+                <label for="ch_nutrition_aid" class="form-label">25. විස්තර / ලැබෙන පෝෂණ ආධාර</label>
+                <textarea id="ch_nutrition_aid" name="ch_nutrition_aid" class="form-control" placeholder="ත්‍රිපෝෂ, පාසල් පෝෂණ වැඩසටහන් හෝ වෙනත් පෝෂණ ආධාර විස්තර..."></textarea>
+              </div>
             </div>
           </div>
         </div>
