@@ -34,6 +34,9 @@ const CARD_CONTAINERS = [
 ];
 
 const CONDITIONAL_WRAPS = [
+  "ch_school_children_wrap",
+  "ch_not_attending_reason_wrap",
+  "ch_underweight_reason_wrap",
   "q20_reason_wrap",
   "q21_reason_wrap",
   "livestock_wrap",
@@ -50,18 +53,6 @@ const CONDITIONAL_WRAPS = [
   "hh_training_details_wrap",
   "hh_license_type_wrap"
 ];
-
-window.addEventListener("DOMContentLoaded", () => {
-  setDefaultValues();
-  loadSurveyorPrefs();
-  loadApplicationNumbers();
-  initDefaultCards();
-  initSection01PersonalDetails();
-  bindButtonEvents();
-  bindProgressListeners(document.getElementById("surveyForm"));
-  showStep(1);
-  updateProgress();
-});
 
 function setDefaultValues() {
   const districtEl = document.getElementById("q1_district");
@@ -129,7 +120,7 @@ function clearSurveyorPrefs() {
   });
   setDefaultValues();
   showNavAlert("info", "මතක තබා තිබූ මූලික විස්තර ඉවත් කර Default අගයන් යොදන ලදී.");
-  updateProgress();
+  if (typeof updateProgress === "function") updateProgress();
 }
 
 function formatAppNo(num) {
@@ -279,7 +270,7 @@ function hideNavAlert() {
   alertEl.textContent = "";
 }
 
-// Section 02 / 01. ගෘහ මූලික / ප්‍රධාන අයදුම්කරුගේ මූලික පෞද්ගලික තොරතුරු Logic
+// Section 02 (02. ගෘහ මූලික / ප්‍රධාන අයදුම්කරුගේ මූලික පෞද්ගලික තොරතුරු) Logic
 function normalizeNic(raw) {
   return String(raw || "").trim().toUpperCase().replace(/\s+/g, "");
 }
@@ -398,7 +389,7 @@ function calculateAgeFor2027() {
   }
 
   ageInput.value = String(Math.max(0, ageIn2027));
-  updateProgress();
+  if (typeof updateProgress === "function") updateProgress();
 }
 
 function updateFamilyMembersCardSummary() {
@@ -432,7 +423,7 @@ function toggleSection01Conditionals() {
     licenseWrap.classList.toggle("d-none", licenseSelect.value !== "ඇත");
   }
 
-  updateProgress();
+  if (typeof updateProgress === "function") updateProgress();
 }
 
 function initSection01PersonalDetails() {
@@ -451,7 +442,7 @@ function initSection01PersonalDetails() {
   document.querySelectorAll(".hh-member-count-input").forEach((input) => {
     input.addEventListener("input", () => {
       updateFamilyMembersCardSummary();
-      updateProgress();
+      if (typeof updateProgress === "function") updateProgress();
     });
   });
 
@@ -459,6 +450,83 @@ function initSection01PersonalDetails() {
   updateFamilyMembersCardSummary();
 }
 
+// Section 03 (03. පවුලේ දරුවන්ගේ අධ්‍යාපන, සෞඛ්‍ය හා පෝෂණ තොරතුරු) Logic
+function toggleSection03Children() {
+  const attendingSelect = document.getElementById("ch_school_attending");
+  const schoolPanel = document.getElementById("ch_school_children_wrap");
+  const container = document.getElementById("schoolChildrenContainer");
+
+  if (attendingSelect && schoolPanel) {
+    const isYes = attendingSelect.value === "ඔව්";
+    schoolPanel.classList.toggle("d-none", !isYes);
+
+    if (isYes && container && container.querySelectorAll(".dynamic-card").length === 0) {
+      addSchoolChildCard(false);
+    }
+  }
+
+  const notAttendingSelect = document.getElementById("ch_not_attending");
+  const notAttendingReasonWrap = document.getElementById("ch_not_attending_reason_wrap");
+  if (notAttendingSelect && notAttendingReasonWrap) {
+    notAttendingReasonWrap.classList.toggle("d-none", notAttendingSelect.value !== "ඇත");
+  }
+
+  const underweightSelect = document.getElementById("ch_underweight");
+  const underweightReasonWrap = document.getElementById("ch_underweight_reason_wrap");
+  if (underweightSelect && underweightReasonWrap) {
+    underweightReasonWrap.classList.toggle("d-none", underweightSelect.value !== "ඇත");
+  }
+
+  if (typeof updateProgress === "function") updateProgress();
+}
+
+function addSchoolChildCard(showRemove = true) {
+  const containerId = "schoolChildrenContainer";
+  const container = document.getElementById(containerId);
+  if (!container) return;
+
+  const prefix = "පාසල් යන දරුවා";
+  const count = container.querySelectorAll(".dynamic-card").length + 1;
+
+  const card = createCardElement(
+    "school_child",
+    `${prefix} #${count}`,
+    showRemove,
+    containerId,
+    prefix,
+    `
+      <div class="row g-3">
+        <div class="col-md-3">
+          <label class="form-label">පාසල් යන දරුවාගේ නම</label>
+          <input type="text" class="form-control" data-field="child_name" placeholder="දරුවාගේ නම" />
+        </div>
+        <div class="col-md-3">
+          <label class="form-label">පාසලේ නම</label>
+          <input type="text" class="form-control" data-field="school_name" placeholder="පාසලේ නම" />
+        </div>
+        <div class="col-md-3">
+          <label class="form-label">ශ්‍රේණිය</label>
+          <input type="text" class="form-control" data-field="grade" placeholder="උදා: 8 ශ්‍රේණිය" />
+        </div>
+        <div class="col-md-3">
+          <label class="form-label">උපන් දිනය</label>
+          <input type="date" class="form-control" data-field="dob" />
+        </div>
+      </div>
+    `
+  );
+
+  appendCard(containerId, card);
+}
+
+function initSection03Children() {
+  bindIfExists("ch_school_attending", "change", toggleSection03Children);
+  bindIfExists("ch_not_attending", "change", toggleSection03Children);
+  bindIfExists("ch_underweight", "change", toggleSection03Children);
+  bindIfExists("addSchoolChildBtn", "click", () => addSchoolChildCard(true));
+
+  toggleSection03Children();
+}
 function toggleConditional(selectId, targetId) {
   const selectEl = document.getElementById(selectId);
   const targetEl = document.getElementById(targetId);
@@ -555,39 +623,6 @@ function appendCard(containerId, cardEl) {
   container.appendChild(cardEl);
   bindProgressListeners(cardEl);
   updateProgress();
-}
-
-function addSchoolChildCard(showRemove = true) {
-  const containerId = "schoolChildrenContainer";
-  const container = document.getElementById(containerId);
-  if (!container) return;
-  const prefix = "පාසල් යන දරුවා";
-  const count = container.querySelectorAll(".dynamic-card").length + 1;
-
-  const card = createCardElement(
-    "school_child",
-    `${prefix} #${count}`,
-    showRemove,
-    containerId,
-    prefix,
-    `
-      <div class="row g-3">
-        <div class="col-md-4">
-          <label class="form-label">දරුවාගේ නම</label>
-          <input type="text" class="form-control" data-field="child_name" placeholder="නම" />
-        </div>
-        <div class="col-md-4">
-          <label class="form-label">පාසලේ නම</label>
-          <input type="text" class="form-control" data-field="school_name" placeholder="පාසල" />
-        </div>
-        <div class="col-md-4">
-          <label class="form-label">ශ්‍රේණිය</label>
-          <input type="text" class="form-control" data-field="grade" placeholder="8 ශ්‍රේණිය" />
-        </div>
-      </div>
-    `
-  );
-  appendCard(containerId, card);
 }
 
 function addLandCard(showRemove = true) {
@@ -1006,7 +1041,6 @@ function addLoanCard(showRemove = true) {
 }
 
 function initDefaultCards() {
-  addSchoolChildCard(false);
   addLandCard(false);
   addBankCard(false);
 }
@@ -1041,7 +1075,6 @@ function bindButtonEvents() {
   bindIfExists("saveSurveyorPrefsBtn", "click", () => saveSurveyorPrefs(true));
   bindIfExists("clearSurveyorPrefsBtn", "click", clearSurveyorPrefs);
 
-  bindIfExists("addSchoolChildBtn", "click", () => addSchoolChildCard(true));
   bindIfExists("addLandBtn", "click", () => addLandCard(true));
   bindIfExists("addLivestockBtn", "click", () => addLivestockCard(true));
   bindIfExists("addVehicleBtn", "click", () => addVehicleCard(true));
@@ -1071,7 +1104,9 @@ function updateProgress() {
     "hh_ethnicity", "hh_religion", "hh_gender", "hh_dob", "hh_age_2027",
     "hh_marital_status", "hh_permanent_address", "hh_mem_male",
     "hh_mem_female", "hh_female_headed", "hh_education", "hh_job_sector",
-    "hh_job_stability", "hh_training_status", "hh_license_status"
+    "hh_job_stability", "hh_training_status", "hh_license_status",
+    "ch_school_attending", "ch_not_attending", "ch_underweight",
+    "ch_malnourished", "ch_nutrition_aid"
   ];
 
   const existingIds = keyIds.filter((id) => document.getElementById(id) !== null);
@@ -1150,7 +1185,8 @@ function buildPayload() {
   data.q09b_housing = collectCheckboxGroup("q09b_housing").join(", ");
   data.q09c_livelihood = collectCheckboxGroup("q09c_livelihood").join(", ");
 
-  data.school_children_cards = collectCardData("schoolChildrenContainer");
+  data.school_children_cards =
+    data.ch_school_attending === "ඔව්" ? collectCardData("schoolChildrenContainer") : [];
   data.land_cards = collectCardData("landsContainer");
   data.livestock_cards = data.q33_livestock_status === "ඇත" ? collectCardData("livestockContainer") : [];
   data.vehicle_cards = data.q42_vehicle_status === "වාහන ඇත" ? collectCardData("vehiclesContainer") : [];
@@ -1268,6 +1304,7 @@ function handleFormReset() {
   loadSurveyorPrefs();
   updateFamilyMembersCardSummary();
   toggleSection01Conditionals();
+  toggleSection03Children();
 
   const lastNo = Number(localStorage.getItem(APP_COUNTER_STORAGE_KEY) || "0") || 0;
   renderApplicationBadges(lastNo, true);
@@ -1294,3 +1331,16 @@ function handleFormReset() {
   showStep(1);
   updateProgress();
 }
+
+window.addEventListener("DOMContentLoaded", () => {
+  setDefaultValues();
+  loadSurveyorPrefs();
+  loadApplicationNumbers();
+  initDefaultCards();
+  initSection01PersonalDetails();
+  initSection03Children();
+  bindButtonEvents();
+  bindProgressListeners(document.getElementById("surveyForm"));
+  showStep(1);
+  updateProgress();
+});
