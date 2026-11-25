@@ -600,7 +600,7 @@
             </select>
           </div>
 
-          <!-- ඔව් (True) තේරූ විට පෙන්වන ප්‍රධාන ප්‍රශ්න (32 - 39) -->
+          <!-- ඔව් (True) තේරූ විට පෙන්වන ප්‍රධාන ප්‍රශ්න (32 - 42) -->
           <div id="sec05_has_house_wrap" class="d-none">
             <!-- 32. නිවසේ ස්වභාවය -->
             <div class="sub-panel">
@@ -691,49 +691,50 @@
               </div>
 
               <!-- වෙනත් බලශක්ති textbox -->
-              <div id="q36_energy_other_wrap" class="d-none mb-3">
+              <div id="q36_energy_other_wrap" class="d-none">
                 <label for="q36_energy_other_text" class="form-label">වෙනත් බලශක්ති ප්‍රභවය (සඳහන් කරන්න)</label>
                 <input type="text" id="q36_energy_other_text" name="q36_energy_other_text" class="form-control" placeholder="වෙනත් බලශක්ති වර්ගය" />
               </div>
+            </div>
 
-              <!-- සූර්ය කෝෂ (Solar) තේරූ විට පෙන්වන ධාරිතාව හා Net Metering -->
-              <div id="q36_solar_details_wrap" class="d-none p-3 bg-white border rounded mb-3">
-                <div class="row g-3">
-                  <div class="col-md-6">
-                    <label for="q36_solar_capacity_kw" class="form-label">සූර්ය පැනල ඇත්නම් ධාරිතාව (kW)</label>
-                    <input type="text" id="q36_solar_capacity_kw" name="q36_solar_capacity_kw" class="form-control" placeholder="උදා: 5 kW" />
-                  </div>
-                  <div class="col-md-6">
-                    <label for="q36_net_metering" class="form-label">ජාතික පද්ධතියට විදුලිය ලබා දීම (Net Metering)</label>
-                    <select id="q36_net_metering" name="q36_net_metering" class="form-select">
-                      <option value="">තෝරන්න...</option>
-                      <option value="ඇත">ඇත</option>
-                      <option value="නැත">නැත</option>
-                    </select>
-                  </div>
-                </div>
+            <!-- සූර්ය කෝෂ (Solar) තේරුවොත් විතරක් පෙන්වන ප්‍රධාන ප්‍රශ්න 3 (37, 38, 39) -->
+            <div id="q36_solar_details_wrap" class="d-none">
+              <!-- 37. සූර්ය පැනල ඇත්නම් ධාරිතාව (kW) -->
+              <div class="sub-panel">
+                <label for="q36_solar_capacity_kw" class="form-label fw-bold">37. සූර්ය පැනල ඇත්නම් ධාරිතාව (kW)</label>
+                <input type="text" id="q36_solar_capacity_kw" name="q36_solar_capacity_kw" class="form-control" placeholder="උදා: 5 kW" />
               </div>
 
-              <!-- සූර්ය බලශක්ති ව්‍යාපෘති හැකියාව (කවුරුවත් විමසීම) -->
-              <div class="row g-3">
-                <div class="col-md-6">
-                  <label for="q36_solar_project_potential" class="form-label">සූර්ය බලශක්ති ව්‍යාපෘති හැකියාව (කවුරුවත් විමසීම)</label>
-                  <select id="q36_solar_project_potential" name="q36_solar_project_potential" class="form-select" onchange="toggleSection05Housing()">
-                    <option value="">තෝරන්න...</option>
-                    <option value="තවත් සූර්ය පැනල සවිකළ හැකිය">1. තවත් සූර්ය පැනල සවිකළ හැකිය</option>
-                    <option value="සූර්ය පැනල සවිකර ගැනීමට හැකි වුවත් ගැටලු ඇත">2. සූර්ය පැනල සවිකර ගැනීමට හැකි වුවත් ගැටලු ඇත</option>
-                  </select>
-                </div>
-                <div class="col-md-6" id="q36_solar_issues_wrap">
-                  <label for="q36_solar_issues_text" class="form-label">3. ගැටලු සඳහන් කරන්න</label>
-                  <input type="text" id="q36_solar_issues_text" name="q36_solar_issues_text" class="form-control" placeholder="ගැටලු ඇත්නම් සඳහන් කරන්න" />
+              <!-- 38. ජාතික පද්ධතියට විදුලිය ලබා දීම (Net Metering) -->
+              <div class="sub-panel">
+                <label for="q36_net_metering" class="form-label fw-bold">38. ජාතික පද්ධතියට විදුලිය ලබා දීම (Net Metering)</label>
+                <select id="q36_net_metering" name="q36_net_metering" class="form-select">
+                  <option value="">තෝරන්න...</option>
+                  <option value="ඇත">ඇත</option>
+                  <option value="නැත">නැත</option>
+                </select>
+              </div>
+
+              <!-- 39. සූර්ය බලශක්ති ව්‍යාපෘති හැකියාව (කවුරුවත් විමසීම) -->
+              <div class="sub-panel">
+                <label for="q36_solar_project_potential" class="form-label fw-bold">39. සූර්ය බලශක්ති ව්‍යාපෘති හැකියාව (කවුරුවත් විමසීම)</label>
+                <select id="q36_solar_project_potential" name="q36_solar_project_potential" class="form-select" onchange="toggleSection05Housing()">
+                  <option value="">තෝරන්න...</option>
+                  <option value="තවත් සූර්ය පැනල සවිකළ හැකිය">1. තවත් සූර්ය පැනල සවිකළ හැකිය</option>
+                  <option value="සූර්ය පැනල සවිකර ගැනීමට හැකි වුවත් ගැටලු ඇත">2. සූර්ය පැනල සවිකර ගැනීමට හැකි වුවත් ගැටලු ඇත</option>
+                </select>
+
+                <!-- 39 හි ගැටලු ඇත තේරුවොත් විතරක් පෙන්වන textarea -->
+                <div id="q36_solar_issues_wrap" class="d-none mt-3">
+                  <label for="q39_solar_issues_textarea" class="form-label fw-semibold">ගැටලු සඳහන් කරන්න</label>
+                  <textarea id="q39_solar_issues_textarea" name="q39_solar_issues_textarea" rows="3" class="form-control" placeholder="ගැටලු ඇත්නම් විස්තර සඳහන් කරන්න"></textarea>
                 </div>
               </div>
             </div>
 
-            <!-- 37. පානීය ජල සැපයුම -->
+            <!-- 40. පානීය ජල සැපයුම -->
             <div class="sub-panel">
-              <label class="form-label fw-bold d-block">37. පානීය ජල සැපයුම</label>
+              <label class="form-label fw-bold d-block">40. පානීය ජල සැපයුම</label>
               <div class="row g-2">
                 <div class="col-md-4">
                   <div class="form-check">
@@ -780,9 +781,9 @@
               </div>
             </div>
 
-            <!-- 38. වැසි ජල සාප්ප / වැසි ජල රැස්කිරීමේ පද්ධති (Rainwater Harvesting) -->
+            <!-- 41. වැසි ජල සාප්ප / වැසි ජල රැස්කිරීමේ පද්ධති (Rainwater Harvesting) -->
             <div class="sub-panel">
-              <label for="q37_rainwater_harvesting" class="form-label fw-bold">38. වැසි ජල සාප්ප / වැසි ජල රැස්කිරීමේ පද්ධති (Rainwater Harvesting)</label>
+              <label for="q37_rainwater_harvesting" class="form-label fw-bold">41. වැසි ජල සාප්ප / වැසි ජල රැස්කිරීමේ පද්ධති (Rainwater Harvesting)</label>
               <select id="q37_rainwater_harvesting" name="q37_rainwater_harvesting" class="form-select">
                 <option value="">තෝරන්න...</option>
                 <option value="ඇත">ඇත</option>
@@ -790,9 +791,9 @@
               </select>
             </div>
 
-            <!-- 39. වැසිකිළි ස්වභාවය -->
+            <!-- 42. වැසිකිළි ස්වභාවය -->
             <div class="sub-panel mb-0">
-              <label for="q38_toilet_nature" class="form-label fw-bold">39. වැසිකිළි ස්වභාවය</label>
+              <label for="q38_toilet_nature" class="form-label fw-bold">42. වැසිකිළි ස්වභාවය</label>
               <select id="q38_toilet_nature" name="q38_toilet_nature" class="form-select">
                 <option value="">තෝරන්න...</option>
                 <option value="ජල මුද්‍රිත">ජල මුද්‍රිත</option>
