@@ -443,7 +443,7 @@
         </div>
       </section>
 
-      <!-- Section 04 / Step 04: 04. ඉඩම් හිමිකම්, කෘෂිකර්මාන්තය, පශු සම්පත් හා ආර්ථික තත්ත්වය -->
+<!-- Section 04 / Step 04: 04. ඉඩම් හිමිකම්, කෘෂිකර්මාන්තය, පශු සම්පත් හා ආර්ථික තත්ත්වය -->
       <section class="section-card d-none" data-step="4">
         <div class="section-header teal">
           <h2>04. ඉඩම් හිමිකම්, කෘෂිකර්මාන්තය, පශු සම්පත් හා ආර්ථික තත්ත්වය</h2>
@@ -468,7 +468,7 @@
             <div id="landsContainer"></div>
           </div>
 
-          <!-- 26, 27, 28, 29 වෙනම Fields -->
+          <!-- 26 සහ 29 වෙනම Fields -->
           <div class="sub-panel">
             <div class="row g-3">
               <div class="col-md-6">
@@ -489,71 +489,76 @@
               <div class="row g-2">
                 <div class="col-6 col-md-3">
                   <div class="form-check">
-                    <input class="form-check-input" type="checkbox" name="q27_livestock" id="livestock_cow" value="එළ ගව" />
+                    <input class="form-check-input q27-livestock-chk" type="checkbox" name="q27_livestock" id="livestock_cow" value="එළ ගව" onchange="syncLivestockCountInputs()" />
                     <label class="form-check-label" for="livestock_cow">එළ ගව</label>
                   </div>
                 </div>
                 <div class="col-6 col-md-3">
                   <div class="form-check">
-                    <input class="form-check-input" type="checkbox" name="q27_livestock" id="livestock_buffalo" value="මී ගව" />
+                    <input class="form-check-input q27-livestock-chk" type="checkbox" name="q27_livestock" id="livestock_buffalo" value="මී ගව" onchange="syncLivestockCountInputs()" />
                     <label class="form-check-label" for="livestock_buffalo">මී ගව</label>
                   </div>
                 </div>
                 <div class="col-6 col-md-3">
                   <div class="form-check">
-                    <input class="form-check-input" type="checkbox" name="q27_livestock" id="livestock_poultry" value="කුකුළන්" />
+                    <input class="form-check-input q27-livestock-chk" type="checkbox" name="q27_livestock" id="livestock_poultry" value="කුකුළන්" onchange="syncLivestockCountInputs()" />
                     <label class="form-check-label" for="livestock_poultry">කුකුළන්</label>
                   </div>
                 </div>
                 <div class="col-6 col-md-3">
                   <div class="form-check">
-                    <input class="form-check-input" type="checkbox" name="q27_livestock" id="livestock_goat" value="එළුවන්" />
+                    <input class="form-check-input q27-livestock-chk" type="checkbox" name="q27_livestock" id="livestock_goat" value="එළුවන්" onchange="syncLivestockCountInputs()" />
                     <label class="form-check-label" for="livestock_goat">එළුවන්</label>
                   </div>
                 </div>
                 <div class="col-6 col-md-3">
                   <div class="form-check">
-                    <input class="form-check-input" type="checkbox" name="q27_livestock" id="livestock_pig" value="ඌරන්" />
+                    <input class="form-check-input q27-livestock-chk" type="checkbox" name="q27_livestock" id="livestock_pig" value="ඌරන්" onchange="syncLivestockCountInputs()" />
                     <label class="form-check-label" for="livestock_pig">ඌරන්</label>
                   </div>
                 </div>
                 <div class="col-6 col-md-3">
                   <div class="form-check">
-                    <input class="form-check-input" type="checkbox" name="q27_livestock" id="livestock_bee" value="මී මැසි ජනපද" />
+                    <input class="form-check-input q27-livestock-chk" type="checkbox" name="q27_livestock" id="livestock_bee" value="මී මැසි ජනපද" onchange="syncLivestockCountInputs()" />
                     <label class="form-check-label" for="livestock_bee">මී මැසි ජනපද</label>
                   </div>
                 </div>
                 <div class="col-6 col-md-3">
                   <div class="form-check">
-                    <input class="form-check-input" type="checkbox" name="q27_livestock" id="livestock_fish" value="මිරිදිය මසුන්" />
+                    <input class="form-check-input q27-livestock-chk" type="checkbox" name="q27_livestock" id="livestock_fish" value="මිරිදිය මසුන්" onchange="syncLivestockCountInputs()" />
                     <label class="form-check-label" for="livestock_fish">මිරිදිය මසුන්</label>
                   </div>
                 </div>
                 <div class="col-6 col-md-3">
                   <div class="form-check">
-                    <input class="form-check-input" type="checkbox" name="q27_livestock" id="livestock_other_chk" value="වෙනත්" onchange="toggleSection04OtherInputs()" />
+                    <input class="form-check-input q27-livestock-chk" type="checkbox" name="q27_livestock" id="livestock_other_chk" value="වෙනත්" onchange="toggleSection04OtherInputs()" />
                     <label class="form-check-label" for="livestock_other_chk">වෙනත්</label>
                   </div>
                 </div>
               </div>
 
               <div class="mt-2 d-none" id="q27_livestock_other_wrap">
-                <label for="q27_livestock_other_text" class="form-label">වෙනත් පශු සම්පත් (සඳහන් කරන්න)</label>
-                <input type="text" id="q27_livestock_other_text" name="q27_livestock_other_text" class="form-control" placeholder="වෙනත් සත්ව වර්ග" />
+                <label for="q27_livestock_other_text" class="form-label">වෙනත් පශු සම්පත් (සත්ව වර්ගයේ නම)</label>
+                <input type="text" id="q27_livestock_other_text" name="q27_livestock_other_text" class="form-control" placeholder="උදා: හාවන්" oninput="syncLivestockCountInputs()" />
               </div>
             </div>
 
             <div>
-              <label for="q28_animal_count_by_type" class="form-label">28. සතුන් ප්‍රමාණය (වර්ගය අනුව)</label>
-              <textarea id="q28_animal_count_by_type" name="q28_animal_count_by_type" class="form-control" placeholder="උදා: එළ ගව - 2, කුකුළන් - 15..."></textarea>
+              <label class="form-label d-block">28. සතුන් ප්‍රමාණය (වර්ගය අනුව)</label>
+              <div id="q28_animal_counts_container" class="row g-2">
+                <div class="col-12 text-muted small" id="q28_empty_hint">
+                  27 වලින් පශු සම්පත් වර්ගයක් තෝරන්න — එවිට එම සත්ව වර්ගයට අදාළ සංඛ්‍යා (No.) box එක මෙහි දිස්වේ.
+                </div>
+              </div>
+              <input type="hidden" id="q28_animal_count_by_type" name="q28_animal_count_by_type" />
             </div>
           </div>
 
-          <!-- ගෙවතු වගාව, කාබනික පොහොර භාවිතය හා වෙළඳපොළ ප්‍රවේශය -->
+          <!-- 30. ගෙවතු වගාව / කාබනික පොහොර නිෂ්පාදනය & 31. නිෂ්පාදන අලෙවියට වෙළඳපොළක් -->
           <div class="sub-panel mb-0">
             <div class="row g-3">
               <div class="col-md-6">
-                <label for="q29a_home_garden_compost" class="form-label">ගෙවතු වගාව / කාබනික පොහොර නිෂ්පාදනය</label>
+                <label for="q29a_home_garden_compost" class="form-label">30. ගෙවතු වගාව / කාබනික පොහොර නිෂ්පාදනය</label>
                 <select id="q29a_home_garden_compost" name="q29a_home_garden_compost" class="form-select">
                   <option value="">තෝරන්න...</option>
                   <option value="සිදු කරයි">සිදු කරයි</option>
@@ -561,7 +566,7 @@
                 </select>
               </div>
               <div class="col-md-6">
-                <label for="q29b_market_access" class="form-label">නිෂ්පාදන අලෙවියට වෙළඳපොළක්</label>
+                <label for="q29b_market_access" class="form-label">31. නිෂ්පාදන අලෙවියට වෙළඳපොළක්</label>
                 <select id="q29b_market_access" name="q29b_market_access" class="form-select">
                   <option value="">තෝරන්න...</option>
                   <option value="ඇත">ඇත</option>
