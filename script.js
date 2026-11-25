@@ -805,8 +805,19 @@ function toggleSection05Housing() {
 
   const solarChk = document.getElementById("energy_solar_chk");
   const solarWrap = document.getElementById("q36_solar_details_wrap");
-  if (solarChk && solarWrap) {
-    solarWrap.classList.toggle("d-none", !solarChk.checked);
+  const isSolarChecked = Boolean(solarChk && solarChk.checked);
+  if (solarWrap) {
+    solarWrap.classList.toggle("d-none", !isSolarChecked);
+  }
+
+  const potentialSelect = document.getElementById("q36_solar_project_potential");
+  const issuesWrap = document.getElementById("q36_solar_issues_wrap");
+  const hasSolarIssues =
+    isSolarChecked &&
+    potentialSelect &&
+    potentialSelect.value === "සූර්ය පැනල සවිකර ගැනීමට හැකි වුවත් ගැටලු ඇත";
+  if (issuesWrap) {
+    issuesWrap.classList.toggle("d-none", !hasSolarIssues);
   }
 
   const energyOtherChk = document.getElementById("energy_other_chk");
