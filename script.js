@@ -854,6 +854,60 @@ function toggleConditional(selectId, targetId) {
 
   updateProgress();
 }
+function toggleSection06CommVehicles() {
+  const hasPhonesSelect = document.getElementById("q45_has_phones");
+  const phoneDetailsWrap = document.getElementById("q46_phone_details_wrap");
+  if (hasPhonesSelect && phoneDetailsWrap) {
+    phoneDetailsWrap.classList.toggle("d-none", hasPhonesSelect.value !== "ඔව්");
+  }
+
+  const hasVehiclesSelect = document.getElementById("q48_has_vehicles");
+  const vehicleDetailsWrap = document.getElementById("q49_vehicle_details_wrap");
+  const regWrap = document.getElementById("q50_51_vehicle_reg_wrap");
+
+  const isVehiclesYes = Boolean(hasVehiclesSelect && hasVehiclesSelect.value === "ඔව්");
+  if (vehicleDetailsWrap) {
+    vehicleDetailsWrap.classList.toggle("d-none", !isVehiclesYes);
+  }
+
+  // පාපැදි හැර වෙනත් වාහනයක් (data-numbered="true") තේරුවොත් පමණක් 50 සහ 51 පෙන්වයි
+  const numberedVehicleChecked = Array.from(
+    document.querySelectorAll(".sec06-veh-chk[data-numbered='true']")
+  ).some((chk) => chk.checked);
+
+  if (regWrap) {
+    regWrap.classList.toggle("d-none", !(isVehiclesYes && numberedVehicleChecked));
+  }
+
+  if (typeof updateProgress === "function") updateProgress();
+}
+
+function addVehicleRegistrationRow() {
+  const container = document.getElementById("vehicle_reg_rows_container");
+  if (!container) return;
+
+  const row = document.createElement("div");
+  row.className = "row g-2 align-items-center mb-2 vehicle-reg-row";
+  row.innerHTML = `
+    <div class="col-md-6">
+      <label class="form-label small fw-semibold mb-1">50. වාහන අයිතිකරුගේ නම</label>
+      <input type="text" name="q50_vehicle_owner_name[]" class="form-control" placeholder="අයිතිකරුගේ නම" />
+    </div>
+    <div class="col-md-5">
+      <label class="form-label small fw-semibold mb-1">51. වාහන අංකය</label>
+      <input type="text" name="q51_vehicle_number[]" class="form-control" placeholder="උදා: WP ABC-1234" />
+    </div>
+    <div class="col-md-1 d-flex align-items-end">
+      <button type="button" class="btn btn-sm btn-outline-danger w-100" title="ඉවත් කරන්න" onclick="this.closest('.vehicle-reg-row').remove()">×</button>
+    </div>
+  `;
+  container.appendChild(row);
+}
+
+// Page load වෙද්දී Section 06 fields නිවැරදි තත්ත්වයට ගෙන ඒමට
+document.addEventListener("DOMContentLoaded", () => {
+  toggleSection06CommVehicles();
+});
 
 function ensureCardWhenOpened(targetId) {
   const map = {
@@ -1705,6 +1759,7 @@ window.addEventListener("DOMContentLoaded", () => {
   initSection03Children();
   initSection04Land();
   initSection05Housing();
+  toggleSection06CommVehicles();
   bindButtonEvents();
   bindProgressListeners(document.getElementById("surveyForm"));
   showStep(1);
