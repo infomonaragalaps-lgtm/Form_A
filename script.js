@@ -787,7 +787,6 @@ function initSection04Land() {
   toggleSection04Land();
 }
 
-// Section 05 (නිවාස, බලශක්තිය, පානීය ජලය හා සනීපාරක්ෂක පහසුකම්) Logic
 function toggleSection05Housing() {
   const ownsSelect = document.getElementById("sec05_owns_house");
   const hasHouseWrap = document.getElementById("sec05_has_house_wrap");
