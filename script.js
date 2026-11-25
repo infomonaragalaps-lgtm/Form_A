@@ -8,6 +8,7 @@ const APP_COUNTER_STORAGE_KEY = "pks_2027_last_app_no_v1";
 const SUBMITTED_NICS_STORAGE_KEY = "pks_2027_submitted_nics_v1";
 
 let lastValidNicValue = "";
+const livestockCountCache = {};
 
 const SURVEYOR_PERSIST_FIELDS = [
   "q1_district",
@@ -534,7 +535,7 @@ function initSection03Children() {
   bindIfExists("ch_school_attending", "change", toggleSection03Children);
   bindIfExists("ch_not_attending", "change", toggleSection03Children);
   bindIfExists("ch_underweight", "change", toggleSection03Children);
-  
+
   toggleSection03Children();
 }
 
@@ -588,17 +589,120 @@ function toggleLandOtherCropInput(cardOrEl) {
   if (typeof updateProgress === "function") updateProgress();
 }
 
+function serializeLivestockCounts() {
+  const hiddenInput = document.getElementById("q28_animal_count_by_type");
+  const container = document.getElementById("q28_animal_counts_container");
+  if (!hiddenInput || !container) return;
+
+  const parts = [];
+  container.querySelectorAll(".q28-animal-count-input").forEach((inp) => {
+    const label = inp.dataset.animalLabel || "";
+    const val = String(inp.value || "").trim();
+    if (label && val !== "") {
+      parts.push(`${label}: ${val}`);
+    }
+  });
+
+  hiddenInput.value = parts.join(", ");
+}
+
+function syncLivestockCountInputs() {
+  const container = document.getElementById("q28_animal_counts_container");
+  if (!container) return;
+
+  // Save current typed counts before rebuilding rows
+  container.querySelectorAll(".q28-animal-count-input").forEach((inp) => {
+    const key = inp.dataset.animalKey;
+    if (key) {
+      livestockCountCache[key] = inp.value;
+    }
+  });
+
+  const selectedAnimals = [];
+  document.querySelectorAll('input[name="q27_livestock"]:checked').forEach((chk) => {
+    if (chk.value === "වෙනත්") {
+      const otherTextEl = document.getElementById("q27_livestock_other_text");
+      const customName = otherTextEl ? otherTextEl.value.trim() : "";
+      if (customName) {
+        selectedAnimals.push({
+          key: `other:${customName.toLowerCase()}`,
+          label: customName
+        });
+      }
+    } else if (chk.value) {
+      selectedAnimals.push({
+        key: `std:${chk.value}`,
+        label: chk.value
+      });
+    }
+  });
+
+  if (selectedAnimals.length === 0) {
+    container.innerHTML = `
+      <div class="col-12 text-muted small" id="q28_empty_hint">
+        27 වලින් පශු සම්පත් වර්ගයක් තෝරන්න — එවිට එම සත්ව වර්ගයට අදාළ සංඛ්‍යා (No.) box එක මෙහි දිස්වේ.
+      </div>
+    `;
+    serializeLivestockCounts();
+    if (typeof updateProgress === "function") updateProgress();
+    return;
+  }
+
+  container.innerHTML = selectedAnimals
+    .map((item) => {
+      const cachedVal = livestockCountCache[item.key] !== undefined ? livestockCountCache[item.key] : "";
+      return `
+        <div class="col-sm-6 col-md-4">
+          <div class="input-group input-group-sm">
+            <span class="input-group-text fw-semibold">${item.label}</span>
+            <input
+              type="number"
+              min="0"
+              step="1"
+              class="form-control q28-animal-count-input"
+              data-animal-key="${item.key.replace(/"/g, "&quot;")}"
+              data-animal-label="${item.label.replace(/"/g, "&quot;")}"
+              value="${String(cachedVal).replace(/"/g, "&quot;")}"
+              placeholder="සංඛ්‍යාව (No.)"
+            />
+          </div>
+        </div>
+      `;
+    })
+    .join("");
+
+  container.querySelectorAll(".q28-animal-count-input").forEach((inp) => {
+    inp.addEventListener("input", () => {
+      livestockCountCache[inp.dataset.animalKey] = inp.value;
+      serializeLivestockCounts();
+      if (typeof updateProgress === "function") updateProgress();
+    });
+  });
+
+  serializeLivestockCounts();
+  if (typeof updateProgress === "function") updateProgress();
+}
+
 function toggleSection04OtherInputs() {
   const livestockOtherChk = document.getElementById("livestock_other_chk");
   const livestockOtherWrap = document.getElementById("q27_livestock_other_wrap");
   if (livestockOtherChk && livestockOtherWrap) {
     livestockOtherWrap.classList.toggle("d-none", !livestockOtherChk.checked);
   }
+  syncLivestockCountInputs();
 }
 
 function initSection04Land() {
   bindIfExists("q20_land_ownership_status", "change", toggleSection04Land);
   bindIfExists("livestock_other_chk", "change", toggleSection04OtherInputs);
+  bindIfExists("q27_livestock_other_text", "input", syncLivestockCountInputs);
+
+  document.querySelectorAll('input[name="q27_livestock"]').forEach((chk) => {
+    if (chk.id !== "livestock_other_chk") {
+      chk.addEventListener("change", syncLivestockCountInputs);
+    }
+  });
+
   toggleSection04Land();
 }
 function toggleConditional(selectId, targetId) {
@@ -1279,6 +1383,8 @@ function collectCheckboxGroup(name) {
 }
 
 function buildPayload() {
+  serializeLivestockCounts();
+
   const form = document.getElementById("surveyForm");
   const data = {};
 
@@ -1418,6 +1524,9 @@ function handleFormReset() {
 
   const form = document.getElementById("surveyForm");
   if (form) form.reset();
+
+  Object.keys(livestockCountCache).forEach((k) => delete livestockCountCache[k]);
+  syncLivestockCountInputs();
 
   lastValidNicValue = "";
   setNicFeedback("");
