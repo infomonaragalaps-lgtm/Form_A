@@ -40,6 +40,10 @@ const CONDITIONAL_WRAPS = [
   "ch_underweight_reason_wrap",
   "land_cards_wrap",
   "q27_livestock_other_wrap",
+  "sec05_has_house_wrap",
+  "sec05_no_house_wrap",
+  "q36_energy_other_wrap",
+  "q36_solar_details_wrap",
   "q20_reason_wrap",
   "q21_reason_wrap",
   "livestock_wrap",
@@ -670,7 +674,6 @@ function syncLivestockCountInputs() {
   const otherHiddenEl = document.getElementById("q27_livestock_other_text");
   if (!container) return;
 
-  // Save current typed counts before rebuilding rows
   container.querySelectorAll(".q28-animal-count-input").forEach((inp) => {
     const key = inp.dataset.animalKey;
     if (key) {
@@ -784,8 +787,43 @@ function initSection04Land() {
   toggleSection04Land();
 }
 
+// Section 05 (නිවාස, බලශක්තිය, පානීය ජලය හා සනීපාරක්ෂක පහසුකම්) Logic
+function toggleSection05Housing() {
+  const ownsSelect = document.getElementById("sec05_owns_house");
+  const hasHouseWrap = document.getElementById("sec05_has_house_wrap");
+  const noHouseWrap = document.getElementById("sec05_no_house_wrap");
 
+  if (ownsSelect) {
+    const val = ownsSelect.value;
+    if (hasHouseWrap) {
+      hasHouseWrap.classList.toggle("d-none", val !== "ඔව්");
+    }
+    if (noHouseWrap) {
+      noHouseWrap.classList.toggle("d-none", val !== "නැත");
+    }
+  }
 
+  const solarChk = document.getElementById("energy_solar_chk");
+  const solarWrap = document.getElementById("q36_solar_details_wrap");
+  if (solarChk && solarWrap) {
+    solarWrap.classList.toggle("d-none", !solarChk.checked);
+  }
+
+  const energyOtherChk = document.getElementById("energy_other_chk");
+  const energyOtherWrap = document.getElementById("q36_energy_other_wrap");
+  if (energyOtherChk && energyOtherWrap) {
+    energyOtherWrap.classList.toggle("d-none", !energyOtherChk.checked);
+  }
+
+  if (typeof updateProgress === "function") updateProgress();
+}
+
+function initSection05Housing() {
+  bindIfExists("sec05_owns_house", "change", toggleSection05Housing);
+  bindIfExists("energy_solar_chk", "change", toggleSection05Housing);
+  bindIfExists("energy_other_chk", "change", toggleSection05Housing);
+  toggleSection05Housing();
+}
 function toggleConditional(selectId, targetId) {
   const selectEl = document.getElementById(selectId);
   const targetEl = document.getElementById(targetId);
@@ -1391,7 +1429,8 @@ function updateProgress() {
     "ch_school_attending", "ch_not_attending", "ch_underweight",
     "ch_malnourished", "ch_nutrition_aid", "q20_land_ownership_status",
     "q26_cultivated_extent", "q28_animal_count_by_type",
-    "q29_gross_monthly_income", "q29a_home_garden_compost", "q29b_market_access"
+    "q29_gross_monthly_income", "q29a_home_garden_compost", "q29b_market_access",
+    "sec05_owns_house", "q32_house_nature", "q37_rainwater_harvesting", "q38_toilet_nature"
   ];
 
   const existingIds = keyIds.filter((id) => document.getElementById(id) !== null);
@@ -1486,6 +1525,8 @@ function buildPayload() {
   data.hh_members_total_calc = m + f + u18 + o60;
 
   data.q27_livestock = collectCheckboxGroup("q27_livestock").join(", ");
+  data.q36_energy_sources = collectCheckboxGroup("q36_energy_sources").join(", ");
+  data.q37_water_sources = collectCheckboxGroup("q37_water_sources").join(", ");
   data.q43_disasters = collectCheckboxGroup("q43_disasters").join(", ");
   data.q43a_insurance = collectCheckboxGroup("q43a_insurance").join(", ");
   data.q09a_social = collectCheckboxGroup("q09a_social").join(", ");
@@ -1617,6 +1658,7 @@ function handleFormReset() {
   toggleSection01Conditionals();
   toggleSection03Children();
   toggleSection04Land();
+  toggleSection05Housing();
 
   const lastNo = Number(localStorage.getItem(APP_COUNTER_STORAGE_KEY) || "0") || 0;
   renderApplicationBadges(lastNo, true);
@@ -1652,6 +1694,7 @@ window.addEventListener("DOMContentLoaded", () => {
   initSection01PersonalDetails();
   initSection03Children();
   initSection04Land();
+  initSection05Housing();
   bindButtonEvents();
   bindProgressListeners(document.getElementById("surveyForm"));
   showStep(1);
