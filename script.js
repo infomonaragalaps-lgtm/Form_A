@@ -864,6 +864,7 @@ function toggleSection06CommVehicles() {
 }
 
 function handleSec06VehicleTypeChange(selectEl) {
+  handleSec06VehicleTypeChange(selectEl);
   const card = selectEl ? selectEl.closest(".vehicle-item-card") : null;
   if (!card) return;
 
