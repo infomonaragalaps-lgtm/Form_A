@@ -855,53 +855,109 @@ function toggleConditional(selectId, targetId) {
   updateProgress();
 }
 function toggleSection06CommVehicles() {
+  // 45. ඔබගේ නිවසේ දුරකථන තිබේද? -> 46. දුරකථන වර්ගය හා සංඛ්‍යාව
   const hasPhonesSelect = document.getElementById("q45_has_phones");
   const phoneDetailsWrap = document.getElementById("q46_phone_details_wrap");
   if (hasPhonesSelect && phoneDetailsWrap) {
     phoneDetailsWrap.classList.toggle("d-none", hasPhonesSelect.value !== "ඔව්");
   }
 
+  // 48. ඔබගේ නිවසේ වාහන තිබේද? -> වාහන Cards
   const hasVehiclesSelect = document.getElementById("q48_has_vehicles");
-  const vehicleDetailsWrap = document.getElementById("q49_vehicle_details_wrap");
-  const regWrap = document.getElementById("q50_51_vehicle_reg_wrap");
-
+  const vehicleCardsWrap = document.getElementById("q49_vehicle_cards_wrap");
   const isVehiclesYes = Boolean(hasVehiclesSelect && hasVehiclesSelect.value === "ඔව්");
-  if (vehicleDetailsWrap) {
-    vehicleDetailsWrap.classList.toggle("d-none", !isVehiclesYes);
+
+  if (vehicleCardsWrap) {
+    vehicleCardsWrap.classList.toggle("d-none", !isVehiclesYes);
   }
 
-  // පාපැදි හැර වෙනත් වාහනයක් (data-numbered="true") තේරුවොත් පමණක් 50 සහ 51 පෙන්වයි
-  const numberedVehicleChecked = Array.from(
-    document.querySelectorAll(".sec06-veh-chk[data-numbered='true']")
-  ).some((chk) => chk.checked);
+  refreshVehicleCardLabels();
 
-  if (regWrap) {
-    regWrap.classList.toggle("d-none", !(isVehiclesYes && numberedVehicleChecked));
+  if (typeof window.updateProgress === "function") {
+    window.updateProgress();
   }
-
-  if (typeof updateProgress === "function") updateProgress();
 }
 
-function addVehicleRegistrationRow() {
-  const container = document.getElementById("vehicle_reg_rows_container");
+function handleVehicleTypeChange(selectEl) {
+  const card = selectEl ? selectEl.closest(".vehicle-item-card") : null;
+  if (!card) return;
+
+  const numCol = card.querySelector(".vehicle-number-col");
+  const numInput = card.querySelector(".vehicle-number-input");
+  const isBicycle = selectEl.value === "පාපැදි";
+
+  if (numCol) {
+    numCol.classList.toggle("d-none", isBicycle);
+  }
+  if (numInput && isBicycle) {
+    numInput.value = "";
+  }
+}
+
+function addVehicleCard() {
+  const container = document.getElementById("vehicle_cards_container");
   if (!container) return;
 
-  const row = document.createElement("div");
-  row.className = "row g-2 align-items-center mb-2 vehicle-reg-row";
-  row.innerHTML = `
-    <div class="col-md-6">
-      <label class="form-label small fw-semibold mb-1">50. වාහන අයිතිකරුගේ නම</label>
-      <input type="text" name="q50_vehicle_owner_name[]" class="form-control" placeholder="අයිතිකරුගේ නම" />
-    </div>
-    <div class="col-md-5">
-      <label class="form-label small fw-semibold mb-1">51. වාහන අංකය</label>
-      <input type="text" name="q51_vehicle_number[]" class="form-control" placeholder="උදා: WP ABC-1234" />
-    </div>
-    <div class="col-md-1 d-flex align-items-end">
-      <button type="button" class="btn btn-sm btn-outline-danger w-100" title="ඉවත් කරන්න" onclick="this.closest('.vehicle-reg-row').remove()">×</button>
+  const card = document.createElement("div");
+  card.className = "card border shadow-sm mb-3 vehicle-item-card";
+  card.innerHTML = `
+    <div class="card-body">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h6 class="card-title fw-bold mb-0 vehicle-card-title">වාහනය</h6>
+        <button type="button" class="btn btn-sm btn-outline-danger" onclick="removeVehicleCard(this)">ඉවත් කරන්න</button>
+      </div>
+      <div class="row g-3">
+        <div class="col-md-4">
+          <label class="form-label fw-semibold">වාහන වර්ගය</label>
+          <select name="vehicle_type[]" class="form-select vehicle-type-select" onchange="handleVehicleTypeChange(this)">
+            <option value="">තෝරන්න...</option>
+            <option value="පාපැදි">පාපැදි</option>
+            <option value="යතුරුපැදි">යතුරුපැදි</option>
+            <option value="ත්‍රිරෝද රථ">ත්‍රිරෝද රථ</option>
+            <option value="මෝටර් රථ">මෝටර් රථ</option>
+            <option value="වෑන් රථ">වෑන් රථ</option>
+            <option value="බස් රථ">බස් රථ</option>
+            <option value="ලොරි රථ">ලොරි රථ</option>
+            <option value="කෘෂි වාහන">කෘෂි වාහන</option>
+            <option value="වෙනත්">වෙනත්</option>
+          </select>
+        </div>
+        <div class="col-md-4">
+          <label class="form-label fw-semibold">වාහන අයිතිකරුගේ නම</label>
+          <input type="text" name="vehicle_owner_name[]" class="form-control" placeholder="අයිතිකරුගේ නම" />
+        </div>
+        <div class="col-md-4 vehicle-number-col">
+          <label class="form-label fw-semibold">වාහන අංකය</label>
+          <input type="text" name="vehicle_number[]" class="form-control vehicle-number-input" placeholder="උදා: WP ABC-1234" />
+        </div>
+      </div>
     </div>
   `;
-  container.appendChild(row);
+
+  container.appendChild(card);
+  refreshVehicleCardLabels();
+}
+
+function removeVehicleCard(btnEl) {
+  const card = btnEl ? btnEl.closest(".vehicle-item-card") : null;
+  if (card) {
+    card.remove();
+    refreshVehicleCardLabels();
+  }
+}
+
+function refreshVehicleCardLabels() {
+  const cards = document.querySelectorAll("#vehicle_cards_container .vehicle-item-card");
+  cards.forEach((card, idx) => {
+    const titleEl = card.querySelector(".vehicle-card-title");
+    if (titleEl) {
+      titleEl.textContent = `වාහනය ${String(idx + 1).padStart(2, "0")}`;
+    }
+    const selectEl = card.querySelector(".vehicle-type-select");
+    if (selectEl) {
+      handleVehicleTypeChange(selectEl);
+    }
+  });
 }
 
 // Page load වෙද්දී Section 06 fields නිවැරදි තත්ත්වයට ගෙන ඒමට
