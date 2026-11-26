@@ -853,7 +853,7 @@
             <div class="row g-3">
               <div class="col-md-4">
                 <div class="form-check mb-2">
-                  <input class="form-check-input" type="checkbox" id="phone_mobile_chk" name="q46_phone_types" value="ජංගම දුරකථන" onchange="toggleSection06CommVehicles()" />
+                  <input class="form-check-input" type="checkbox" id="phone_mobile_chk" name="q46_phone_types" value="ජංගම දුරකථන" />
                   <label class="form-check-label fw-semibold" for="phone_mobile_chk">ජංගම දුරකථන</label>
                 </div>
                 <input type="number" min="0" id="q46_mobile_count" name="q46_mobile_count" class="form-control" placeholder="සංඛ්‍යාව" />
@@ -861,7 +861,7 @@
 
               <div class="col-md-4">
                 <div class="form-check mb-2">
-                  <input class="form-check-input" type="checkbox" id="phone_smartphone_chk" name="q46_phone_types" value="ස්මාර්ට් දුරකථන (Smartphones)" onchange="toggleSection06CommVehicles()" />
+                  <input class="form-check-input" type="checkbox" id="phone_smartphone_chk" name="q46_phone_types" value="ස්මාර්ට් දුරකථන (Smartphones)" />
                   <label class="form-check-label fw-semibold" for="phone_smartphone_chk">ස්මාර්ට් දුරකථන (Smartphones)</label>
                 </div>
                 <input type="number" min="0" id="q46_smartphone_count" name="q46_smartphone_count" class="form-control" placeholder="සංඛ්‍යාව" />
@@ -869,7 +869,7 @@
 
               <div class="col-md-4">
                 <div class="form-check mb-2">
-                  <input class="form-check-input" type="checkbox" id="phone_landline_chk" name="q46_phone_types" value="ස්ථාවර දුරකථන" onchange="toggleSection06CommVehicles()" />
+                  <input class="form-check-input" type="checkbox" id="phone_landline_chk" name="q46_phone_types" value="ස්ථාවර දුරකථන" />
                   <label class="form-check-label fw-semibold" for="phone_landline_chk">ස්ථාවර දුරකථන</label>
                 </div>
                 <input type="number" min="0" id="q46_landline_count" name="q46_landline_count" class="form-control" placeholder="සංඛ්‍යාව" />
@@ -898,116 +898,48 @@
             </select>
           </div>
 
-          <!-- 49. වාහන වර්ගය හා සංඛ්‍යාව + 50 & 51 (48 හි 'ඔව්' නම් පමණි) -->
-          <div id="q49_vehicle_details_wrap" class="d-none">
-            <div class="sub-panel">
-              <label class="form-label fw-bold d-block mb-2">49. වාහන වර්ගය හා සංඛ්‍යාව</label>
-              <div class="row g-3">
-                <div class="col-6 col-md-4">
-                  <div class="form-check mb-1">
-                    <input class="form-check-input sec06-veh-chk" type="checkbox" id="veh_bicycle" data-numbered="false" value="පාපැදි" onchange="toggleSection06CommVehicles()" />
-                    <label class="form-check-label" for="veh_bicycle">පාපැදි</label>
+          <!-- 48 හි 'ඔව්' තේරූ විට පෙන්වන වාහන Cards කොටස -->
+          <div id="q49_vehicle_cards_wrap" class="d-none">
+            <div id="vehicle_cards_container">
+              <!-- Default පළමු වාහන Card එක -->
+              <div class="card border shadow-sm mb-3 vehicle-item-card">
+                <div class="card-body">
+                  <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h6 class="card-title fw-bold mb-0 vehicle-card-title">වාහනය 01</h6>
                   </div>
-                  <input type="number" min="0" id="veh_bicycle_count" class="form-control form-control-sm" placeholder="සංඛ්‍යාව" />
-                </div>
-
-                <div class="col-6 col-md-4">
-                  <div class="form-check mb-1">
-                    <input class="form-check-input sec06-veh-chk" type="checkbox" id="veh_motorcycle" data-numbered="true" value="යතුරුපැදි" onchange="toggleSection06CommVehicles()" />
-                    <label class="form-check-label" for="veh_motorcycle">යතුරුපැදි</label>
-                  </div>
-                  <input type="number" min="0" id="veh_motorcycle_count" class="form-control form-control-sm" placeholder="සංඛ්‍යාව" />
-                </div>
-
-                <div class="col-6 col-md-4">
-                  <div class="form-check mb-1">
-                    <input class="form-check-input sec06-veh-chk" type="checkbox" id="veh_threewheeler" data-numbered="true" value="ත්‍රිරෝද රථ" onchange="toggleSection06CommVehicles()" />
-                    <label class="form-check-label" for="veh_threewheeler">ත්‍රිරෝද රථ</label>
-                  </div>
-                  <input type="number" min="0" id="veh_threewheeler_count" class="form-control form-control-sm" placeholder="සංඛ්‍යාව" />
-                </div>
-
-                <div class="col-6 col-md-4">
-                  <div class="form-check mb-1">
-                    <input class="form-check-input sec06-veh-chk" type="checkbox" id="veh_car" data-numbered="true" value="මෝටර් රථ" onchange="toggleSection06CommVehicles()" />
-                    <label class="form-check-label" for="veh_car">මෝටර් රථ</label>
-                  </div>
-                  <input type="number" min="0" id="veh_car_count" class="form-control form-control-sm" placeholder="සංඛ්‍යාව" />
-                </div>
-
-                <div class="col-6 col-md-4">
-                  <div class="form-check mb-1">
-                    <input class="form-check-input sec06-veh-chk" type="checkbox" id="veh_van" data-numbered="true" value="වෑන් රථ" onchange="toggleSection06CommVehicles()" />
-                    <label class="form-check-label" for="veh_van">වෑන් රථ</label>
-                  </div>
-                  <input type="number" min="0" id="veh_van_count" class="form-control form-control-sm" placeholder="සංඛ්‍යාව" />
-                </div>
-
-                <div class="col-6 col-md-4">
-                  <div class="form-check mb-1">
-                    <input class="form-check-input sec06-veh-chk" type="checkbox" id="veh_bus" data-numbered="true" value="බස් රථ" onchange="toggleSection06CommVehicles()" />
-                    <label class="form-check-label" for="veh_bus">බස් රථ</label>
-                  </div>
-                  <input type="number" min="0" id="veh_bus_count" class="form-control form-control-sm" placeholder="සංඛ්‍යාව" />
-                </div>
-
-                <div class="col-6 col-md-4">
-                  <div class="form-check mb-1">
-                    <input class="form-check-input sec06-veh-chk" type="checkbox" id="veh_lorry" data-numbered="true" value="ලොරි රථ" onchange="toggleSection06CommVehicles()" />
-                    <label class="form-check-label" for="veh_lorry">ලොරි රථ</label>
-                  </div>
-                  <input type="number" min="0" id="veh_lorry_count" class="form-control form-control-sm" placeholder="සංඛ්‍යාව" />
-                </div>
-
-                <div class="col-6 col-md-4">
-                  <div class="form-check mb-1">
-                    <input class="form-check-input sec06-veh-chk" type="checkbox" id="veh_agri" data-numbered="true" value="කෘෂි වාහන" onchange="toggleSection06CommVehicles()" />
-                    <label class="form-check-label" for="veh_agri">කෘෂි වාහන</label>
-                  </div>
-                  <input type="number" min="0" id="veh_agri_count" class="form-control form-control-sm" placeholder="සංඛ්‍යාව" />
-                </div>
-
-                <div class="col-6 col-md-4">
-                  <div class="form-check mb-1">
-                    <input class="form-check-input sec06-veh-chk" type="checkbox" id="veh_other" data-numbered="true" value="වෙනත්" onchange="toggleSection06CommVehicles()" />
-                    <label class="form-check-label" for="veh_other">වෙනත්</label>
-                  </div>
-                  <div class="row g-1">
-                    <div class="col-7">
-                      <input type="text" id="veh_other_type" class="form-control form-control-sm" placeholder="වර්ගය" />
+                  <div class="row g-3">
+                    <div class="col-md-4">
+                      <label class="form-label fw-semibold">වාහන වර්ගය</label>
+                      <select name="vehicle_type[]" class="form-select vehicle-type-select" onchange="handleVehicleTypeChange(this)">
+                        <option value="">තෝරන්න...</option>
+                        <option value="පාපැදි">පාපැදි</option>
+                        <option value="යතුරුපැදි">යතුරුපැදි</option>
+                        <option value="ත්‍රිරෝද රථ">ත්‍රිරෝද රථ</option>
+                        <option value="මෝටර් රථ">මෝටර් රථ</option>
+                        <option value="වෑන් රථ">වෑන් රථ</option>
+                        <option value="බස් රථ">බස් රථ</option>
+                        <option value="ලොරි රථ">ලොරි රථ</option>
+                        <option value="කෘෂි වාහන">කෘෂි වාහන</option>
+                        <option value="වෙනත්">වෙනත්</option>
+                      </select>
                     </div>
-                    <div class="col-5">
-                      <input type="number" min="0" id="veh_other_count" class="form-control form-control-sm" placeholder="ගණන" />
+                    <div class="col-md-4">
+                      <label class="form-label fw-semibold">වාහන අයිතිකරුගේ නම</label>
+                      <input type="text" name="vehicle_owner_name[]" class="form-control" placeholder="අයිතිකරුගේ නම" />
+                    </div>
+                    <div class="col-md-4 vehicle-number-col">
+                      <label class="form-label fw-semibold">වාහන අංකය</label>
+                      <input type="text" name="vehicle_number[]" class="form-control vehicle-number-input" placeholder="උදා: WP ABC-1234" />
                     </div>
                   </div>
                 </div>
               </div>
             </div>
 
-            <!-- 50. වාහන අයිතිකරුගේ නම & 51. වාහන අංකය (පාපැදි හැර වෙනත් වාහනයක් තේරූ විට පමණි) -->
-            <div id="q50_51_vehicle_reg_wrap" class="sub-panel mb-0 d-none">
-              <div class="d-flex justify-content-between align-items-center mb-3">
-                <span class="fw-bold">50. වාහන අයිතිකරුගේ නම &nbsp;|&nbsp; 51. වාහන අංකය</span>
-                <button type="button" class="btn btn-sm btn-outline-primary" onclick="addVehicleRegistrationRow()">
-                  + වාහනයක් එක් කරන්න
-                </button>
-              </div>
-
-              <div id="vehicle_reg_rows_container">
-                <div class="row g-2 align-items-center mb-2 vehicle-reg-row">
-                  <div class="col-md-6">
-                    <label class="form-label small fw-semibold mb-1">50. වාහන අයිතිකරුගේ නම</label>
-                    <input type="text" name="q50_vehicle_owner_name[]" class="form-control" placeholder="අයිතිකරුගේ නම" />
-                  </div>
-                  <div class="col-md-5">
-                    <label class="form-label small fw-semibold mb-1">51. වාහන අංකය</label>
-                    <input type="text" name="q51_vehicle_number[]" class="form-control" placeholder="උදා: WP ABC-1234" />
-                  </div>
-                  <div class="col-md-1 d-flex align-items-end">
-                    <!-- පළමු row එකට remove button අවශ්‍ය නැත -->
-                  </div>
-                </div>
-              </div>
+            <div class="mt-2">
+              <button type="button" class="btn btn-outline-primary btn-sm fw-semibold" onclick="addVehicleCard()">
+                + තව වාහනයක් ඇඩ් කරන්න
+              </button>
             </div>
           </div>
         </div>
