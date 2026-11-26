@@ -44,10 +44,13 @@ const CONDITIONAL_WRAPS = [
   "sec05_no_house_wrap",
   "q36_energy_other_wrap",
   "q36_solar_details_wrap",
+  "q36_solar_issues_wrap",
   "q20_reason_wrap",
   "q21_reason_wrap",
   "livestock_wrap",
   "q38_other_wrap",
+  "q46_phone_details_wrap",
+  "q49_vehicle_cards_wrap",
   "phone_details_wrap",
   "vehicles_wrap",
   "aid_details_wrap",
@@ -787,6 +790,7 @@ function initSection04Land() {
   toggleSection04Land();
 }
 
+// Section 05 Logic
 function toggleSection05Housing() {
   const ownsSelect = document.getElementById("sec05_owns_house");
   const hasHouseWrap = document.getElementById("sec05_has_house_wrap");
@@ -832,37 +836,18 @@ function initSection05Housing() {
   bindIfExists("sec05_owns_house", "change", toggleSection05Housing);
   bindIfExists("energy_solar_chk", "change", toggleSection05Housing);
   bindIfExists("energy_other_chk", "change", toggleSection05Housing);
+  bindIfExists("q36_solar_project_potential", "change", toggleSection05Housing);
   toggleSection05Housing();
 }
-function toggleConditional(selectId, targetId) {
-  const selectEl = document.getElementById(selectId);
-  const targetEl = document.getElementById(targetId);
-  if (!selectEl || !targetEl) return;
 
-  const val = selectEl.value;
-  const shouldShow =
-    val === "ඔව්" ||
-    val === "ඇත" ||
-    val === "දුරකථන ඇත" ||
-    val === "වාහන ඇත";
-
-  targetEl.classList.toggle("d-none", !shouldShow);
-
-  if (shouldShow) {
-    ensureCardWhenOpened(targetId);
-  }
-
-  updateProgress();
-}
+// Section 06 Logic (සන්නිවේදන උපකරණ, ඩිජිටල් පහසුකම් හා වාහන හිමිකම්)
 function toggleSection06CommVehicles() {
-  // 45. ඔබගේ නිවසේ දුරකථන තිබේද? -> 46. දුරකථන වර්ගය හා සංඛ්‍යාව
   const hasPhonesSelect = document.getElementById("q45_has_phones");
   const phoneDetailsWrap = document.getElementById("q46_phone_details_wrap");
   if (hasPhonesSelect && phoneDetailsWrap) {
     phoneDetailsWrap.classList.toggle("d-none", hasPhonesSelect.value !== "ඔව්");
   }
 
-  // 48. ඔබගේ නිවසේ වාහන තිබේද? -> වාහන Cards
   const hasVehiclesSelect = document.getElementById("q48_has_vehicles");
   const vehicleCardsWrap = document.getElementById("q49_vehicle_cards_wrap");
   const isVehiclesYes = Boolean(hasVehiclesSelect && hasVehiclesSelect.value === "ඔව්");
@@ -871,14 +856,14 @@ function toggleSection06CommVehicles() {
     vehicleCardsWrap.classList.toggle("d-none", !isVehiclesYes);
   }
 
-  refreshVehicleCardLabels();
+  refreshSec06VehicleCardLabels();
 
-  if (typeof window.updateProgress === "function") {
-    window.updateProgress();
+  if (typeof updateProgress === "function") {
+    updateProgress();
   }
 }
 
-function handleVehicleTypeChange(selectEl) {
+function handleSec06VehicleTypeChange(selectEl) {
   const card = selectEl ? selectEl.closest(".vehicle-item-card") : null;
   if (!card) return;
 
@@ -894,7 +879,7 @@ function handleVehicleTypeChange(selectEl) {
   }
 }
 
-function addVehicleCard() {
+function addSec06VehicleCard() {
   const container = document.getElementById("vehicle_cards_container");
   if (!container) return;
 
@@ -904,12 +889,12 @@ function addVehicleCard() {
     <div class="card-body">
       <div class="d-flex justify-content-between align-items-center mb-3">
         <h6 class="card-title fw-bold mb-0 vehicle-card-title">වාහනය</h6>
-        <button type="button" class="btn btn-sm btn-outline-danger" onclick="removeVehicleCard(this)">ඉවත් කරන්න</button>
+        <button type="button" class="btn btn-sm btn-outline-danger remove-sec06-vehicle-btn">ඉවත් කරන්න</button>
       </div>
       <div class="row g-3">
         <div class="col-md-4">
           <label class="form-label fw-semibold">වාහන වර්ගය</label>
-          <select name="vehicle_type[]" class="form-select vehicle-type-select" onchange="handleVehicleTypeChange(this)">
+          <select name="vehicle_type[]" class="form-select vehicle-type-select">
             <option value="">තෝරන්න...</option>
             <option value="පාපැදි">පාපැදි</option>
             <option value="යතුරුපැදි">යතුරුපැදි</option>
@@ -935,18 +920,12 @@ function addVehicleCard() {
   `;
 
   container.appendChild(card);
-  refreshVehicleCardLabels();
+  refreshSec06VehicleCardLabels();
+  bindProgressListeners(card);
+  if (typeof updateProgress === "function") updateProgress();
 }
 
-function removeVehicleCard(btnEl) {
-  const card = btnEl ? btnEl.closest(".vehicle-item-card") : null;
-  if (card) {
-    card.remove();
-    refreshVehicleCardLabels();
-  }
-}
-
-function refreshVehicleCardLabels() {
+function refreshSec06VehicleCardLabels() {
   const cards = document.querySelectorAll("#vehicle_cards_container .vehicle-item-card");
   cards.forEach((card, idx) => {
     const titleEl = card.querySelector(".vehicle-card-title");
@@ -955,15 +934,80 @@ function refreshVehicleCardLabels() {
     }
     const selectEl = card.querySelector(".vehicle-type-select");
     if (selectEl) {
-      handleVehicleTypeChange(selectEl);
+      handleSec06VehicleTypeChange(selectEl);
     }
   });
 }
 
-// Page load වෙද්දී Section 06 fields නිවැරදි තත්ත්වයට ගෙන ඒමට
-document.addEventListener("DOMContentLoaded", () => {
+function resetSec06VehicleCards() {
+  const container = document.getElementById("vehicle_cards_container");
+  if (!container) return;
+  const cards = container.querySelectorAll(".vehicle-item-card");
+  cards.forEach((card, idx) => {
+    if (idx > 0) card.remove();
+  });
+  refreshSec06VehicleCardLabels();
+}
+
+function collectSec06VehicleCards() {
+  return Array.from(document.querySelectorAll("#vehicle_cards_container .vehicle-item-card"))
+    .map((card) => {
+      const typeEl = card.querySelector('select[name="vehicle_type[]"]');
+      const ownerEl = card.querySelector('input[name="vehicle_owner_name[]"]');
+      const numEl = card.querySelector('input[name="vehicle_number[]"]');
+      return {
+        vehicle_type: typeEl ? typeEl.value.trim() : "",
+        owner_name: ownerEl ? ownerEl.value.trim() : "",
+        vehicle_number: numEl ? numEl.value.trim() : ""
+      };
+    })
+    .filter((item) => item.vehicle_type !== "" || item.owner_name !== "" || item.vehicle_number !== "");
+}
+
+function initSection06CommVehicles() {
+  bindIfExists("q45_has_phones", "change", toggleSection06CommVehicles);
+  bindIfExists("q48_has_vehicles", "change", toggleSection06CommVehicles);
+  bindIfExists("btn_add_vehicle_card", "click", addSec06VehicleCard);
+
+  document.addEventListener("change", (e) => {
+    if (e.target && e.target.classList.contains("vehicle-type-select")) {
+      handleSec06VehicleTypeChange(e.target);
+    }
+  });
+
+  document.addEventListener("click", (e) => {
+    if (e.target && e.target.classList.contains("remove-sec06-vehicle-btn")) {
+      const card = e.target.closest(".vehicle-item-card");
+      if (card) {
+        card.remove();
+        refreshSec06VehicleCardLabels();
+        if (typeof updateProgress === "function") updateProgress();
+      }
+    }
+  });
+
   toggleSection06CommVehicles();
-});
+}
+function toggleConditional(selectId, targetId) {
+  const selectEl = document.getElementById(selectId);
+  const targetEl = document.getElementById(targetId);
+  if (!selectEl || !targetEl) return;
+
+  const val = selectEl.value;
+  const shouldShow =
+    val === "ඔව්" ||
+    val === "ඇත" ||
+    val === "දුරකථන ඇත" ||
+    val === "වාහන ඇත";
+
+  targetEl.classList.toggle("d-none", !shouldShow);
+
+  if (shouldShow) {
+    ensureCardWhenOpened(targetId);
+  }
+
+  updateProgress();
+}
 
 function ensureCardWhenOpened(targetId) {
   const map = {
@@ -1550,7 +1594,8 @@ function updateProgress() {
     "ch_malnourished", "ch_nutrition_aid", "q20_land_ownership_status",
     "q26_cultivated_extent", "q28_animal_count_by_type",
     "q29_gross_monthly_income", "q29a_home_garden_compost", "q29b_market_access",
-    "sec05_owns_house", "q32_house_nature", "q37_rainwater_harvesting", "q38_toilet_nature"
+    "sec05_owns_house", "q32_house_nature", "q37_rainwater_harvesting", "q38_toilet_nature",
+    "q45_has_phones", "q47_internet_facility", "q48_has_vehicles"
   ];
 
   const existingIds = keyIds.filter((id) => document.getElementById(id) !== null);
@@ -1647,6 +1692,7 @@ function buildPayload() {
   data.q27_livestock = collectCheckboxGroup("q27_livestock").join(", ");
   data.q36_energy_sources = collectCheckboxGroup("q36_energy_sources").join(", ");
   data.q37_water_sources = collectCheckboxGroup("q37_water_sources").join(", ");
+  data.q46_phone_types = collectCheckboxGroup("q46_phone_types").join(", ");
   data.q43_disasters = collectCheckboxGroup("q43_disasters").join(", ");
   data.q43a_insurance = collectCheckboxGroup("q43a_insurance").join(", ");
   data.q09a_social = collectCheckboxGroup("q09a_social").join(", ");
@@ -1659,6 +1705,8 @@ function buildPayload() {
     data.q20_land_ownership_status === "ඔව්" ? collectCardData("landsContainer") : [];
   data.livestock_cards = data.q33_livestock_status === "ඇත" ? collectCardData("livestockContainer") : [];
   data.vehicle_cards = data.q42_vehicle_status === "වාහන ඇත" ? collectCardData("vehiclesContainer") : [];
+  data.sec06_vehicle_cards =
+    data.q48_has_vehicles === "ඔව්" ? collectSec06VehicleCards() : [];
   data.abroad_cards = data.q45_abroad_status === "ඔව්" ? collectCardData("abroadContainer") : [];
   data.orphan_cards = data.q46_orphan_status === "ඔව්" ? collectCardData("orphanContainer") : [];
   data.disability_cards = data.q47_disability_status === "ඔව්" ? collectCardData("disabilityContainer") : [];
@@ -1793,6 +1841,9 @@ function handleFormReset() {
     if (el) el.classList.add("d-none");
   });
 
+  resetSec06VehicleCards();
+  toggleSection06CommVehicles();
+
   initDefaultCards();
   hideNavAlert();
 
@@ -1815,7 +1866,7 @@ window.addEventListener("DOMContentLoaded", () => {
   initSection03Children();
   initSection04Land();
   initSection05Housing();
-  toggleSection06CommVehicles();
+  initSection06CommVehicles();
   bindButtonEvents();
   bindProgressListeners(document.getElementById("surveyForm"));
   showStep(1);
