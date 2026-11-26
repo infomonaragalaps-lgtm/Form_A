@@ -864,7 +864,6 @@ function toggleSection06CommVehicles() {
 }
 
 function handleSec06VehicleTypeChange(selectEl) {
-  handleSec06VehicleTypeChange(selectEl);
   const card = selectEl ? selectEl.closest(".vehicle-item-card") : null;
   if (!card) return;
 
@@ -878,6 +877,9 @@ function handleSec06VehicleTypeChange(selectEl) {
   if (numInput && isBicycle) {
     numInput.value = "";
   }
+}
+function handleVehicleTypeChange(selectEl) {
+  handleSec06VehicleTypeChange(selectEl);
 }
 
 function addSec06VehicleCard() {
