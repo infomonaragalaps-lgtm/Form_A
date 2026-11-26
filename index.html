@@ -945,38 +945,185 @@
         </div>
       </section>
 
-      <!-- Step 07: ආපදා අවදානම්, රක්ෂණ හා ප්‍රජා සහභාගීත්වය -->
+<!-- Step 07: ස්වාභාවික ආපදා අවදානම්, ප්‍රජා සමිති හා සංවර්ධන කටයුතු දායකත්වය -->
       <section class="section-card d-none" data-step="7">
         <div class="section-header teal">
-          <h2>07. ආපදා අවදානම්, රක්ෂණ හා ප්‍රජා සහභාගීත්වය</h2>
+          <h2>07. ස්වාභාවික ආපදා අවදානම්, ප්‍රජා සමිති හා සංවර්ධන කටයුතු දායකත්වය</h2>
         </div>
         <div class="section-body">
+
+          <!-- 49. ඔබ නිවසට හෝ ප්‍රදේශයට ආපදා අවදානම් -->
           <div class="mb-4">
-            <label class="form-label">ස්වභාවික ආපදා අවදානම් (අදාළ ඒවා තෝරන්න)</label>
-            <div class="check-grid">
-              <label class="check-tile"><input type="checkbox" class="form-check-input" name="q43_disasters" value="නියඟය" /> <span>නියඟය</span></label>
-              <label class="check-tile"><input type="checkbox" class="form-check-input" name="q43_disasters" value="ගංවතුර" /> <span>ගංවතුර</span></label>
-              <label class="check-tile"><input type="checkbox" class="form-check-input" name="q43_disasters" value="නායයෑම් / පස් කඳු කඩාවැටීම්" /> <span>නායයෑම් / පස් කඳු කඩාවැටීම්</span></label>
-              <label class="check-tile"><input type="checkbox" class="form-check-input" name="q43_disasters" value="වනඅලි / වන සත්ව හානි" /> <span>වනඅලි / වන සත්ව හානි</span></label>
-              <label class="check-tile"><input type="checkbox" class="form-check-input" name="q43_disasters" value="අකුණු / තද සුළං" /> <span>අකුණු / තද සුළං</span></label>
-              <label class="check-tile"><input type="checkbox" class="form-check-input" name="q43_disasters" value="අවදානමක් නැත" /> <span>අවදානමක් නැත</span></label>
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label for="q49_disaster_risk_status" class="form-label fw-semibold">
+                  49. ඔබ නිවසට හෝ ප්‍රදේශයට ආපදා අවදානම් ?
+                </label>
+                <select id="q49_disaster_risk_status" name="q49_disaster_risk_status" class="form-select">
+                  <option value="">තෝරන්න...</option>
+                  <option value="ඇත">ඇත</option>
+                  <option value="නැත">නැත</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- "ඇත" නම් පමණක් පෙන්වන ආපදා වර්ග checkboxes -->
+            <div id="q49_disaster_types_wrap" class="d-none mt-3">
+              <label class="form-label fw-semibold">ආපදා අවදානම් වර්ග (අදාළ ඒවා තෝරන්න):</label>
+              <div class="check-grid">
+                <label class="check-tile">
+                  <input type="checkbox" class="form-check-input" name="q49_disasters" value="නියඟය" />
+                  <span>නියඟය</span>
+                </label>
+                <label class="check-tile">
+                  <input type="checkbox" class="form-check-input" name="q49_disasters" value="ගංවතුර" />
+                  <span>ගංවතුර</span>
+                </label>
+                <label class="check-tile">
+                  <input type="checkbox" class="form-check-input" name="q49_disasters" value="නායයෑම්" />
+                  <span>නායයෑම්</span>
+                </label>
+                <label class="check-tile">
+                  <input type="checkbox" class="form-check-input" name="q49_disasters" value="අලි - මිනිස් ගැටුම්" />
+                  <span>අලි - මිනිස් ගැටුම්</span>
+                </label>
+                <label class="check-tile">
+                  <input type="checkbox" class="form-check-input" name="q49_disasters" value="දැඩි සුළං" />
+                  <span>දැඩි සුළං</span>
+                </label>
+              </div>
             </div>
           </div>
 
+          <!-- 50. රක්ෂණ ආවරණ -->
           <div class="mb-4">
-            <label class="form-label">රක්ෂණ ආවරණ (අදාළ ඒවා තෝරන්න)</label>
-            <div class="check-grid">
-              <label class="check-tile"><input type="checkbox" class="form-check-input" name="q43a_insurance" value="කෘෂි / ගොවි රක්ෂණ" /> <span>කෘෂි / ගොවි රක්ෂණ</span></label>
-              <label class="check-tile"><input type="checkbox" class="form-check-input" name="q43a_insurance" value="සෞඛ්‍ය / ජීවිත රක්ෂණ" /> <span>සෞඛ්‍ය / ජීවිත රක්ෂණ</span></label>
-              <label class="check-tile"><input type="checkbox" class="form-check-input" name="q43a_insurance" value="වාහන / දේපළ රක්ෂණ" /> <span>වාහන / දේපළ රක්ෂණ</span></label>
-              <label class="check-tile"><input type="checkbox" class="form-check-input" name="q43a_insurance" value="රක්ෂණ ආවරණ නොමැත" /> <span>රක්ෂණ ආවරණ නොමැත</span></label>
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label for="q50_insurance_status" class="form-label fw-semibold">
+                  50. රක්ෂණ ආවරණ:
+                </label>
+                <select id="q50_insurance_status" name="q50_insurance_status" class="form-select">
+                  <option value="">තෝරන්න...</option>
+                  <option value="ඇත">ඇත</option>
+                  <option value="නැත">නැත</option>
+                </select>
+              </div>
             </div>
           </div>
 
-          <div>
-            <label for="q43b_community_org" class="form-label">ගමේ ප්‍රජා සංවර්ධන සමිතිවල සක්‍රීය දායකත්වය</label>
-            <textarea id="q43b_community_org" name="q43b_community_org" class="form-control" placeholder="ග්‍රාම සංවර්ධන සමිතිය, මරණාධාර සමිතිය, කාන්තා සමිති, ගොවි සමිති..."></textarea>
+          <!-- 51. ප්‍රජා සංවර්ධන සමිතිවලට දායකත්වය ලබා දේ ද? -->
+          <div class="mb-4">
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label for="q51_society_participation_status" class="form-label fw-semibold">
+                  51. ප්‍රජා සංවර්ධන සමිතිවලට දායකත්වය ලබා දේ ද?
+                </label>
+                <select id="q51_society_participation_status" name="q51_society_participation_status" class="form-select">
+                  <option value="">තෝරන්න...</option>
+                  <option value="ඔව්">ඔව්</option>
+                  <option value="නැත">නැත</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- "ඔව්" නම් පමණක් පෙන්වන ප්‍රජා සමිති checkboxes -->
+            <div id="q51_societies_wrap" class="d-none mt-3">
+              <label class="form-label fw-semibold">ගමේ ප්‍රජා සංවර්ධන සමිතිවල සක්‍රීය දායකත්වය (අදාළ ඒවා තෝරන්න):</label>
+              <div class="check-grid">
+                <label class="check-tile">
+                  <input type="checkbox" class="form-check-input" name="q51_community_societies" value="ගොවි සමිතිය" />
+                  <span>ගොවි සමිතිය</span>
+                </label>
+                <label class="check-tile">
+                  <input type="checkbox" class="form-check-input" name="q51_community_societies" value="මරණාධාර සමිතිය" />
+                  <span>මරණාධාර සමිතිය</span>
+                </label>
+                <label class="check-tile">
+                  <input type="checkbox" class="form-check-input" name="q51_community_societies" value="කාන්තා සමිතිය" />
+                  <span>කාන්තා සමිතිය</span>
+                </label>
+                <label class="check-tile">
+                  <input type="checkbox" class="form-check-input" name="q51_community_societies" value="තරුණ සමිතිය" />
+                  <span>තරුණ සමිතිය</span>
+                </label>
+                <label class="check-tile">
+                  <input type="checkbox" class="form-check-input" name="q51_community_societies" value="ප්‍රජා මණ්ඩලය" />
+                  <span>ප්‍රජා මණ්ඩලය</span>
+                </label>
+                <label class="check-tile">
+                  <input type="checkbox" class="form-check-input" id="q51_society_other_chk" name="q51_community_societies" value="වෙනත්" />
+                  <span>වෙනත්</span>
+                </label>
+              </div>
+
+              <!-- "වෙනත්" තේරූ විට පමණක් පෙන්වන Dynamic Text Boxes + Add Button -->
+              <div id="q51_society_other_wrap" class="d-none mt-3 p-3 border rounded bg-light">
+                <label class="form-label fw-semibold">වෙනත් සමිති (සඳහන් කරන්න):</label>
+                <div id="q51_other_societies_container">
+                  <div class="input-group mb-2 sec07-other-society-row">
+                    <input
+                      type="text"
+                      name="q51_other_society_name[]"
+                      class="form-control"
+                      placeholder="වෙනත් සමිතියක නම සඳහන් කරන්න"
+                    />
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  id="btn_add_sec07_other_society"
+                  class="btn btn-outline-primary btn-sm fw-semibold mt-1"
+                  onclick="addSec07OtherSocietyRow()"
+                >
+                  + තව සමිතියක් ඇඩ් කරන්න
+                </button>
+              </div>
+            </div>
           </div>
+
+          <!-- 52 & 53. සංවර්ධන කටයුතු / ශ්‍රමදාන දායකත්වය සහ දායක වූ ආකාරය -->
+          <div class="sub-panel mb-0">
+            <div class="row g-3">
+              <div class="col-md-8">
+                <label for="q52_dev_participation" class="form-label fw-semibold">
+                  52. 2025 වර්ෂයෙන් පසු ගමේ ක්‍රියාත්මක වූ සංවර්ධන කටයුතුවලදී හා ශ්‍රමදානවලදී ලබා දුන් දායකත්වය:
+                </label>
+                <select id="q52_dev_participation" name="q52_dev_participation" class="form-select">
+                  <option value="">තෝරන්න...</option>
+                  <option value="සහභාගි වුණා">සහභාගි වුණා</option>
+                  <option value="සහභාගි වුණේ නැත">සහභාගි වුණේ නැත</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- "සහභාගි වුණා" නම් පමණක් පෙන්වන 53 වන ප්‍රශ්නය -->
+            <div id="q53_contribution_wrap" class="d-none mt-3">
+              <label class="form-label fw-semibold">53. දායක වූ ආකාරය:</label>
+              <div class="check-grid">
+                <label class="check-tile">
+                  <input type="checkbox" class="form-check-input" name="q53_contribution_type" value="1. ශ්‍රමයෙන් දායක වුණා" />
+                  <span>1. ශ්‍රමයෙන් දායක වුණා</span>
+                </label>
+                <label class="check-tile">
+                  <input type="checkbox" class="form-check-input" name="q53_contribution_type" value="2. ද්‍රව්‍ය ආධාරවලින්" />
+                  <span>2. ද්‍රව්‍ය ආධාරවලින්</span>
+                </label>
+                <label class="check-tile">
+                  <input type="checkbox" class="form-check-input" name="q53_contribution_type" value="3. මූල්‍ය ආධාරවලින්" />
+                  <span>3. මූල්‍ය ආධාරවලින්</span>
+                </label>
+                <label class="check-tile">
+                  <input type="checkbox" class="form-check-input" name="q53_contribution_type" value="4. ආහාරපාන / තේ සංග්‍රහ කටයුතුවලින්" />
+                  <span>4. ආහාරපාන / තේ සංග්‍රහ කටයුතුවලින්</span>
+                </label>
+                <label class="check-tile">
+                  <input type="checkbox" class="form-check-input" name="q53_contribution_type" value="5. ශ්‍රමයෙන් හා ද්‍රව්‍ය / මූල්‍ය සෑම අතින්ම" />
+                  <span>5. ශ්‍රමයෙන් හා ද්‍රව්‍ය / මූල්‍ය සෑම අතින්ම</span>
+                </label>
+              </div>
+            </div>
+          </div>
+
         </div>
       </section>
 
