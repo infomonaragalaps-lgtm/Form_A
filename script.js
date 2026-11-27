@@ -25,6 +25,8 @@ const CARD_CONTAINERS = [
   "landsContainer",
   "livestockContainer",
   "vehiclesContainer",
+  "materialAidContainer",
+  "cashAidContainer",
   "abroadContainer",
   "orphanContainer",
   "disabilityContainer",
@@ -54,6 +56,8 @@ const CONDITIONAL_WRAPS = [
   "phone_details_wrap",
   "vehicles_wrap",
   "aid_details_wrap",
+  "material_aid_wrap",
+  "cash_aid_wrap",
   "abroad_wrap",
   "orphan_wrap",
   "disability_wrap",
@@ -995,6 +999,7 @@ function initSection06CommVehicles() {
 
   toggleSection06CommVehicles();
 }
+
 // ==========================================
 // Section 07: ආපදා අවදානම්, රක්ෂණ හා ප්‍රජා සහභාගීත්වය (49 - 53)
 // ==========================================
@@ -1077,7 +1082,6 @@ function resetSec07OtherSocieties() {
 }
 
 function toggleSection07Logic() {
-  // 49. ආපදා අවදානම් ("ඇත" නම් පමණක් checkboxes පෙන්වයි)
   const disasterStatusEl = document.getElementById("q49_disaster_risk_status");
   const disasterTypesWrap = document.getElementById("q49_disaster_types_wrap");
   const hasDisasterRisk = Boolean(disasterStatusEl && disasterStatusEl.value === "ඇත");
@@ -1091,7 +1095,6 @@ function toggleSection07Logic() {
     });
   }
 
-  // 51. ප්‍රජා සංවර්ධන සමිති දායකත්වය ("ඔව්" නම් පමණක් සමිති පෙන්වයි)
   const societyStatusEl = document.getElementById("q51_society_participation_status");
   const societiesWrap = document.getElementById("q51_societies_wrap");
   const hasSocietyParticipation = Boolean(societyStatusEl && societyStatusEl.value === "ඔව්");
@@ -1123,7 +1126,6 @@ function toggleSection07Logic() {
     }
   }
 
-  // 52 & 53. සංවර්ධන කටයුතු / ශ්‍රමදාන දායකත්වය ("සහභාගි වුණා" නම් පමණක් 53 පෙන්වයි)
   const devPartEl = document.getElementById("q52_dev_participation");
   const contribWrap = document.getElementById("q53_contribution_wrap");
   const isParticipated = Boolean(devPartEl && devPartEl.value === "සහභාගි වුණා");
@@ -1164,6 +1166,92 @@ function initSection07Logic() {
   toggleSection07Logic();
 }
 
+// ==========================================
+// Section 08: ආධාර, විදෙස්ගතවූවන් හා සුභසාධන තොරතුරු (54 - 80)
+// ==========================================
+function toggleSec08WelfareOther(selectEl) {
+  const card = selectEl ? selectEl.closest(".dynamic-card") : null;
+  if (!card) return;
+
+  const otherWrap = card.querySelector(".sec08-welfare-other-wrap");
+  const otherInput = card.querySelector('[data-field="allowance_other"]');
+  const isOther = selectEl.value === "වෙනත්";
+
+  if (otherWrap) {
+    otherWrap.classList.toggle("d-none", !isOther);
+  }
+  if (!isOther && otherInput) {
+    otherInput.value = "";
+  }
+  if (typeof updateProgress === "function") updateProgress();
+}
+
+function addMaterialAidCard(showRemove = true) {
+  const containerId = "materialAidContainer";
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  const prefix = "ද්‍රව්‍ය ආධාරය";
+  const count = container.querySelectorAll(".dynamic-card").length + 1;
+
+  const card = createCardElement(
+    "material_aid",
+    `${prefix} #${count}`,
+    showRemove,
+    containerId,
+    prefix,
+    `
+      <div class="row g-3">
+        <div class="col-md-4">
+          <label class="form-label">55. ලැබූ වර්ෂය</label>
+          <input type="number" class="form-control" data-field="year" min="1950" max="2100" placeholder="උදා: 2025" />
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">56. ලැබූ ප්‍රමාණය</label>
+          <input type="text" class="form-control" data-field="quantity" placeholder="ලැබූ ප්‍රමාණය" />
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">57. ලබා දුන් ආයතනය / වැඩසටහන</label>
+          <input type="text" class="form-control" data-field="institution" placeholder="ආයතනය හෝ වැඩසටහන" />
+        </div>
+      </div>
+    `
+  );
+  appendCard(containerId, card);
+}
+
+function addCashAidCard(showRemove = true) {
+  const containerId = "cashAidContainer";
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  const prefix = "ආධාර මුදල";
+  const count = container.querySelectorAll(".dynamic-card").length + 1;
+
+  const card = createCardElement(
+    "cash_aid",
+    `${prefix} #${count}`,
+    showRemove,
+    containerId,
+    prefix,
+    `
+      <div class="row g-3">
+        <div class="col-md-4">
+          <label class="form-label">59. ලැබූ වර්ෂය</label>
+          <input type="number" class="form-control" data-field="year" min="1950" max="2100" placeholder="උදා: 2025" />
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">60. ලබා ගත් මුදල (රු.)</label>
+          <input type="number" step="0.01" class="form-control" data-field="amount" placeholder="රු." />
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">61. ලබා දුන් ආයතනය / වැඩසටහන</label>
+          <input type="text" class="form-control" data-field="institution" placeholder="ආයතනය හෝ වැඩසටහන" />
+        </div>
+      </div>
+    `
+  );
+  appendCard(containerId, card);
+}
+
 function toggleConditional(selectId, targetId) {
   const selectEl = document.getElementById(selectId);
   const targetEl = document.getElementById(targetId);
@@ -1190,6 +1278,8 @@ function ensureCardWhenOpened(targetId) {
     land_cards_wrap: ["landsContainer", () => addLandCard(false)],
     livestock_wrap: ["livestockContainer", () => addLivestockCard(false)],
     vehicles_wrap: ["vehiclesContainer", () => addVehicleCard(false)],
+    material_aid_wrap: ["materialAidContainer", () => addMaterialAidCard(false)],
+    cash_aid_wrap: ["cashAidContainer", () => addCashAidCard(false)],
     abroad_wrap: ["abroadContainer", () => addAbroadCard(false)],
     orphan_wrap: ["orphanContainer", () => addOrphanCard(false)],
     disability_wrap: ["disabilityContainer", () => addDisabilityCard(false)],
@@ -1425,6 +1515,7 @@ function addVehicleCard(showRemove = true) {
   appendCard(containerId, card);
 }
 
+// 62 - 64: විදෙස්ගත වූවන්
 function addAbroadCard(showRemove = true) {
   const containerId = "abroadContainer";
   const container = document.getElementById(containerId);
@@ -1440,17 +1531,13 @@ function addAbroadCard(showRemove = true) {
     prefix,
     `
       <div class="row g-3">
-        <div class="col-md-4">
-          <label class="form-label">නම</label>
-          <input type="text" class="form-control" data-field="name" placeholder="නම" />
-        </div>
-        <div class="col-md-4">
-          <label class="form-label">විදෙස්ගත වූ රට</label>
+        <div class="col-md-6">
+          <label class="form-label">63. විදෙස් ගත වූ රට</label>
           <input type="text" class="form-control" data-field="country" placeholder="රටේ නම" />
         </div>
-        <div class="col-md-4">
-          <label class="form-label">වර්ෂය</label>
-          <input type="text" class="form-control" data-field="year" placeholder="2023" />
+        <div class="col-md-6">
+          <label class="form-label">64. විදෙස් ගත වූ වර්ෂය</label>
+          <input type="number" class="form-control" data-field="year" min="1950" max="2100" placeholder="උදා: 2023" />
         </div>
       </div>
     `
@@ -1458,6 +1545,7 @@ function addAbroadCard(showRemove = true) {
   appendCard(containerId, card);
 }
 
+// 65 - 67: මව / පියා අහිමි වූ දරුවන්
 function addOrphanCard(showRemove = true) {
   const containerId = "orphanContainer";
   const container = document.getElementById(containerId);
@@ -1474,11 +1562,11 @@ function addOrphanCard(showRemove = true) {
     `
       <div class="row g-3">
         <div class="col-md-6">
-          <label class="form-label">නම</label>
+          <label class="form-label">66. දරුවාගේ නම</label>
           <input type="text" class="form-control" data-field="name" placeholder="දරුවාගේ නම" />
         </div>
         <div class="col-md-6">
-          <label class="form-label">උපන් දිනය</label>
+          <label class="form-label">67. දරුවාගේ උපන් දිනය</label>
           <input type="date" class="form-control" data-field="dob" />
         </div>
       </div>
@@ -1487,6 +1575,7 @@ function addOrphanCard(showRemove = true) {
   appendCard(containerId, card);
 }
 
+// 68 - 72: විශේෂ ආබාධ සහිත පුද්ගලයින්
 function addDisabilityCard(showRemove = true) {
   const containerId = "disabilityContainer";
   const container = document.getElementById(containerId);
@@ -1503,7 +1592,7 @@ function addDisabilityCard(showRemove = true) {
     `
       <div class="row g-3">
         <div class="col-md-3">
-          <label class="form-label">ආබාධයේ ස්වභාවය</label>
+          <label class="form-label">69. ආබාධයේ ස්වභාවය</label>
           <select class="form-select" data-field="disability_type">
             <option value="">තෝරන්න...</option>
             <option value="දෘශ්‍යාබාධ">දෘශ්‍යාබාධ</option>
@@ -1519,15 +1608,15 @@ function addDisabilityCard(showRemove = true) {
           </select>
         </div>
         <div class="col-md-3">
-          <label class="form-label">නම</label>
+          <label class="form-label">70. නම</label>
           <input type="text" class="form-control" data-field="name" placeholder="නම" />
         </div>
         <div class="col-md-3">
-          <label class="form-label">උපන් දිනය</label>
+          <label class="form-label">71. උපන් දිනය</label>
           <input type="date" class="form-control" data-field="dob" />
         </div>
         <div class="col-md-3">
-          <label class="form-label">ජා.හැ. අංකය</label>
+          <label class="form-label">72. ජා.හැ. අංකය</label>
           <input type="text" class="form-control" data-field="nic" placeholder="NIC අංකය" />
         </div>
       </div>
@@ -1536,6 +1625,7 @@ function addDisabilityCard(showRemove = true) {
   appendCard(containerId, card);
 }
 
+// 73 - 75: මත්පැන් / දුම්වැටි / මත්ද්‍රව්‍ය වලට ඇබ්බැහි වූවන්
 function addAddictionCard(showRemove = true) {
   const containerId = "addictionContainer";
   const container = document.getElementById(containerId);
@@ -1551,17 +1641,13 @@ function addAddictionCard(showRemove = true) {
     prefix,
     `
       <div class="row g-3">
-        <div class="col-md-4">
-          <label class="form-label">නම</label>
+        <div class="col-md-6">
+          <label class="form-label">74. නම</label>
           <input type="text" class="form-control" data-field="name" placeholder="නම" />
         </div>
-        <div class="col-md-4">
-          <label class="form-label">උපන් දිනය</label>
+        <div class="col-md-6">
+          <label class="form-label">75. උපන් දිනය</label>
           <input type="date" class="form-control" data-field="dob" />
-        </div>
-        <div class="col-md-4">
-          <label class="form-label">ජා.හැ. අංකය</label>
-          <input type="text" class="form-control" data-field="nic" placeholder="NIC අංකය" />
         </div>
       </div>
     `
@@ -1569,6 +1655,7 @@ function addAddictionCard(showRemove = true) {
   appendCard(containerId, card);
 }
 
+// 76 - 80: රජයේ විවිධ සමාජ ආධාර ලැබෙන පුද්ගලයින්
 function addWelfareCard(showRemove = true) {
   const containerId = "welfareContainer";
   const container = document.getElementById(containerId);
@@ -1584,9 +1671,21 @@ function addWelfareCard(showRemove = true) {
     prefix,
     `
       <div class="row g-3">
-        <div class="col-md-3">
-          <label class="form-label">දීමනා වර්ගය</label>
-          <select class="form-select" data-field="allowance_type">
+        <div class="col-md-6">
+          <label class="form-label">77. නම</label>
+          <input type="text" class="form-control" data-field="name" placeholder="නම" />
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">78. ජාතික හැඳුනුම්පත් අංකය</label>
+          <input type="text" class="form-control" data-field="nic" placeholder="NIC අංකය" />
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">79. දුරකථන අංකය</label>
+          <input type="tel" class="form-control" data-field="phone" placeholder="දුරකථන අංකය" />
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">80. දීමනාවේ ස්වභාවය</label>
+          <select class="form-select" data-field="allowance_type" onchange="toggleSec08WelfareOther(this)">
             <option value="">තෝරන්න...</option>
             <option value="අස්වැසුම">අස්වැසුම</option>
             <option value="මහජන ආධාර">මහජන ආධාර</option>
@@ -1595,21 +1694,13 @@ function addWelfareCard(showRemove = true) {
             <option value="වකුගඩු ආධාර">වකුගඩු ආධාර</option>
             <option value="පිළිකා ආධාර">පිළිකා ආධාර</option>
             <option value="තැලසීමියා ආධාර">තැලසීමියා ආධාර</option>
-            <option value="ළඳරු">ළඳරු</option>
+            <option value="ලාදුරු">ලාදුරු</option>
             <option value="වෙනත්">වෙනත්</option>
           </select>
         </div>
-        <div class="col-md-3">
-          <label class="form-label">නම</label>
-          <input type="text" class="form-control" data-field="name" placeholder="නම" />
-        </div>
-        <div class="col-md-3">
-          <label class="form-label">උපන් දිනය</label>
-          <input type="date" class="form-control" data-field="dob" />
-        </div>
-        <div class="col-md-3">
-          <label class="form-label">ජා.හැ. අංකය</label>
-          <input type="text" class="form-control" data-field="nic" placeholder="NIC අංකය" />
+        <div class="col-12 d-none sec08-welfare-other-wrap">
+          <label class="form-label">වෙනත් දීමනාවේ ස්වභාවය</label>
+          <input type="text" class="form-control" data-field="allowance_other" placeholder="වෙනත් දීමනාව සඳහන් කරන්න" />
         </div>
       </div>
     `
@@ -1739,6 +1830,8 @@ function bindButtonEvents() {
 
   bindIfExists("addLivestockBtn", "click", () => addLivestockCard(true));
   bindIfExists("addVehicleBtn", "click", () => addVehicleCard(true));
+  bindIfExists("addMaterialAidBtn", "click", () => addMaterialAidCard(true));
+  bindIfExists("addCashAidBtn", "click", () => addCashAidCard(true));
   bindIfExists("addAbroadBtn", "click", () => addAbroadCard(true));
   bindIfExists("addOrphanBtn", "click", () => addOrphanCard(true));
   bindIfExists("addDisabilityBtn", "click", () => addDisabilityCard(true));
@@ -1771,7 +1864,10 @@ function updateProgress() {
     "q26_cultivated_extent", "q28_animal_count_by_type",
     "q29_gross_monthly_income", "q29a_home_garden_compost", "q29b_market_access",
     "sec05_owns_house", "q32_house_nature", "q37_rainwater_harvesting", "q38_toilet_nature",
-    "q45_has_phones", "q47_internet_facility", "q48_has_vehicles"
+    "q45_has_phones", "q47_internet_facility", "q48_has_vehicles",
+    "q54_material_aid_status", "q58_cash_aid_status", "q62_abroad_status",
+    "q65_orphan_status", "q68_disability_status", "q73_addiction_status",
+    "q76_welfare_status"
   ];
 
   const existingIds = keyIds.filter((id) => document.getElementById(id) !== null);
@@ -1883,37 +1979,49 @@ function buildPayload() {
   data.vehicle_cards = data.q42_vehicle_status === "වාහන ඇත" ? collectCardData("vehiclesContainer") : [];
   data.sec06_vehicle_cards =
     data.q48_has_vehicles === "ඔව්" ? collectSec06VehicleCards() : [];
-  data.abroad_cards = data.q45_abroad_status === "ඔව්" ? collectCardData("abroadContainer") : [];
-  data.orphan_cards = data.q46_orphan_status === "ඔව්" ? collectCardData("orphanContainer") : [];
-  data.disability_cards = data.q47_disability_status === "ඔව්" ? collectCardData("disabilityContainer") : [];
-  data.addiction_cards = data.q48_addiction_status === "ඔව්" ? collectCardData("addictionContainer") : [];
-  data.welfare_cards = data.q49_welfare_status === "ඔව්" ? collectCardData("welfareContainer") : [];
+
+  // Section 08 (54 - 80) Dynamic Cards
+  data.material_aid_cards =
+    data.q54_material_aid_status === "ඔව්" ? collectCardData("materialAidContainer") : [];
+  data.cash_aid_cards =
+    data.q58_cash_aid_status === "ඔව්" ? collectCardData("cashAidContainer") : [];
+  data.abroad_cards =
+    data.q62_abroad_status === "ඔව්" ? collectCardData("abroadContainer") : [];
+  data.orphan_cards =
+    data.q65_orphan_status === "ඔව්" ? collectCardData("orphanContainer") : [];
+  data.disability_cards =
+    data.q68_disability_status === "ඔව්" ? collectCardData("disabilityContainer") : [];
+  data.addiction_cards =
+    data.q73_addiction_status === "ඔව්" ? collectCardData("addictionContainer") : [];
+  data.welfare_cards =
+    data.q76_welfare_status === "ඔව්" ? collectCardData("welfareContainer") : [];
+
   data.bank_cards = collectCardData("bankContainer");
   data.loan_cards = data.q52_loan_status === "ඔව්" ? collectCardData("loanContainer") : [];
 
   data.submitted_at = new Date().toISOString();
 
   data.q49_disaster_risk_status = data.q49_disaster_risk_status || "";
-data.q49_disasters =
-  data.q49_disaster_risk_status === "ඇත"
-    ? collectCheckboxGroup("q49_disasters").join(", ")
-    : "";
+  data.q49_disasters =
+    data.q49_disaster_risk_status === "ඇත"
+      ? collectCheckboxGroup("q49_disasters").join(", ")
+      : "";
 
-data.q50_insurance_status = data.q50_insurance_status || "";
+  data.q50_insurance_status = data.q50_insurance_status || "";
 
-data.q51_society_participation_status = data.q51_society_participation_status || "";
-data.q51_community_societies =
-  data.q51_society_participation_status === "ඔව්"
-    ? collectCheckboxGroup("q51_community_societies").join(", ")
-    : "";
-data.q51_other_societies = getSec07OtherSocietiesList().join(", ");
+  data.q51_society_participation_status = data.q51_society_participation_status || "";
+  data.q51_community_societies =
+    data.q51_society_participation_status === "ඔව්"
+      ? collectCheckboxGroup("q51_community_societies").join(", ")
+      : "";
+  data.q51_other_societies = getSec07OtherSocietiesList().join(", ");
 
-data.q52_dev_participation = data.q52_dev_participation || "";
-data.q53_contribution_type =
-  data.q52_dev_participation === "සහභාගි වුණා"
-    ? collectCheckboxGroup("q53_contribution_type").join(", ")
-    : "";
-  
+  data.q52_dev_participation = data.q52_dev_participation || "";
+  data.q53_contribution_type =
+    data.q52_dev_participation === "සහභාගි වුණා"
+      ? collectCheckboxGroup("q53_contribution_type").join(", ")
+      : "";
+
   return data;
 }
 
@@ -2044,9 +2152,9 @@ function handleFormReset() {
 
   initDefaultCards();
   hideNavAlert();
-  
+
   resetSec07OtherSocieties();
-  toggleSection07Logic();  
+  toggleSection07Logic();
 
   const statusBox = document.getElementById("statusMessage");
   if (statusBox) {
@@ -2072,5 +2180,5 @@ window.addEventListener("DOMContentLoaded", () => {
   bindButtonEvents();
   bindProgressListeners(document.getElementById("surveyForm"));
   showStep(1);
-  updateProgress();  
+  updateProgress();
 });
