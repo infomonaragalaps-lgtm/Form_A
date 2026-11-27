@@ -1,6 +1,6 @@
 const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbww2GIaQkDYozdMg-WOAXnPS8tDxJQWHqKwus3dmywcZDhrh0ZOBnBdExFHm32jOXEN/exec";
 
-const TOTAL_STEPS = 9;
+const TOTAL_STEPS = 10;
 let currentStep = 1;
 
 const SURVEYOR_STORAGE_KEY = "pks_2027_surveyor_prefs_v1";
