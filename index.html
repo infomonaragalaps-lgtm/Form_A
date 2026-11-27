@@ -1127,50 +1127,55 @@
         </div>
       </section>
 
-      <!-- Step 08: ආධාර, විදෙස්ගතවූවන් හා සුභසාධන තොරතුරු -->
+      <!-- Step 08: ආධාර, විදෙස්ගතවූවන් හා සුභසාධන තොරතුරු (54 - 80) -->
       <section class="section-card d-none" data-step="8">
         <div class="section-header violet">
           <h2>08. ආධාර, විදෙස්ගතවූවන් හා සුභසාධන තොරතුරු</h2>
         </div>
         <div class="section-body">
-          <!-- 7.1 ආධාර ලැබේද? (Conditional 4 fields) -->
+          <!-- 54 - 57: ද්‍රව්‍ය ආධාර (Conditional + Dynamic Cards) -->
           <div class="sub-panel">
             <div class="mb-3">
-              <label for="q44_aid_received" class="form-label">ඔබට කුමන හෝ ආධාරයක් මේ වන විට ලැබේද?</label>
-              <select id="q44_aid_received" name="q44_aid_received" class="form-select" onchange="toggleConditional('q44_aid_received', 'aid_details_wrap')">
+              <label for="q54_material_aid_status" class="form-label">54. ඔබ පවුලට ද්‍රව්‍ය ආධාර හිමි වී තිබේද?</label>
+              <select id="q54_material_aid_status" name="q54_material_aid_status" class="form-select" onchange="toggleConditional('q54_material_aid_status', 'material_aid_wrap')">
                 <option value="">තෝරන්න...</option>
                 <option value="නැත">නැත</option>
                 <option value="ඔව්">ඔව්</option>
               </select>
             </div>
-
-            <div class="d-none" id="aid_details_wrap">
-              <div class="row g-3">
-                <div class="col-md-6">
-                  <label for="q44a_material_aid" class="form-label">පවුලට ලැබී ඇති ද්‍රව්‍ය ආධාර</label>
-                  <input type="text" id="q44a_material_aid" name="q44a_material_aid" class="form-control" placeholder="ද්‍රව්‍ය ආධාර" />
-                </div>
-                <div class="col-md-6">
-                  <label for="q44b_aid_qty" class="form-label">ලැබූ ප්‍රමාණය</label>
-                  <input type="text" id="q44b_aid_qty" name="q44b_aid_qty" class="form-control" placeholder="ප්‍රමාණය" />
-                </div>
-                <div class="col-md-6">
-                  <label for="q44c_aid_amount" class="form-label">පවුලට ලැබෙන ආධාර මුදල් / මාසික ප්‍රමාණය (රු.)</label>
-                  <input type="text" id="q44c_aid_amount" name="q44c_aid_amount" class="form-control" placeholder="රු." />
-                </div>
-                <div class="col-md-6">
-                  <label for="q44d_aid_provider" class="form-label">ලබාදුන් ආයතනය / වැඩසටහන</label>
-                  <input type="text" id="q44d_aid_provider" name="q44d_aid_provider" class="form-control" placeholder="ආයතනය හෝ වැඩසටහන" />
-                </div>
+            <div class="d-none" id="material_aid_wrap">
+              <div class="sub-panel-header">
+                <span>55 - 57. ද්‍රව්‍ය ආධාර විස්තර</span>
+                <button type="button" class="btn btn-add-item" id="addMaterialAidBtn">+ තවත් ආධාරයක් එක් කරන්න</button>
               </div>
+              <div id="materialAidContainer"></div>
             </div>
           </div>
 
-          <!-- 7.2 විදෙස්ගත වූවන් සිටීද? (Conditional + Dynamic Cards) -->
+          <!-- 58 - 61: ආධාර මුදල් (Conditional + Dynamic Cards) -->
           <div class="sub-panel">
             <div class="mb-3">
-              <label for="q45_abroad_status" class="form-label">විදෙස්ගත වූවන් සිටීද?</label>
-              <select id="q45_abroad_status" name="q45_abroad_status" class="form-select" onchange="toggleConditional('q45_abroad_status', 'abroad_wrap')">
+              <label for="q58_cash_aid_status" class="form-label">58. ඔබ පවුලට ආධාර මුදල් හිමි වේද?</label>
+              <select id="q58_cash_aid_status" name="q58_cash_aid_status" class="form-select" onchange="toggleConditional('q58_cash_aid_status', 'cash_aid_wrap')">
+                <option value="">තෝරන්න...</option>
+                <option value="නැත">නැත</option>
+                <option value="ඔව්">ඔව්</option>
+              </select>
+            </div>
+            <div class="d-none" id="cash_aid_wrap">
+              <div class="sub-panel-header">
+                <span>59 - 61. ආධාර මුදල් විස්තර</span>
+                <button type="button" class="btn btn-add-item" id="addCashAidBtn">+ තවත් මුදල් ආධාරයක් එක් කරන්න</button>
+              </div>
+              <div id="cashAidContainer"></div>
+            </div>
+          </div>
+
+          <!-- 62 - 64: විදෙස්ගත වූවන් සිටීද? (Conditional + Dynamic Cards) -->
+          <div class="sub-panel">
+            <div class="mb-3">
+              <label for="q62_abroad_status" class="form-label">62. ඔබ පවුලේ විදෙස් ගත වූවන් සිටීද?</label>
+              <select id="q62_abroad_status" name="q62_abroad_status" class="form-select" onchange="toggleConditional('q62_abroad_status', 'abroad_wrap')">
                 <option value="">තෝරන්න...</option>
                 <option value="නැත">නැත</option>
                 <option value="ඔව්">ඔව්</option>
@@ -1178,18 +1183,18 @@
             </div>
             <div class="d-none" id="abroad_wrap">
               <div class="sub-panel-header">
-                <span>විදෙස්ගත වූවන්ගේ විස්තර</span>
+                <span>63 - 64. විදෙස්ගත වූවන්ගේ විස්තර</span>
                 <button type="button" class="btn btn-add-item" id="addAbroadBtn">+ තවත් අයෙක් එක් කරන්න</button>
               </div>
               <div id="abroadContainer"></div>
             </div>
           </div>
 
-          <!-- 7.3 මව / පියා අහිමි වූ දරුවන් සිටීද? (Conditional + Dynamic Cards) -->
+          <!-- 65 - 67: මව / පියා අහිමි වූ දරුවන් සිටීද? (Conditional + Dynamic Cards) -->
           <div class="sub-panel">
             <div class="mb-3">
-              <label for="q46_orphan_status" class="form-label">මව / පියා අහිමි වූ දරුවන් සිටීද?</label>
-              <select id="q46_orphan_status" name="q46_orphan_status" class="form-select" onchange="toggleConditional('q46_orphan_status', 'orphan_wrap')">
+              <label for="q65_orphan_status" class="form-label">65. මව පියා අහිමි වූ දරුවන් සිටී ද?</label>
+              <select id="q65_orphan_status" name="q65_orphan_status" class="form-select" onchange="toggleConditional('q65_orphan_status', 'orphan_wrap')">
                 <option value="">තෝරන්න...</option>
                 <option value="නැත">නැත</option>
                 <option value="ඔව්">ඔව්</option>
@@ -1197,18 +1202,18 @@
             </div>
             <div class="d-none" id="orphan_wrap">
               <div class="sub-panel-header">
-                <span>මව / පියා අහිමි වූ දරුවන්ගේ විස්තර</span>
+                <span>66 - 67. මව / පියා අහිමි වූ දරුවන්ගේ විස්තර</span>
                 <button type="button" class="btn btn-add-item" id="addOrphanBtn">+ තවත් දරුවෙක් එක් කරන්න</button>
               </div>
               <div id="orphanContainer"></div>
             </div>
           </div>
 
-          <!-- 7.4 විශේෂ ආබාධ සහිත පුද්ගලයින් සිටීද? (Conditional + Dynamic Cards) -->
+          <!-- 68 - 72: විශේෂ ආබාධ සහිත පුද්ගලයින් සිටීද? (Conditional + Dynamic Cards) -->
           <div class="sub-panel">
             <div class="mb-3">
-              <label for="q47_disability_status" class="form-label">විශේෂ ආබාධ සහිත පුද්ගලයින් සිටීද?</label>
-              <select id="q47_disability_status" name="q47_disability_status" class="form-select" onchange="toggleConditional('q47_disability_status', 'disability_wrap')">
+              <label for="q68_disability_status" class="form-label">68. විශේෂ ආබාධ සහිත පුද්ගලයින් සිටී ද?</label>
+              <select id="q68_disability_status" name="q68_disability_status" class="form-select" onchange="toggleConditional('q68_disability_status', 'disability_wrap')">
                 <option value="">තෝරන්න...</option>
                 <option value="නැත">නැත</option>
                 <option value="ඔව්">ඔව්</option>
@@ -1216,18 +1221,18 @@
             </div>
             <div class="d-none" id="disability_wrap">
               <div class="sub-panel-header">
-                <span>විශේෂ ආබාධ සහිත පුද්ගලයින්ගේ විස්තර</span>
+                <span>69 - 72. විශේෂ ආබාධ සහිත පුද්ගලයින්ගේ විස්තර</span>
                 <button type="button" class="btn btn-add-item" id="addDisabilityBtn">+ තවත් අයෙක් එක් කරන්න</button>
               </div>
               <div id="disabilityContainer"></div>
             </div>
           </div>
 
-          <!-- 7.5 මත්පැන් / දුම්වැටි / මත්ද්‍රව්‍ය වලට ඇබ්බැහි වූවන් සිටීද? (Conditional + Dynamic Cards) -->
+          <!-- 73 - 75: මත්පැන් / දුම්වැටි / මත්ද්‍රව්‍ය වලට ඇබ්බැහි වූවන් සිටීද? (Conditional + Dynamic Cards) -->
           <div class="sub-panel">
             <div class="mb-3">
-              <label for="q48_addiction_status" class="form-label">මත්පැන් / දුම්වැටි / මත්ද්‍රව්‍ය වලට ඇබ්බැහි වූවන් සිටීද?</label>
-              <select id="q48_addiction_status" name="q48_addiction_status" class="form-select" onchange="toggleConditional('q48_addiction_status', 'addiction_wrap')">
+              <label for="q73_addiction_status" class="form-label">73. මත්පැන් / දුම්වැටි / මත්ද්‍රව්‍ය වලට ඇබ්බැහි වූවන් සිටී ද?</label>
+              <select id="q73_addiction_status" name="q73_addiction_status" class="form-select" onchange="toggleConditional('q73_addiction_status', 'addiction_wrap')">
                 <option value="">තෝරන්න...</option>
                 <option value="නැත">නැත</option>
                 <option value="ඔව්">ඔව්</option>
@@ -1235,18 +1240,18 @@
             </div>
             <div class="d-none" id="addiction_wrap">
               <div class="sub-panel-header">
-                <span>ඇබ්බැහි වූවන්ගේ විස්තර</span>
+                <span>74 - 75. ඇබ්බැහි වූවන්ගේ විස්තර</span>
                 <button type="button" class="btn btn-add-item" id="addAddictionBtn">+ තවත් අයෙක් එක් කරන්න</button>
               </div>
               <div id="addictionContainer"></div>
             </div>
           </div>
 
-          <!-- 7.6 විවිධ රජයේ / සමාජ ආධාර ලබන පුද්ගලයින් සිටීද? (Conditional + Dynamic Cards) -->
+          <!-- 76 - 80: රජයේ විවිධ සමාජ ආධාර ලබන පුද්ගලයින් සිටීද? (Conditional + Dynamic Cards) -->
           <div class="sub-panel">
             <div class="mb-3">
-              <label for="q49_welfare_status" class="form-label">විවිධ රජයේ / සමාජ ආධාර ලබන පුද්ගලයින් සිටීද?</label>
-              <select id="q49_welfare_status" name="q49_welfare_status" class="form-select" onchange="toggleConditional('q49_welfare_status', 'welfare_wrap')">
+              <label for="q76_welfare_status" class="form-label">76. රජයේ විවිධ සමාජ ආධාර ලබන පුද්ගලයින් සිටී ද?</label>
+              <select id="q76_welfare_status" name="q76_welfare_status" class="form-select" onchange="toggleConditional('q76_welfare_status', 'welfare_wrap')">
                 <option value="">තෝරන්න...</option>
                 <option value="නැත">නැත</option>
                 <option value="ඔව්">ඔව්</option>
@@ -1254,7 +1259,7 @@
             </div>
             <div class="d-none" id="welfare_wrap">
               <div class="sub-panel-header">
-                <span>රජයේ / සමාජ ආධාර ලබන පුද්ගලයින්ගේ විස්තර</span>
+                <span>77 - 80. රජයේ / සමාජ ආධාර ලබන පුද්ගලයින්ගේ විස්තර</span>
                 <button type="button" class="btn btn-add-item" id="addWelfareBtn">+ තවත් අයෙක් එක් කරන්න</button>
               </div>
               <div id="welfareContainer"></div>
