@@ -1,4 +1,4 @@
-const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbww2GIaQkDYozdMg-WOAXnPS8tDxJQWHqKwus3dmywcZDhrh0ZOBnBdExFHm32jOXEN/exec";
+const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxDjIr3fpwib6M51IFbkIkq6BA0gp4U_n-dL7e9GyI9LGu33Pz-QBU2H9ZqNwO49Y55/exec";
 
 const TOTAL_STEPS = 10;
 let currentStep = 1;
