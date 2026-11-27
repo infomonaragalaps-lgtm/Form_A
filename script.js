@@ -61,7 +61,7 @@ const CONDITIONAL_WRAPS = [
   "welfare_wrap",
   "loan_wrap",
   "hh_training_details_wrap",
-  "hh_license_type_wrap"
+  "hh_license_type_wrap",
   "q49_disaster_types_wrap",
   "q51_societies_wrap",
   "q51_society_other_wrap",
