@@ -2103,7 +2103,7 @@ async function handleFormSubmit(e) {
 
     showStatus(
       "success",
-      `සාර්ථකයි! අයදුම්පත් අංකය PKS-2027-${formatAppNo(lastNo)} යටතේ දත්ත Google Sheet වෙත යොමු කරන ලදී. ඊළඟ අයදුම්පත: PKS-2027-${formatAppNo(lastNo + 1)}`
+      `සාර්ථකයි! අයදුම්පත් අංකය PKS-2027-${formatAppNo(lastNo)} යටතේ යොමු කරන ලදී. ඊළඟ අයදුම්පත: PKS-2027-${formatAppNo(lastNo + 1)}`
     );
   } catch (err) {
     showStatus("error", "දත්ත යැවීමේදී ගැටලුවක් ඇති විය. අන්තර්ජාල සම්බන්ධතාව පරීක්ෂා කර නැවත උත්සාහ කරන්න.");
