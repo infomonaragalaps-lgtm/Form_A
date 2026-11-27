@@ -1724,15 +1724,15 @@ function addBankCard(showRemove = true) {
     `
       <div class="row g-3">
         <div class="col-md-4">
-          <label class="form-label">බැංකුවේ නම</label>
+          <label class="form-label">81. බැංකුවේ නම</label>
           <input type="text" class="form-control" data-field="bank_name" placeholder="බැංකුවේ නම" />
         </div>
         <div class="col-md-4">
-          <label class="form-label">බැංකු ගිණුම් අංකය (කැමති නම්)</label>
+          <label class="form-label">82. බැංකු ගිණුම් අංකය (කැමති නම්)</label>
           <input type="text" class="form-control" data-field="account_no" placeholder="ගිණුම් අංකය (විකල්ප)" />
         </div>
         <div class="col-md-4">
-          <label class="form-label">බැංකු ශාඛාව</label>
+          <label class="form-label">83. බැංකු ශාඛාව</label>
           <input type="text" class="form-control" data-field="branch" placeholder="ශාඛාව" />
         </div>
       </div>
@@ -1757,7 +1757,7 @@ function addLoanCard(showRemove = true) {
     `
       <div class="row g-3">
         <div class="col-md-3">
-          <label class="form-label">ණය මූලාශ්‍රය</label>
+          <label class="form-label">85. ණය මූලාශ්‍රය</label>
           <select class="form-select" data-field="loan_source">
             <option value="">තෝරන්න...</option>
             <option value="රාජ්‍ය / පෞද්ගලික බැංකු">රාජ්‍ය / පෞද්ගලික බැංකු</option>
@@ -1767,7 +1767,7 @@ function addLoanCard(showRemove = true) {
           </select>
         </div>
         <div class="col-md-3">
-          <label class="form-label">ගෙවීමට ඇති මුළු ණය මුදල් ප්‍රමාණය</label>
+          <label class="form-label">86. ගෙවීමට ඇති මුළු ණය මුදල් ප්‍රමාණය</label>
           <select class="form-select" data-field="total_loan_amount">
             <option value="">තෝරන්න...</option>
             <option value="රු. 50,000 ට අඩු">රු. 50,000 ට අඩු</option>
@@ -1777,11 +1777,11 @@ function addLoanCard(showRemove = true) {
           </select>
         </div>
         <div class="col-md-3">
-          <label class="form-label">මාසික ණය වාරික ප්‍රමාණය</label>
+          <label class="form-label">87. මාසික ණය වාරික ප්‍රමාණය</label>
           <input type="text" class="form-control" data-field="monthly_installment" placeholder="රු." />
         </div>
         <div class="col-md-3">
-          <label class="form-label">ණය ගෙවීමේ පහසුව</label>
+          <label class="form-label">88. ණය ගෙවීමේ පහසුව</label>
           <select class="form-select" data-field="repayment_ease">
             <option value="">තෝරන්න...</option>
             <option value="නියමිත පරිදි ගෙවයි">නියමිත පරිදි ගෙවයි</option>
