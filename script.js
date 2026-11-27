@@ -62,6 +62,10 @@ const CONDITIONAL_WRAPS = [
   "loan_wrap",
   "hh_training_details_wrap",
   "hh_license_type_wrap"
+  "q49_disaster_types_wrap",
+  "q51_societies_wrap",
+  "q51_society_other_wrap",
+  "q53_contribution_wrap"
 ];
 
 function setDefaultValues() {
@@ -991,6 +995,175 @@ function initSection06CommVehicles() {
 
   toggleSection06CommVehicles();
 }
+// ==========================================
+// Section 07: ආපදා අවදානම්, රක්ෂණ හා ප්‍රජා සහභාගීත්වය (49 - 53)
+// ==========================================
+function createSec07OtherSocietyRow(value = "", showRemove = true) {
+  const row = document.createElement("div");
+  row.className = "input-group mb-2 sec07-other-society-row";
+
+  const input = document.createElement("input");
+  input.type = "text";
+  input.name = "q51_other_society_name[]";
+  input.className = "form-control";
+  input.placeholder = "වෙනත් සමිතියක නම සඳහන් කරන්න";
+  input.value = value;
+
+  row.appendChild(input);
+
+  if (showRemove) {
+    const removeBtn = document.createElement("button");
+    removeBtn.type = "button";
+    removeBtn.className = "btn btn-outline-danger sec07-remove-society-btn";
+    removeBtn.textContent = "ඉවත් කරන්න";
+    removeBtn.addEventListener("click", function () {
+      row.remove();
+      refreshSec07OtherSocietyRemoveButtons();
+      if (typeof updateProgress === "function") updateProgress();
+    });
+    row.appendChild(removeBtn);
+  }
+
+  return row;
+}
+
+function refreshSec07OtherSocietyRemoveButtons() {
+  const container = document.getElementById("q51_other_societies_container");
+  if (!container) return;
+
+  const rows = container.querySelectorAll(".sec07-other-society-row");
+  rows.forEach((row, index) => {
+    const existingBtn = row.querySelector(".sec07-remove-society-btn");
+    if (index === 0) {
+      if (existingBtn) existingBtn.remove();
+    } else if (!existingBtn) {
+      const removeBtn = document.createElement("button");
+      removeBtn.type = "button";
+      removeBtn.className = "btn btn-outline-danger sec07-remove-society-btn";
+      removeBtn.textContent = "ඉවත් කරන්න";
+      removeBtn.addEventListener("click", function () {
+        row.remove();
+        refreshSec07OtherSocietyRemoveButtons();
+        if (typeof updateProgress === "function") updateProgress();
+      });
+      row.appendChild(removeBtn);
+    }
+  });
+}
+
+function addSec07OtherSocietyRow() {
+  const container = document.getElementById("q51_other_societies_container");
+  if (!container) return;
+
+  const newRow = createSec07OtherSocietyRow("", true);
+  container.appendChild(newRow);
+  refreshSec07OtherSocietyRemoveButtons();
+
+  if (typeof bindProgressListeners === "function") {
+    bindProgressListeners(newRow);
+  }
+  if (typeof updateProgress === "function") {
+    updateProgress();
+  }
+}
+
+function resetSec07OtherSocieties() {
+  const container = document.getElementById("q51_other_societies_container");
+  if (!container) return;
+
+  container.innerHTML = "";
+  container.appendChild(createSec07OtherSocietyRow("", false));
+  refreshSec07OtherSocietyRemoveButtons();
+}
+
+function toggleSection07Logic() {
+  // 49. ආපදා අවදානම් ("ඇත" නම් පමණක් checkboxes පෙන්වයි)
+  const disasterStatusEl = document.getElementById("q49_disaster_risk_status");
+  const disasterTypesWrap = document.getElementById("q49_disaster_types_wrap");
+  const hasDisasterRisk = Boolean(disasterStatusEl && disasterStatusEl.value === "ඇත");
+
+  if (disasterTypesWrap) {
+    disasterTypesWrap.classList.toggle("d-none", !hasDisasterRisk);
+  }
+  if (!hasDisasterRisk) {
+    document.querySelectorAll('input[name="q49_disasters"]').forEach((chk) => {
+      chk.checked = false;
+    });
+  }
+
+  // 51. ප්‍රජා සංවර්ධන සමිති දායකත්වය ("ඔව්" නම් පමණක් සමිති පෙන්වයි)
+  const societyStatusEl = document.getElementById("q51_society_participation_status");
+  const societiesWrap = document.getElementById("q51_societies_wrap");
+  const hasSocietyParticipation = Boolean(societyStatusEl && societyStatusEl.value === "ඔව්");
+
+  if (societiesWrap) {
+    societiesWrap.classList.toggle("d-none", !hasSocietyParticipation);
+  }
+
+  const otherChk = document.getElementById("q51_society_other_chk");
+  const otherWrap = document.getElementById("q51_society_other_wrap");
+
+  if (!hasSocietyParticipation) {
+    document.querySelectorAll('input[name="q51_community_societies"]').forEach((chk) => {
+      chk.checked = false;
+    });
+    if (otherWrap) {
+      otherWrap.classList.add("d-none");
+    }
+    resetSec07OtherSocieties();
+  } else {
+    const isOtherChecked = Boolean(otherChk && otherChk.checked);
+    if (otherWrap) {
+      otherWrap.classList.toggle("d-none", !isOtherChecked);
+    }
+    if (!isOtherChecked) {
+      resetSec07OtherSocieties();
+    } else {
+      refreshSec07OtherSocietyRemoveButtons();
+    }
+  }
+
+  // 52 & 53. සංවර්ධන කටයුතු / ශ්‍රමදාන දායකත්වය ("සහභාගි වුණා" නම් පමණක් 53 පෙන්වයි)
+  const devPartEl = document.getElementById("q52_dev_participation");
+  const contribWrap = document.getElementById("q53_contribution_wrap");
+  const isParticipated = Boolean(devPartEl && devPartEl.value === "සහභාගි වුණා");
+
+  if (contribWrap) {
+    contribWrap.classList.toggle("d-none", !isParticipated);
+  }
+  if (!isParticipated) {
+    document.querySelectorAll('input[name="q53_contribution_type"]').forEach((chk) => {
+      chk.checked = false;
+    });
+  }
+
+  if (typeof updateProgress === "function") {
+    updateProgress();
+  }
+}
+
+function getSec07OtherSocietiesList() {
+  const otherChk = document.getElementById("q51_society_other_chk");
+  const societyStatusEl = document.getElementById("q51_society_participation_status");
+  if (!societyStatusEl || societyStatusEl.value !== "ඔව්" || !otherChk || !otherChk.checked) {
+    return [];
+  }
+
+  return Array.from(document.querySelectorAll('input[name="q51_other_society_name[]"]'))
+    .map((input) => input.value.trim())
+    .filter((val) => val.length > 0);
+}
+
+function initSection07Logic() {
+  bindIfExists("q49_disaster_risk_status", "change", toggleSection07Logic);
+  bindIfExists("q51_society_participation_status", "change", toggleSection07Logic);
+  bindIfExists("q51_society_other_chk", "change", toggleSection07Logic);
+  bindIfExists("q52_dev_participation", "change", toggleSection07Logic);
+
+  refreshSec07OtherSocietyRemoveButtons();
+  toggleSection07Logic();
+}
+
 function toggleConditional(selectId, targetId) {
   const selectEl = document.getElementById(selectId);
   const targetEl = document.getElementById(targetId);
@@ -1719,6 +1892,28 @@ function buildPayload() {
   data.loan_cards = data.q52_loan_status === "ඔව්" ? collectCardData("loanContainer") : [];
 
   data.submitted_at = new Date().toISOString();
+
+  data.q49_disaster_risk_status = data.q49_disaster_risk_status || "";
+data.q49_disasters =
+  data.q49_disaster_risk_status === "ඇත"
+    ? collectCheckboxGroup("q49_disasters").join(", ")
+    : "";
+
+data.q50_insurance_status = data.q50_insurance_status || "";
+
+data.q51_society_participation_status = data.q51_society_participation_status || "";
+data.q51_community_societies =
+  data.q51_society_participation_status === "ඔව්"
+    ? collectCheckboxGroup("q51_community_societies").join(", ")
+    : "";
+data.q51_other_societies = getSec07OtherSocietiesList().join(", ");
+
+data.q52_dev_participation = data.q52_dev_participation || "";
+data.q53_contribution_type =
+  data.q52_dev_participation === "සහභාගි වුණා"
+    ? collectCheckboxGroup("q53_contribution_type").join(", ")
+    : "";
+  
   return data;
 }
 
@@ -1849,6 +2044,9 @@ function handleFormReset() {
 
   initDefaultCards();
   hideNavAlert();
+  
+  resetSec07OtherSocieties();
+  toggleSection07Logic();  
 
   const statusBox = document.getElementById("statusMessage");
   if (statusBox) {
@@ -1870,8 +2068,9 @@ window.addEventListener("DOMContentLoaded", () => {
   initSection04Land();
   initSection05Housing();
   initSection06CommVehicles();
+  initSection07Logic();
   bindButtonEvents();
   bindProgressListeners(document.getElementById("surveyForm"));
   showStep(1);
-  updateProgress();
+  updateProgress();  
 });
